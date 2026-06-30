@@ -7,7 +7,7 @@
 
     <title>{{ config('app.name') }} | @yield('title', 'خانه')</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/logo.png') }}">
-
+    <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     {{-- استایل‌های اضافه فرانت (بعداً اضافه کن) --}}
 </head>
