@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
+<g>
+	<circle fill="#EF4538" cx="64" cy="64" r="63.5"/>
+	<g>
+		<rect x="25.2" y="41.6" fill="#753A29" width="5.1" height="62.1"/>
+		<rect x="99.4" y="41.6" fill="#753A29" width="5.1" height="62.1"/>
+		<path fill="#E3E6E8" d="M31.8,56.5L31.8,56.5c-3.7,0-6.6-3-6.6-6.6v-8.3h13.2v8.3C38.4,53.6,35.4,56.5,31.8,56.5z"/>
+		<path fill="#FFC717" d="M45,56.5L45,56.5c-3.7,0-6.6-3-6.6-6.6v-8.3h13.2v8.3C51.6,53.6,48.7,56.5,45,56.5z"/>
+		<path fill="#E3E6E8" d="M58.2,56.5L58.2,56.5c-3.7,0-6.6-3-6.6-6.6v-8.3h13.2v8.3C64.9,53.6,61.9,56.5,58.2,56.5z"/>
+		<path fill="#FFC717" d="M71.5,56.5L71.5,56.5c-3.7,0-6.6-3-6.6-6.6v-8.3h13.2v8.3C78.1,53.6,75.1,56.5,71.5,56.5z"/>
+		<path fill="#E3E6E8" d="M84.7,56.5L84.7,56.5c-3.7,0-6.6-3-6.6-6.6v-8.3h13.2v8.3C91.3,53.6,88.4,56.5,84.7,56.5z"/>
+		<path fill="#FFC717" d="M97.9,56.5L97.9,56.5c-3.7,0-6.6-3-6.6-6.6v-8.3h13.2v8.3C104.5,53.6,101.6,56.5,97.9,56.5z"/>
+		<polygon fill="#C0C9CE" points="38.4,41.6 25.2,41.6 36.8,24.3 46.2,24.3 		"/>
+		<polygon fill="#F7B319" points="51.6,41.6 38.4,41.6 46.2,24.3 55.5,24.3 		"/>
+		<polygon fill="#C0C9CE" points="64.9,41.6 51.6,41.6 55.5,24.3 64.9,24.3 		"/>
+		<polygon fill="#F7B319" points="78.1,41.6 64.9,41.6 64.9,24.3 74.2,24.3 		"/>
+		<polygon fill="#C0C9CE" points="91.3,41.6 78.1,41.6 74.2,24.3 83.5,24.3 		"/>
+		<polygon fill="#F7B319" points="104.5,41.6 91.3,41.6 83.5,24.3 92.9,24.3 		"/>
+		<rect x="25.2" y="78.5" fill="#E3E6E8" width="79.4" height="25.2"/>
+	</g>
+</g>
+</svg>

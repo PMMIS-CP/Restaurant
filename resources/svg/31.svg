@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 18.1.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 128 128" enable-background="new 0 0 128 128" xml:space="preserve">
+<g>
+	<circle fill="#41B655" cx="64" cy="64" r="63.5"/>
+	<g>
+		<polygon fill="#E3E6E8" points="84.6,103.7 36.7,103.7 40.7,88.9 80.7,88.9 		"/>
+		<rect x="51.4" y="85.4" fill="#5D5E61" width="18.5" height="3.5"/>
+		<polygon fill="#FCD83A" points="82.1,40.8 39.3,40.8 43.6,85.4 77.8,85.4 		"/>
+		<polygon fill="#E3E6E8" points="88.3,40.8 82.1,40.8 81.8,43.8 88.3,43.8 88.3,64.3 91.3,64.3 91.3,43.8 91.3,40.8 		"/>
+		<path fill="#E3E6E8" d="M39.3,40.6c0-6.1,9.6-11,21.4-11s21.4,4.9,21.4,11"/>
+		<path fill="#565756" d="M60.7,29.6c1.4,0,2.8,0.1,4.2,0.2c0.1-0.4,0.2-0.8,0.2-1.2c0-2.4-2-4.4-4.4-4.4s-4.4,2-4.4,4.4
+			c0,0.4,0.1,0.8,0.2,1.2C57.8,29.7,59.2,29.6,60.7,29.6z"/>
+		<circle fill="#5D5E61" cx="60.7" cy="96.3" r="3.3"/>
+	</g>
+</g>
+</svg>
