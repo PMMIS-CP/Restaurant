@@ -4,8 +4,7 @@
 
 @section('content')
     {{-- Hero Section --}}
-    <section class="bg-cover bg-center h-96 flex items-center justify-center text-white"
-             style="background-image: url('https://via.placeholder.com/1920x600?text=Restaurant+Hero');">
+    <section class="bg-cover bg-center h-96 flex items-center justify-center text-white">
         <div class="text-center bg-black bg-opacity-50 p-8 rounded-lg">
             <h1 class="text-4xl md:text-5xl font-bold mb-4">به {{ config('app.name') }} خوش آمدید</h1>
             <p class="text-lg mb-6">طعمی که هرگز فراموش نمی‌کنید</p>
@@ -21,7 +20,6 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
             {{-- نمونه کارت غذا --}}
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <img src="https://via.placeholder.com/400x250?text=Food+1" alt="غذا" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-gray-800">غذای شماره ۱</h3>
                     <p class="text-gray-600 mt-2">توضیح کوتاه</p>
@@ -29,7 +27,6 @@
                 </div>
             </div>
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <img src="https://via.placeholder.com/400x250?text=Food+2" alt="غذا" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-gray-800">غذای شماره ۲</h3>
                     <p class="text-gray-600 mt-2">توضیح کوتاه</p>
@@ -37,7 +34,6 @@
                 </div>
             </div>
             <div class="bg-white shadow-md rounded-lg overflow-hidden">
-                <img src="https://via.placeholder.com/400x250?text=Food+3" alt="غذا" class="w-full h-48 object-cover">
                 <div class="p-4">
                     <h3 class="text-xl font-semibold text-gray-800">غذای شماره ۳</h3>
                     <p class="text-gray-600 mt-2">توضیح کوتاه</p>
