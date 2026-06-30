@@ -15,7 +15,6 @@ class SetLocale
      */
     public function handle(Request $request, Closure $next)
     {
-        // اگر کاربر لاگین بود از دیتابیس، در غیر این صورت از سشن استفاده کن
         if (auth()->check() && auth()->user()->locale) {
             app()->setLocale(auth()->user()->locale);
         } elseif (session()->has('locale')) {
