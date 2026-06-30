@@ -70,7 +70,16 @@
     font-display: swap;
 }
 
-body {
+/* body {
     font-family: 'Vazirmatn';
     font-weight: 400;
+} */
+
+html:lang(fa) {
+    font-family: 'Vazirmatn';
+    font-weight: 700;
+}
+
+html:lang(en) {
+    font-family: 'Inter', 'Vazirmatn', sans-serif;
 }
