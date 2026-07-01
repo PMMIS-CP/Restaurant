@@ -3,7 +3,7 @@
         :class="scrollY <= 50 
             ? 'bg-transparent py-6 border-b border-transparent' 
             : 'bg-red-950/95 py-4 border-b border-yellow-700/30 backdrop-blur-md shadow-xl'"
-        class="fixed w-full top-0 z-50 transition-all duration-500" dir="rtl">
+        class="fixed w-full top-0 z-50 transition-all duration-500">
     
     <div class="container mx-auto px-6 flex items-center justify-between">
         

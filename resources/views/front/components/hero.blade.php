@@ -1,4 +1,4 @@
-<div class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0" dir="rtl">
+<div class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0">
     
     <img src="{{ asset('assets/images/50.webp') }}" 
          alt="Background" 

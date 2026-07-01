@@ -18,7 +18,8 @@
         'assets/images/8391157.jpg',
     ];
 @endphp
-@include('front.components.header')
+@include('front.components.hero')
+@include('front.components.abuot')
 @include('front.components.galley')
 
 @endsection

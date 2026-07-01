@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-50 font-sans antialiased max-w-full overflow-x-hidden">
+<body class="bg-gray-50 antialiased max-w-full overflow-x-hidden">
 
     {{-- هدر --}}
     @include('front.partials.header')
