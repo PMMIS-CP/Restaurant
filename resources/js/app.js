@@ -10,6 +10,12 @@ import Swiper from 'swiper';
 import { EffectCards, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
+import { gsap } from "gsap";
+import { Flip } from "gsap/Flip";
+
+gsap.registerPlugin(Flip);
+window.gsap = gsap;
+window.Flip = Flip;
 
 window.Swiper = Swiper;
 window.SwiperEffectCards = EffectCards;
