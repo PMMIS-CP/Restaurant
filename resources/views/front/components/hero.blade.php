@@ -1,8 +1,21 @@
-<div class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0">
-    
-    <img src="{{ asset('assets/images/50.webp') }}" 
-         alt="Background" 
-         class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none z-0">
+<div class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0"
+     x-data="{
+        images: [
+            '{{ asset('assets/images/IMG_20260702_113729.webp') }}',
+            '{{ asset('assets/images/IMG_20260702_113837.webp') }}',
+            '{{ asset('assets/images/IMG_20260702_113844.webp') }}',
+            '{{ asset('assets/images/IMG_20260702_113900.webp') }}'
+        ],
+        active: 0
+     }"
+     x-init="setInterval(() => { active = (active + 1) % images.length }, 4000)">
+
+    <template x-for="(image, index) in images" :key="index">
+        <img :src="image" 
+             alt="Background" 
+             class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none z-0 transition-opacity duration-1000 ease-in-out"
+             :class="active === index ? 'opacity-100' : 'opacity-0'">
+    </template>
 
     <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] z-10"></div>
 
@@ -26,5 +39,4 @@
         </div>
         
     </div>
-
 </div>

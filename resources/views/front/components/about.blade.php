@@ -36,7 +36,7 @@
                 <div class="relative px-2 sm:px-0">
                     <div class="absolute -inset-3 sm:-inset-4 rounded-2xl sm:rounded-3xl bg-[#C41E3A]/10 sm:bg-[#C41E3A]/20 blur-xl sm:blur-2xl"></div>
                     <div class="absolute -inset-0.5 sm:-inset-1 rounded-xl sm:rounded-2xl bg-linear-to-tr from-[#D4AF37] via-[#F1E5AC] to-[#D4AF37] p-0.5 shadow-[0_0_20px_rgba(212,175,55,0.4)] sm:shadow-[0_0_30px_rgba(212,175,55,0.6)]"></div>
-                    <img src="{{ asset('assets/images/50.webp') }}" 
+                    <img src="{{ asset('assets/images/IMG_20260702_113844.webp') }}" 
                          alt="فضای باشکوه کاخ موراکو" 
                          class="relative w-full rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl" 
                          loading="lazy">

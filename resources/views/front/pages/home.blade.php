@@ -22,4 +22,5 @@
 @include('front.components.about')
 @include('front.components.gallery')
 @include('front.components.services')
+@include('front.components.ceremony')
 @endsection
