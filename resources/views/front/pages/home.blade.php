@@ -21,5 +21,5 @@
 @include('front.components.hero')
 @include('front.components.abuot')
 @include('front.components.galley')
-
+@include('front.components.sevices')
 @endsection

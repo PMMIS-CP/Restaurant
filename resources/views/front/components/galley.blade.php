@@ -3,7 +3,7 @@
     <h2 class="text-3xl lg:text-4xl font-extrabold text-gray-800">گالری رستوران</h2>
 </div>
 
-<div class="mt-8 py-8 flex justify-center items-center overflow-hidden">
+<div class="mb-20 mt-8 py-8 flex justify-center items-center overflow-hidden">
     <div class="swiper card-swiper w-[85%] md:w-[90%] max-w-2xl aspect-9/4">
         <div class="swiper-wrapper">
             @foreach($images as $image)
