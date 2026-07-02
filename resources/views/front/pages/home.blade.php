@@ -19,7 +19,7 @@
     ];
 @endphp
 @include('front.components.hero')
-@include('front.components.abuot')
-@include('front.components.galley')
-@include('front.components.sevices')
+@include('front.components.about')
+@include('front.components.gallery')
+@include('front.components.services')
 @endsection
