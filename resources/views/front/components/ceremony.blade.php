@@ -113,7 +113,7 @@
         
         {{-- دکمه CTA با طراحی مدرن و زرین --}}
         <div class="text-center mt-10 md:mt-14">
-            <a href="#reservation" class="relative inline-block group bg-[#8B1A1A] hover:bg-[#6b1414] text-white font-bold py-3.5 px-8 md:py-4 md:px-10 rounded-full shadow-xl transition-all duration-300 text-base md:text-lg overflow-hidden">
+            <a class="relative inline-block group bg-[#8B1A1A] hover:bg-[#6b1414] text-white font-bold py-3.5 px-8 md:py-4 md:px-10 rounded-full shadow-xl transition-all duration-300 text-base md:text-lg overflow-hidden">
                 <span class="relative z-10 flex items-center justify-center gap-2">
                     همین حالا سالن اختصاصی خود را رزرو کنید
                     <svg class="w-5 h-5 transition-transform duration-300 ltr:rotate-0 rtl:rotate-180

@@ -23,5 +23,6 @@
 @include('front.components.gallery')
 @include('front.components.services')
 @include('front.components.ceremony')
+@include('front.components.cart')
 @include('front.components.commetns')
 @endsection

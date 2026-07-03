@@ -116,9 +116,9 @@
                         slidesPerView: 1,
                         spaceBetween: 30,
                         loop: true,
-                        speed: 3000, // سرعت نرم برای اسکرول مداوم
+                        speed: 3000,
                         autoplay: {
-                            delay: 0, // اسکرول بدون توقف
+                            delay: 0,
                             disableOnInteraction: false,
                             pauseOnMouseEnter: false,
                         },
@@ -136,16 +136,41 @@
                         }
                     });
 
-                    // مدیریت توقف ۳۰ ثانیه‌ای در صورت کلیک کاربر
-                    this.$refs.swiperContainer.addEventListener('mousedown', () => {
+                    // تابع کمکی برای توقف و زمان‌بندی مجدد
+                    const handleInteraction = () => {
                         this.swiper.autoplay.stop();
                         clearTimeout(this.timeout);
                         this.timeout = setTimeout(() => {
                             this.swiper.autoplay.start();
                         }, 30000);
+                    };
+
+                    // تشخیص اسکرول موس (کمترین حرکت)
+                    this.$refs.swiperContainer.addEventListener('wheel', (e) => {
+                        // فقط اگر اسکرول عمودی باشه (نه افقی)
+                        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                            handleInteraction();
+                        }
+                    }, { passive: true });
+
+                    // تشخیص لمس در موبایل (کمترین حرکت انگشت)
+                    let touchStartY = 0;
+                    this.$refs.swiperContainer.addEventListener('touchstart', (e) => {
+                        touchStartY = e.touches[0].clientY;
                     });
+                    
+                    this.$refs.swiperContainer.addEventListener('touchmove', (e) => {
+                        const touchY = e.touches[0].clientY;
+                        // اگر حرکت عمودی اتفاق افتاده (حتی کم)
+                        if (Math.abs(touchY - touchStartY) > 5) {
+                            handleInteraction();
+                        }
+                    }, { passive: true });
+
+                    // کلیک موس هم بمونه (برای موارد خاص)
+                    this.$refs.swiperContainer.addEventListener('mousedown', handleInteraction);
                 }
-            }" 
+            }"
             x-init="initSwiper()"
             class="relative swiper-container-custom"
         >
