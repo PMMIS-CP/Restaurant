@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
+use App\Http\Controllers\Front\MenuController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,5 +20,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
+Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 
 require __DIR__.'/auth.php';

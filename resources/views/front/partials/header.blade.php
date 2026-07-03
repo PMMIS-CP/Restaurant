@@ -12,7 +12,7 @@
             @php
                 $links = [
                     ['name' => __('messages.nav.home'), 'url' => '/'],
-                    ['name' => __('messages.nav.menu'), 'url' => '#'],
+                    ['name' => __('messages.nav.menu'), 'url' => route('menu')],
                     ['name' => __('messages.nav.reserve'), 'url' => '#'],
                 ];
                 $isRtl = app()->getLocale() === 'fa';
