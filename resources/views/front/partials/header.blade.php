@@ -7,15 +7,15 @@
     
     <div class="container mx-auto px-6 flex items-center justify-between">
         
-        {{-- ناوبری دسکتاپ (بدون تغییر) --}}
-        <nav class="hidden lg:flex items-center gap-10">
+        {{-- ناوبری دسکتاپ --}}
+        <nav class="hidden lg:flex items-center gap-6">
             @php
                 $links = [
                     ['name' => __('messages.nav.home'), 'url' => '/'],
                     ['name' => __('messages.nav.menu'), 'url' => '#'],
                     ['name' => __('messages.nav.reserve'), 'url' => '#'],
-                    ['name' => __('messages.nav.contact'), 'url' => '#'],
                 ];
+                $isRtl = app()->getLocale() === 'fa';
             @endphp
             @foreach($links as $link)
                 <a href="{{ $link['url'] }}" class="text-sm font-medium text-gray-200 hover:text-yellow-500 transition-colors relative group">
@@ -23,6 +23,39 @@
                     <span class="absolute -bottom-2 inset-s-0 w-0 h-0.5 bg-yellow-500 transition-all duration-300 group-hover:w-full"></span>
                 </a>
             @endforeach
+            
+            {{-- آیتم تماس با دو شماره --}}
+            @if($isRtl)
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-yellow-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    </svg>
+                    
+                    <div class="flex flex-col text-right" dir="rtl">
+                        <a href="tel:09353077797" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
+                            09353077797
+                        </a>
+                        <a href="tel:02191094044" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
+                            021-910-940-44
+                        </a>
+                    </div>
+                </div>
+            @else
+                <div class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-yellow-500 shrink-0 transform scale-x-[-1]" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                    </svg>
+                    
+                    <div class="flex flex-col text-left" dir="ltr">
+                        <a href="tel:09353077797" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
+                            09353077797
+                        </a>
+                        <a href="tel:02191094044" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
+                            021-910-940-44
+                        </a>
+                    </div>
+                </div>
+            @endif
         </nav>
 
         {{-- لوگو --}}

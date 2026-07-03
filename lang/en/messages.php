@@ -3,7 +3,7 @@ return [
     'nav' => [
         'home' => 'Home',
         'menu' => 'Menu',
-        'reserve' => 'Reserve Table',
+        'reserve' => 'Reserve',
         'contact' => 'Contact',
     ],
     'auth' => [
