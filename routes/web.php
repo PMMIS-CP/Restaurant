@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Front\MenuController;
+use App\Http\Controllers\Front\ReserveController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -21,5 +22,6 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
+Route::get('/reserve', [reserveController::class, 'index'])->name('reserve');
 
 require __DIR__.'/auth.php';

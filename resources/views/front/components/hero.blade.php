@@ -1,10 +1,10 @@
 <div class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0"
      x-data="{
         images: [
+            '{{ asset('assets/images/IMG_20260702_113900.webp') }}',
+            '{{ asset('assets/images/IMG_20260702_113844.webp') }}',
             '{{ asset('assets/images/IMG_20260702_113729.webp') }}',
             '{{ asset('assets/images/IMG_20260702_113837.webp') }}',
-            '{{ asset('assets/images/IMG_20260702_113844.webp') }}',
-            '{{ asset('assets/images/IMG_20260702_113900.webp') }}'
         ],
         active: 0
      }"
@@ -31,10 +31,10 @@
 
         <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
             <a href="#order" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold text-lg px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-300 transform hover:-translate-y-1 text-center">
-                سفارش آنلاین غذای شما
+                سفارش آنلاین
             </a>
             <a href="#reserve" class="w-full sm:w-auto bg-transparent hover:bg-white border-2 border-white text-white hover:text-black font-bold text-lg px-8 py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
-                رزرو سریع میز
+                رزرو میز
             </a>
         </div>
         
