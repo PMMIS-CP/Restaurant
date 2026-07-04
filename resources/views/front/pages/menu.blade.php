@@ -65,11 +65,11 @@
             {"ردیف":59,"اسم_غذا_فارسی":"حمص","اسم_غذا_لاتین":"Hummus","نوع":"پیش غذا","قیمت":500000,"جزئیات":"نخود پخته- ارده- سیر- لیمو- روغن زیتون"},
             {"ردیف":60,"اسم_غذا_فارسی":"متبل","اسم_غذا_لاتین":"Moutabel","نوع":"پیش غذا","قیمت":500000,"جزئیات":"بادمجان کبابی- ارده- سیر- لیمو- روغن زیتون"},
             {"ردیف":61,"اسم_غذا_فارسی":"سینی مخصوص","اسم_غذا_لاتین":"Special Platter","نوع":"سینی‌های مخصوص","قیمت":4000000,"جزئیات":"چلو لقمه- چلو جوجه زعفرانی- زرشک پلو با مرغ- چلوخورشت قیمه"},
-            {"ردیف":62,"اسم_غذا_فارسی":"سینی همایونی","اسم_غذا_لاتین":"Homayouni Platter","نوع":"سینی‌های مخصوص","قیمت":4500000,"جزئیات":"باقالی پلو با ماهیچه- چلو برگ مخصوص- چلو لقمه مخصوص-چلو خورشت قرمه"},
+            {"ردیف":62,"اسم_غذا_فارسی":"سینی همایونی","اسم_غذا_لاتین":"Homayouni Platter","نوع":"سینی‌های مخصوص","قیمت":5500000,"جزئیات":"باقالی پلو با ماهیچه- چلو برگ مخصوص- چلو لقمه مخصوص-چلو خورشت قرمه"},
             {"ردیف":63,"اسم_غذا_فارسی":"سینی موراکو","اسم_غذا_لاتین":"Morocco Platter","نوع":"سینی‌های مخصوص","قیمت":4200000,"جزئیات":"باقالی پلو با ماهیچه- چلوجوجه زعفرانی- سبزی پلو با ماهی سرخ شده"},
             {"ردیف":64,"اسم_غذا_فارسی":"سینی عمارت","اسم_غذا_لاتین":"Mansion Platter","نوع":"سینی‌های مخصوص","قیمت":4500000,"جزئیات":"چلو ماهی کباب- چلو جوجه با استخوان-چلو برگ مخصوص- چلو بختیاری"},
             {"ردیف":65,"اسم_غذا_فارسی":"سینی 3 نفره","اسم_غذا_لاتین":"Platter for three","نوع":"سینی‌های مخصوص","قیمت":3500000,"جزئیات":"چلو لقمه-چلو خورشت- چلوجوجه زعفرانی- چلو قیمه- چلو قرمه"},
-            {"ردیف":66,"اسم_غذا_فارسی":"سینی 2 نفره","اسم_غذا_لاتین":"Platter for two","نوع":"سینی‌های مخصوص","قیمت":2500000,"جزئیات":"کاسه کباب دونفره"},
+            {"ردیف":66,"اسم_غذا_فارسی":"سینی 2 نفره","اسم_غذا_لاتین":"Platter for two","نوع":"سینی‌های مخصوص","قیمت":25000000,"جزئیات":"کاسه کباب دونفره"},
             {"ردیف":67,"اسم_غذا_فارسی":"سینی ویژه","اسم_غذا_لاتین":"Chef\'s Special Platter","نوع":"سینی‌های مخصوص","قیمت":4000000,"جزئیات":"چلو ماهی کباب- چلو لقمه مخصوص-چلو برگ مخصوص- زرشک پلو با مرغ"}
         ]';
         $menu = json_decode($menuJson, true);
@@ -86,19 +86,29 @@
         $english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         return str_replace($english, $persian, (string) $num);
     }
-
+    function formatPriceFull($price) {
+        return toPersianNum(number_format($price)) . ' تومان';
+    }
     function formatPrice($price) {
-        if ($price < 1000000) {
-            $thousands = (int) ($price / 1000);
+        if ($price >= 1000000) {
+            // برای اعداد میلیونی: تقسیم بر 1 میلیون و گرد کردن به 1 رقم اعشار
+            $millions = $price / 1000000;
+            // اگر عدد صحیح است، اعشار نشان نده
+            if ($price % 1000000 == 0) {
+                return toPersianNum((int)$millions) . ' میلیون تومان';
+            } else {
+                // گرد کردن به 1 رقم اعشار و تبدیل نقطه به ممیز فارسی
+                $formatted = number_format($millions, 1, '.', '');
+                $parts = explode('.', $formatted);
+                return toPersianNum($parts[0]) . '٫' . toPersianNum($parts[1]) . ' میلیون تومان';
+            }
+        } elseif ($price >= 1000) {
+            // برای اعداد هزارتایی
+            $thousands = round($price / 1000);
             return toPersianNum($thousands) . ' هزار تومان';
         } else {
-            $millions = $price / 1000000;
-            if ($price % 1000000 == 0) {
-                return toPersianNum((int) $millions) . ' میلیون تومان';
-            } else {
-                $formatted = number_format($millions, 1, '.', '');
-                return toPersianNum($formatted) . ' میلیون تومان';
-            }
+            // برای اعداد کمتر از 1000
+            return toPersianNum($price) . ' تومان';
         }
     }
 @endphp
@@ -109,8 +119,17 @@
     
     // محاسبه حداقل و حداکثر قیمت برای تنظیم خودکار اسلایدر فیلتر قیمت
     $prices = array_column($menu, 'قیمت');
-    $maxPrice = !empty($prices) ? max($prices) : 4500000;
-    $minPrice = !empty($prices) ? min($prices) : 400000;
+    $maxPrice = !empty($prices) ? max($prices) : 0;
+    $minPrice = !empty($prices) ? min($prices) : 0;
+@endphp
+@php
+    $menuArray = json_decode($menuJson, true);
+
+    foreach ($menuArray as $item) {
+        $imageNumber = fmod($item['ردیف'] - 1, 12) + 1;
+        
+        $imagePath = asset("assets/images/menu/{$imageNumber}.webp");
+    }
 @endphp
 
 <div class="min-h-screen bg-[#090506] text-gray-100 antialiased selection:bg-[#bc1c24] selection:text-white">
@@ -146,12 +165,13 @@
                             <span class="w-1.5 h-1.5 rounded-full bg-[#bc1c24]"></span> حداکثر قیمت:
                         </span>
                         <span id="price-val" class="font-bold text-[#ffd700] text-sm bg-[#1c1416] px-2 py-0.5 rounded border border-[#dfb15b]/10">
-                            {{ number_format($maxPrice) }} تومان
+                            {{ formatPriceFull($maxPrice) }}
                         </span>
                     </div>
                     <input type="range" id="price-slider" 
-                           min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="50000"
-                           class="w-full accent-[#bc1c24] h-1.5 bg-[#1c1416] rounded-lg cursor-pointer appearance-none">
+                        min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="50000"
+                        class="w-full accent-[#bc1c24] h-1.5 bg-[#1c1416] rounded-lg cursor-pointer appearance-none"
+                        data-min="{{ $minPrice }}" data-max="{{ $maxPrice }}">
                 </div>
 
                 <div class="text-left md:text-left text-xs text-gray-400 flex justify-end items-center gap-2">
@@ -199,43 +219,58 @@
 
         <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($menu as $item)
-                <div class="menu-item-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900 rounded-2xl p-6 transition-all duration-300 hover:border-[#dfb15b]/30 hover:shadow-[0_15px_30px_rgba(0,0,0,0.6)] relative overflow-hidden"
-                    data-category="{{ $item['نوع'] ?? 'سایر' }}"
-                    data-price="{{ $item['قیمت'] }}"
-                    data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}"
-                    style="opacity: 1; visibility: visible; display: block;">
-                    
-                    <div class="absolute inset-0 bg-[#bc1c24]/1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"></div>
+    @php
+        // محاسبه شماره تصویر بر اساس ردیف (۱ تا ۱۲)
+        $imageNumber = fmod($item['ردیف'] - 1, 12) + 1;
+        $imagePath = asset("assets/images/menu/{$imageNumber}.webp");
+    @endphp
 
-                    <div class="flex flex-col h-full justify-between relative z-10">
-                        <div>
-                            <div class="flex justify-between items-start gap-4">
-                                <div class="space-y-1">
-                                    <h3 class="text-lg font-bold text-gray-100 group-hover:text-[#ffd700] transition-colors duration-300">
-                                        {{ $item['اسم_غذا_فارسی'] }}
-                                    </h3>
-                                </div>
-                                <span class="text-[10px] px-2 py-1 bg-[#1c1416] text-[#dfb15b]/80 border border-[#dfb15b]/10 rounded">
-                                    {{ $item['نوع'] ?? 'سایر' }}
-                                </span>
-                            </div>
+    <div class="menu-item-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900 rounded-2xl transition-all duration-300 hover:border-[#dfb15b]/30 hover:shadow-[0_15px_30px_rgba(0,0,0,0.6)] relative overflow-hidden flex flex-col h-full"
+         data-category="{{ $item['نوع'] ?? 'سایر' }}"
+         data-price="{{ $item['قیمت'] }}"
+         data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}"
+         style="opacity: 1; visibility: visible; display: flex;">
 
-                            <div class="my-4 h-px bg-linear-to-r from-transparent via-[#dfb15b]/10 to-transparent"></div>
+        <!-- overlay hover -->
+        <div class="absolute inset-0 bg-[#bc1c24]/1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
 
-                            <p class="text-xs text-gray-400 leading-relaxed text-justify opacity-80 min-h-9">
-                                {{ $item['جزئیات'] }}
-                            </p>
-                        </div>
+        <!-- بخش تصویر + overlay نام و نوع -->
+        <div class="relative">
+            <img src="{{ $imagePath }}" alt="{{ $item['اسم_غذا_فارسی'] }}" class="w-full h-48 object-cover">
+            <!-- سایه و gradient از پایین تصویر -->
+            <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pt-8">
 
-                        <div class="mt-6 flex justify-between items-center bg-[#181113] p-3 rounded-xl border border-neutral-900/50">
-                            <span class="text-xs text-gray-500">بهای هر سهم</span>
-                            <div class="text-sm font-black text-[#ffd700] tracking-wide">
-                                {{ formatPrice($item['قیمت']) }}
-                            </div>
-                        </div>
-                    </div>
+                <div class="flex justify-between items-end gap-4">
+                    <h3 class="text-lg font-bold text-gray-100 group-hover:text-[#ffd700] transition-colors duration-300">
+                        {{ $item['اسم_غذا_فارسی'] }}
+                    </h3>
+                    <span class="text-[10px] px-2 py-1 bg-[#1c1416] text-[#dfb15b]/80 border border-[#dfb15b]/10 rounded whitespace-nowrap">
+                        {{ $item['نوع'] ?? 'سایر' }}
+                    </span>
                 </div>
-            @endforeach
+            </div>
+        </div>
+
+        <!-- محتوای پایینی کارت -->
+        <div class="flex-1 flex flex-col p-6 pt-4 relative z-10">
+            <!-- خط جداکننده -->
+            <div class="my-4 h-px bg-linear-to-r from-transparent via-[#dfb15b]/10 to-transparent"></div>
+
+            <!-- توضیحات -->
+            <p class="text-xs text-gray-400 leading-relaxed text-justify opacity-80 flex-1 min-h-9">
+                {{ $item['جزئیات'] }}
+            </p>
+
+            <!-- بخش قیمت -->
+            <div class="mt-6 flex justify-between items-center bg-[#181113] p-3 rounded-xl border border-neutral-900/50">
+                <span class="text-xs text-gray-500">بهای هر سهم</span>
+                <div class="text-sm font-black text-[#ffd700] tracking-wide">
+                    {{ formatPrice($item['قیمت']) }}
+                </div>
+            </div>
+        </div>
+    </div>
+@endforeach
         </div>
     </main>
 </div>
