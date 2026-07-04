@@ -9,6 +9,9 @@ class MenuController extends Controller
 {
     public function index()
     {
-        return view('front.pages.menu');
+        return view('front.pages.menu', [
+            'hideHeader' => true,
+            'hideFooter' => true
+        ]);
     }
 }

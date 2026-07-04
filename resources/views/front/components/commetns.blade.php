@@ -87,7 +87,7 @@
         'بازدید از کاخ سنتی موراکو' => 'bg-[#8B0000]/10 text-[#8B0000]',
     ];
 @endphp
-<div class="w-full py-16 bg-linear-to-b from-[#8B0000]/5 to-transparent" dir="rtl">
+<div class="w-full py-16 bg-linear-to-b from-[#8B0000]/5 to-transparent">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {{-- عنوان بخش --}}
         <div class="w-24 h-1 bg-[#D4AF37] mx-auto mb-4 rounded-full"></div>

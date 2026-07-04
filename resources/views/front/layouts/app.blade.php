@@ -102,7 +102,9 @@
 <body class="bg-gray-50 antialiased max-w-full overflow-x-hidden">
 
     {{-- هدر --}}
-    @include('front.partials.header')
+    @if(!isset($hideHeader) || !$hideHeader)
+        @include('front.partials.header')
+    @endif
 
     {{-- محتوای اصلی --}}
     <main class="min-h-screen max-w-full overflow-x-hidden">
@@ -110,7 +112,9 @@
     </main>
 
     {{-- فوتر --}}
-    @include('front.partials.footer')
+    @if(!isset($hideFooter) || !$hideFooter)
+        @include('front.partials.footer')
+    @endif
 
     @stack('scripts')
 </body>
