@@ -6,10 +6,15 @@ import IMask from 'imask';
 import dayjs from 'dayjs';
 import '@splidejs/splide/css'; 
 
+import flatpickr from 'flatpickr';
+import 'flatpickr/dist/flatpickr.css';
+import 'flatpickr/dist/l10n/fa.js';
+
 import Swiper from 'swiper';
 import { EffectCards, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
+
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import persianDate from 'persian-date';
@@ -28,5 +33,7 @@ window.axios = axios;
 window.Splide = Splide;
 window.IMask = IMask;
 window.dayjs = dayjs;
+window.flatpickr = flatpickr;
+flatpickr.localize(flatpickr.l10ns.fa);
 
 Alpine.start();
