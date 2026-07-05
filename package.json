@@ -25,6 +25,7 @@
         "jalaali-js": "^2.0.0",
         "lazysizes": "^5.3.2",
         "leaflet": "^1.9.4",
+        "persian-date": "^1.1.0",
         "swiper": "^14.0.1",
         "tailwindcss": "^4.3.2",
         "toastify-js": "^1.12.0"

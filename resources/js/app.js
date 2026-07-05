@@ -12,7 +12,9 @@ import 'swiper/css';
 import 'swiper/css/effect-cards';
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
+import persianDate from 'persian-date';
 
+window.persianDate = persianDate;
 gsap.registerPlugin(Flip);
 window.gsap = gsap;
 window.Flip = Flip;
