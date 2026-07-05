@@ -74,7 +74,6 @@
                 </div>
                 {{-- بخش دوم --}}
                 <div class="flex flex-row gap-1 md:gap-3 w-full mt-1 md:mt-2">
-                    
                     {{-- باکس تاریخ و ساعت ثبت شده (تأیید شده) --}}
                     <div class="flex flex-col flex-1 min-w-0">
                         <label for="new_box" class="absolute text-right text-black" 
@@ -82,15 +81,51 @@
                             تاریخ و ساعت ثبت شده:
                         </label>
                         <div class="absolute" style="left: 48.65%; top: 21.18%; width: 16.58%; height: 57px;"
-                            x-data="{ confirmedDate: '' }"
-                            x-on:date-confirmed.window="confirmedDate = $event.detail.date">
+                            x-data="{ 
+                                confirmedDate: '', 
+                                confirmedEntryTime: '',
+                                confirmedExitTime: '',
+                                get displayText() {
+                                    // حالت ۱: همه موارد تکمیل شده
+                                    if (this.confirmedDate && this.confirmedEntryTime && this.confirmedExitTime) {
+                                        return `${this.confirmedDate} - ${this.confirmedEntryTime} الی ${this.confirmedExitTime}`;
+                                    } 
+                                    // حالت ۲: تاریخ و ورود ثبت شده، خروج ثبت نشده
+                                    else if (this.confirmedDate && this.confirmedEntryTime && !this.confirmedExitTime) {
+                                        return `${this.confirmedDate} - ${this.confirmedEntryTime} الی ---`;
+                                    } 
+                                    // حالت ۳: تاریخ و خروج ثبت شده، ورود ثبت نشده
+                                    else if (this.confirmedDate && !this.confirmedEntryTime && this.confirmedExitTime) {
+                                        return `${this.confirmedDate} - --- الی ${this.confirmedExitTime}`;
+                                    } 
+                                    // حالت ۴: فقط تاریخ ثبت شده
+                                    else if (this.confirmedDate && !this.confirmedEntryTime && !this.confirmedExitTime) {
+                                        return `${this.confirmedDate} - بدون ساعت`;
+                                    } 
+                                    // حالت ۵: فقط ساعت‌ها ثبت شده (بدون تاریخ)
+                                    else if (!this.confirmedDate && (this.confirmedEntryTime || this.confirmedExitTime)) {
+                                        const entry = this.confirmedEntryTime || '---';
+                                        const exit = this.confirmedExitTime || '---';
+                                        return `بدون تاریخ - ${entry} الی ${exit}`;
+                                    } 
+                                    // حالت ۶: هیچکدام ثبت نشده
+                                    else {
+                                        return 'تأیید نشده';
+                                    }
+                                }
+                            }"
+                            x-on:date-confirmed.window="confirmedDate = $event.detail.date"
+                            x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
+                            x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
+                            
                             {{-- SVG باکس --}}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
                                 <rect class="cls-1" x="0" y="0" width="305.61" height="57.14"/>
                             </svg>
-                            {{-- نمایش تاریخ تأیید شده --}}
-                            <div class="absolute inset-0 flex items-center justify-center text-[12px] sm:text-[14px] md:text-[16px] text-gray-800 font-medium pointer-events-none"
-                                x-text="confirmedDate || 'تأیید نشده'">
+                            
+                            {{-- نمایش تاریخ و ساعت تأیید شده --}}
+                            <div class="absolute inset-0 flex items-center justify-center text-[10px] sm:text-[12px] md:text-[14px] text-gray-800 font-medium pointer-events-none px-2"
+                                x-text="displayText">
                             </div>
                         </div>
                     </div>
@@ -218,59 +253,55 @@
                         </div>
                     </div>
                     <script>
-                    document.addEventListener('alpine:init', () => {
-                        Alpine.data('datePicker', () => ({
-                            showCalendar: false,
-                            selectedDate: '',      // انتخاب موقت کاربر
-                            finalDate: '',         // تاریخ نهایی پس از تأیید (وارد hidden می‌شود)
-                            
-                            year: new persianDate().year(),
-                            month: new persianDate().month(),
-                            
-                            blockedDates: ['1406/4/4', '1406/4/5'],
-                            
-                            get viewDate() { 
-                                return new persianDate([this.year, this.month, 1]); 
-                            },
-                            get currentYear() { return this.viewDate.year(); },
-                            get currentMonthName() { return this.viewDate.format('MMMM'); },
-                            get daysInMonth() { return this.viewDate.daysInMonth(); },
-                            get startDayOffset() { 
-                                return this.viewDate.day(); 
-                            },
+                        document.addEventListener('alpine:init', () => {
+                            Alpine.data('datePicker', () => ({
+                                showCalendar: false,
+                                selectedDate: '',
+                                finalDate: '',
+                                
+                                year: new persianDate().year(),
+                                month: new persianDate().month(),
+                                
+                                blockedDates: ['1406/4/4', '1406/4/5'],
+                                
+                                get viewDate() { 
+                                    return new persianDate([this.year, this.month, 1]); 
+                                },
+                                get currentYear() { return this.viewDate.year(); },
+                                get currentMonthName() { return this.viewDate.format('MMMM'); },
+                                get daysInMonth() { return this.viewDate.daysInMonth(); },
+                                get startDayOffset() { 
+                                    return this.viewDate.day(); 
+                                },
 
-                            changeMonth(amount) {
-                                let newDate = this.viewDate.add('months', amount);
-                                this.year = newDate.year();
-                                this.month = newDate.month();
-                            },
+                                changeMonth(amount) {
+                                    let newDate = this.viewDate.add('months', amount);
+                                    this.year = newDate.year();
+                                    this.month = newDate.month();
+                                },
 
-                            selectDate(day) {
-                                if (this.isBlocked(day)) return;
-                                // فقط انتخاب موقت، تقویم باز می‌ماند
-                                this.selectedDate = `${this.year}/${this.month}/${day}`;
-                            },
+                                selectDate(day) {
+                                    if (this.isBlocked(day)) return;
+                                    this.selectedDate = `${this.year}/${this.month}/${day}`;
+                                },
 
-                            confirmDate() {
-                                if (!this.selectedDate) return;
-                                // ذخیره‌سازی نهایی
-                                this.finalDate = this.selectedDate;
-                                // ارسال رویداد برای نمایش در باکس خارجی
-                                this.$dispatch('date-confirmed', { date: this.finalDate });
-                                // بستن تقویم (در صورت نیاز)
-                                this.showCalendar = false;
-                            },
+                                confirmDate() {
+                                    if (!this.selectedDate) return;
+                                    this.finalDate = this.selectedDate;
+                                    this.$dispatch('date-confirmed', { date: this.finalDate });
+                                    this.showCalendar = false;
+                                },
 
-                            isSelected(day) {
-                                return this.selectedDate === `${this.year}/${this.month}/${day}`;
-                            },
+                                isSelected(day) {
+                                    return this.selectedDate === `${this.year}/${this.month}/${day}`;
+                                },
 
-                            isBlocked(day) {
-                                let dateStr = `${this.year}/${this.month}/${day}`;
-                                return this.blockedDates.includes(dateStr);
-                            }
-                        }));
-                    });
+                                isBlocked(day) {
+                                    let dateStr = `${this.year}/${this.month}/${day}`;
+                                    return this.blockedDates.includes(dateStr);
+                                }
+                            }));
+                        });
                     </script>
                     {{-- ساعت --}}
                     <div class="absolute bg-white overflow-hidden"
@@ -280,7 +311,7 @@
 
                         {{-- SVG حاشیه --}}
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 289.98 520.18"
-                            class="w-full h-full pointer-events-none absolute z-10 text-gray-700">
+                            class="cls-1 w-full h-full pointer-events-none absolute z-10 text-gray-700">
                             <rect x="0" y="0" width="289.98" height="520.18" fill="none" stroke="currentColor"/>
                         </svg>
 
@@ -460,20 +491,18 @@
                     {{-- اسکریپت Alpine --}}
                     <script>
                         function timePickerInline() {
-                            const ITEM_HEIGHT = 40; // باید با ارتفاع wheel-item در CSS یکسان باشد
+                            const ITEM_HEIGHT = 40;
 
                             return {
                                 mode: 'split',
                                 entryTime: null,
                                 exitTime: null,
-                                hourIndex: 8,   // پیش‌فرض ۰۸
-                                minuteIndex: 0,  // پیش‌فرض ۰۰
+                                hourIndex: 8,
+                                minuteIndex: 0,
 
-                                // وضعیت ویرایش
                                 editingType: null,
                                 editingOriginalTime: null,
 
-                                // وضعیت درگ با کلیک راست
                                 dragging: {
                                     active: false,
                                     type: null,
@@ -482,24 +511,20 @@
                                 },
 
                                 initPicker() {
-                                    // رویدادهای سراسری موس برای درگ
                                     window.addEventListener('mousemove', this.onMouseMove.bind(this));
                                     window.addEventListener('mouseup', this.stopDrag.bind(this));
                                 },
 
                                 openPicker(type) {
-                                    // ذخیره زمان فعلی برای امکان لغو
                                     this.editingType = type;
                                     this.editingOriginalTime = type === 'entry' ? this.entryTime : this.exitTime;
 
-                                    // تنظیم مقادیر اولیه بر اساس زمان فعلی
                                     const currentTime = type === 'entry' ? this.entryTime : this.exitTime;
                                     if (currentTime) {
                                         const [h, m] = currentTime.split(':').map(Number);
                                         this.hourIndex = h;
                                         this.minuteIndex = m;
                                     } else {
-                                        // ⬇️ تغییر این بخش: استفاده از ساعت و دقیقهٔ سیستم
                                         const now = new Date();
                                         this.hourIndex = now.getHours();
                                         this.minuteIndex = now.getMinutes();
@@ -507,7 +532,6 @@
 
                                     this.mode = type === 'entry' ? 'entry-edit' : 'exit-edit';
 
-                                    // اسکرول به موقعیت صحیح (بدون انیمیشن برای نمایش سریع)
                                     this.$nextTick(() => {
                                         this.scrollToIndex('hour', false);
                                         this.scrollToIndex('minute', false);
@@ -525,7 +549,6 @@
                                     }
                                 },
 
-                                // رویداد اسکرول طبیعی (چرخ ماوس، درگ لمسی)
                                 onScroll(type) {
                                     const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
                                     if (!scrollRef) return;
@@ -537,9 +560,8 @@
                                     }
                                 },
 
-                                // ═══════════════════════ درگ با کلیک راست ═══════════════════════
                                 startDrag(event, type) {
-                                    if (event.button !== 2) return; // فقط کلیک راست
+                                    if (event.button !== 2) return;
                                     event.preventDefault();
                                     event.stopPropagation();
 
@@ -553,7 +575,6 @@
                                 onMouseMove(event) {
                                     if (!this.dragging.active) return;
                                     const deltaY = event.clientY - this.dragging.startY;
-                                    // حرکت موس به بالا (deltaY منفی) اسکرول را کاهش می‌دهد
                                     let newScrollTop = this.dragging.startScroll - deltaY;
 
                                     const maxIndex = this.dragging.type === 'hour' ? 23 : 59;
@@ -563,7 +584,6 @@
                                     const scrollRef = this.dragging.type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
                                     if (scrollRef) {
                                         scrollRef.scrollTop = newScrollTop;
-                                        // onScroll به‌طور خودکار فراخوانی می‌شود و ایندکس را به‌روز می‌کند
                                     }
                                 },
 
@@ -572,14 +592,11 @@
                                     const type = this.dragging.type;
                                     this.dragging.active = false;
                                     this.dragging.type = null;
-                                    // اسنپ به نزدیک‌ترین آیتم با انیمیشن نرم
                                     this.$nextTick(() => {
                                         this.scrollToIndex(type, true);
                                     });
                                 },
-                                // ════════════════════════════════════════════════════════════
 
-                                // ════════════ کلیک روی آیتم برای انتخاب مستقیم ════════════
                                 clickItem(index, type) {
                                     if (type === 'hour') {
                                         this.hourIndex = index;
@@ -589,7 +606,6 @@
                                     this.scrollToIndex(type, true);
                                 },
 
-                                // ════════════ پشتیبانی از صفحه‌کلید ════════════
                                 onKeydown(event, type) {
                                     const keys = ['ArrowUp', 'ArrowDown', 'Enter', 'Escape'];
                                     if (!keys.includes(event.key)) return;
@@ -621,8 +637,19 @@
                                     // بازگرداندن زمان اصلی
                                     if (this.editingType === 'entry') {
                                         this.entryTime = this.editingOriginalTime;
+                                        // اگر می‌خواهید لغو هم در باکس منعکس شود
+                                        if (this.editingOriginalTime) {
+                                            this.$dispatch('entry-time-confirmed', { time: this.editingOriginalTime });
+                                        } else {
+                                            this.$dispatch('entry-time-confirmed', { time: '' });
+                                        }
                                     } else if (this.editingType === 'exit') {
                                         this.exitTime = this.editingOriginalTime;
+                                        if (this.editingOriginalTime) {
+                                            this.$dispatch('exit-time-confirmed', { time: this.editingOriginalTime });
+                                        } else {
+                                            this.$dispatch('exit-time-confirmed', { time: '' });
+                                        }
                                     }
                                     this.mode = 'split';
                                 },
@@ -634,14 +661,17 @@
 
                                     if (this.mode === 'entry-edit') {
                                         this.entryTime = timeStr;
+                                        // dispatch رویداد مخصوص زمان ورود
+                                        this.$dispatch('entry-time-confirmed', { time: timeStr });
                                     } else if (this.mode === 'exit-edit') {
                                         this.exitTime = timeStr;
+                                        // dispatch رویداد مخصوص زمان خروج
+                                        this.$dispatch('exit-time-confirmed', { time: timeStr });
                                     }
 
                                     this.mode = 'split';
                                 },
 
-                                // پاک‌سازی event listener هنگام حذف کامپوننت (اختیاری)
                                 destroy() {
                                     window.removeEventListener('mousemove', this.onMouseMove);
                                     window.removeEventListener('mouseup', this.stopDrag);
