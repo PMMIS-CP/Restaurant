@@ -995,7 +995,6 @@ document.addEventListener('DOMContentLoaded', function() {
       
       this.appendChild(ripple);
       
-      // حذف ripple بعد از انیمیشن
       setTimeout(() => {
         ripple.remove();
       }, 110);
