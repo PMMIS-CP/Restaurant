@@ -6,3 +6,35 @@
   -moz-user-select: none;
   -ms-user-select: none;
 }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #DC143C #1A0A0D;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1A0A0D;
+    border-radius: 8px;
+    box-shadow: inset 0 0 6px rgba(220, 20, 60, 0.2);
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #DC143C, #B01030);
+    border-radius: 8px;
+    border: 2px solid #FFD700;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #FF1744, #DC143C);
+    border-color: #FFC107;
+    box-shadow: 0 0 8px rgba(255, 215, 0, 0.5);
+}
+
+::-webkit-scrollbar-corner {
+    background: #1A0A0D;
+}

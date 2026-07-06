@@ -2,7 +2,7 @@
 @section('title', 'رزرو')
 @section('content')
 
-<div class="relative min-h-screen w-full bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
+<div class="hidden lg:block relative min-h-screen w-full bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
     {{-- لایه تیره با تم کرمی --}}
     <div class="absolute inset-0 bg-amber-50/80 backdrop-blur-[2px]"
          style="mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 60%, transparent 100%);
@@ -39,52 +39,59 @@
             <div class="absolute w-full h-full">
                 {{-- بخش اول --}}
                 <div class="flex flex-row gap-1 md:gap-3 w-full">
-                    {{-- ایمیل --}}
-                    <div class="flex flex-col flex-1 min-w-0">
-                        <label for="email" class="absolute text-right font-bold" 
-                            style="left: 48.65%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px);
-                                   color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                            ایمیل:
-                        </label>
-                        <div class="absolute" style="left: 48.65%; top: 7.32%; width: 16.58%; height: 57px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
-                                <rect class="modern-box-crimson" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
-                            </svg>
-                            <input type="email" id="email" placeholder="مثال: example@email.com" 
-                                class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
-                                style="color: #1a1a1a;">
+                    <div x-data="formAnimation">
+                        {{-- ایمیل --}}
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <label for="email" class="absolute text-right font-bold" 
+                                style="left: 48.65%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
+                                ایمیل:
+                            </label>
+                            <div class="absolute" style="left: 48.65%; top: 7.32%; width: 16.58%; height: 57px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
+                                    <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
+                                        x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
+                                </svg>
+                                <input type="email" id="email" placeholder="مثال: example@email.com" 
+                                    @focus="triggerAnimation($el.parentElement)"
+                                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
+                                    style="color: #1a1a1a;">
+                            </div>
                         </div>
-                    </div>
-                    {{-- شماره تماس --}}
-                    <div class="flex flex-col flex-1 min-w-0">
-                        <label for="phone" class="absolute text-right font-bold" 
-                            style="left: 66.02%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px);
-                                   color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                            شماره تماس:
-                        </label>
-                        <div class="absolute" style="left: 66.02%; top: 7.32%; width: 16.58%; height: 57px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
-                                <rect class="modern-box-crimson" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
-                            </svg>
-                            <input type="tel" id="phone" placeholder="مثال: 09123456789" 
-                                class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
-                                style="color: #1a1a1a;">
+
+                        {{-- شماره تماس --}}
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <label for="phone" class="absolute text-right font-bold" 
+                                style="left: 66.02%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
+                                شماره تماس:
+                            </label>
+                            <div class="absolute" style="left: 66.02%; top: 7.32%; width: 16.58%; height: 57px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
+                                    <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
+                                        x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
+                                </svg>
+                                <input type="tel" id="phone" placeholder="مثال: 09123456789" 
+                                    @focus="triggerAnimation($el.parentElement)"
+                                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
+                                    style="color: #1a1a1a;">
+                            </div>
                         </div>
-                    </div>
-                    {{-- نام و نام خانوادگی --}}
-                    <div class="flex flex-col flex-1 min-w-0">
-                        <label for="name" class="absolute text-right font-bold" 
-                            style="left: 83.39%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px);
-                                   color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                            نام و نام خانوادگی:
-                        </label>
-                        <div class="absolute" style="left: 83.39%; top: 7.32%; width: 16.58%; height: 57px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
-                                <rect class="modern-box-crimson" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
-                            </svg>
-                            <input type="text" id="name" placeholder="مثال: علی رضایی" 
-                                class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
-                                style="color: #1a1a1a;">
+
+                        {{-- نام و نام خانوادگی --}}
+                        <div class="flex flex-col flex-1 min-w-0">
+                            <label for="name" class="absolute text-right font-bold" 
+                                style="left: 83.39%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
+                                نام و نام خانوادگی:
+                            </label>
+                            <div class="absolute" style="left: 83.39%; top: 7.32%; width: 16.58%; height: 57px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
+                                    <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
+                                        x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
+                                </svg>
+                                <input type="text" id="name" placeholder="مثال: علی رضایی" 
+                                    @focus="triggerAnimation($el.parentElement)"
+                                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
+                                    style="color: #1a1a1a;">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -108,7 +115,7 @@
                             x-on:click="triggerAnimation($el)">
                             
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full absolute overflow-visible">
-                                <rect class="modern-box-crimson" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12" fill="transparent"/>
+                                <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12" fill="transparent"/>
                                 
                                 <rect class="light-rect" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12" 
                                     fill="none" 
@@ -126,66 +133,131 @@
                     </div>
 
                     {{-- تعداد نفرات --}}
-                    <div class="flex flex-col flex-1 min-w-0">
-                        <label for="guest_count" class="absolute text-right font-bold" 
+                    <div class="flex flex-col flex-1 min-w-0 custom-dropdown-container" data-type="guest">
+                        <label class="absolute text-right font-bold" 
                             style="left: 66.02%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px);
-                                   color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
+                                color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
                             تعداد مهمان:
                         </label>
                         <div class="absolute" style="left: 66.02%; top: 21.18%; width: 16.58%; height: 57px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
-                                <rect class="modern-box-crimson" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute z-10">
+                                <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                             </svg>
-                            <select id="guest_count" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right cursor-pointer appearance-none text-[10px] sm:text-xs md:text-sm"
-                                    style="color: #1a1a1a;">
-                                <option value="" disabled selected hidden>تعداد را وارد کنید</option> 
-                                <option value="1-4">۱ تا ۴ نفر</option>
-                                <option value="5-10">۵ تا ۱۰ نفر</option>
-                                <option value="25-50">۲۵ تا ۵۰ نفر</option>
-                                <option value="50-100">۵۰ تا ۱۰۰ نفر</option>
-                            </select>
+                            
+                            <input type="hidden" name="guest_count" id="guest_count" value="">
+
+                            <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right cursor-pointer flex items-center justify-between text-[10px] sm:text-xs md:text-sm text-gray-400 z-20">
+                                <span class="selected-text">تعداد را وارد کنید</span>
+                                <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+
+                            <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
+                                <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">۱ تا ۴ نفر</li>
+                                <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">۵ تا ۱۰ نفر</li>
+                                <li data-value="25-50" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">۲۵ تا ۵۰ نفر</li>
+                                <li data-value="50-100" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">۵۰ تا ۱۰۰ نفر</li>
+                            </ul>
                         </div>
                     </div>
 
                     {{-- نوع مراسم --}}
-                    <div class="flex flex-col flex-1 min-w-0">
-                        <label for="event_type" class="absolute text-right font-bold" 
+                    <div class="flex flex-col flex-1 min-w-0 custom-dropdown-container" data-type="event">
+                        <label class="absolute text-right font-bold" 
                             style="left: 83.39%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px);
-                                   color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
+                                color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
                             نوع مراسم:
                         </label>
                         <div class="absolute" style="left: 83.39%; top: 21.18%; width: 16.58%; height: 57px;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
-                                <rect class="modern-box-crimson" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute z-10">
+                                <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                             </svg>
-                            <select id="event_type" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right cursor-pointer appearance-none text-[10px] sm:text-xs md:text-sm"
-                                    style="color: #1a1a1a;">
-                                <option value="" disabled selected hidden>نوع مراسم را انتخاب کنید</option>
-                                <option value="wedding">عروسی</option>
-                                <option value="birthday">تولد</option>
-                                <option value="corporate">مهمانی سازمانی یا شرکتی</option>
-                                <option value="engagement">نامزدی</option>
-                                <option value="anniversary">سالگرد ازدواج</option>
-                                <option value="friendly">مهمانی دوستانه</option>
-                                <option value="conference">همایش یا سمینار</option>
-                            </select>
+                            
+                            <input type="hidden" name="event_type" id="event_type" value="">
+
+                            <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right cursor-pointer flex items-center justify-between text-[10px] sm:text-xs md:text-sm text-gray-400 z-20">
+                                <span class="selected-text">نوع مراسم را انتخاب کنید</span>
+                                <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                            </button>
+
+                            <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
+                                <li data-value="wedding" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">عروسی</li>
+                                <li data-value="birthday" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
+                                <li data-value="corporate" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مهمانی سازمانی یا شرکتی</li>
+                                <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">نامزدی</li>
+                                <li data-value="anniversary" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سالگرد ازدواج</li>
+                                <li data-value="friendly" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مهمانی دوستانه</li>
+                                <li data-value="conference" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">همایش یا سمینار</li>
+                            </ul>
                         </div>
                     </div>
+
+                    {{-- جاوااسکریپت هوشمند برای مدیریت هردو دراپ‌داون --}}
+                    <script>
+                        document.querySelectorAll('.custom-dropdown-container').forEach(container => {
+                            const trigger = container.querySelector('.dropdown-trigger');
+                            const menu = container.querySelector('.dropdown-menu');
+                            const arrow = trigger.querySelector('svg');
+                            const hiddenInput = container.querySelector('input[type="hidden"]');
+                            const selectedText = container.querySelector('.selected-text');
+                            const items = container.querySelectorAll('li');
+
+                            // باز و بسته کردن منو با کلیک روی دکمه
+                            trigger.addEventListener('click', (e) => {
+                                e.stopPropagation();
+                                // بستن بقیه دراپ‌داون‌های باز در صفحه
+                                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                                    if(m !== menu) m.classList.add('hidden');
+                                });
+                                document.querySelectorAll('.dropdown-trigger svg').forEach(svg => {
+                                    if(svg !== arrow) svg.classList.remove('rotate-180');
+                                });
+
+                                menu.classList.toggle('hidden');
+                                arrow.classList.toggle('rotate-180');
+                            });
+
+                            // مدیریت انتخاب گزینه‌ها
+                            items.forEach(item => {
+                                item.addEventListener('click', (e) => {
+                                    e.stopPropagation();
+                                    const value = item.getAttribute('data-value');
+                                    const text = item.textContent;
+
+                                    hiddenInput.value = value; // مقداردهی به اینپوت اصلی
+                                    selectedText.textContent = text; // تغییر متن نمایشی
+                                    
+                                    // تغییر رنگ متن به تیره پس از انتخاب
+                                    trigger.classList.remove('text-gray-400');
+                                    trigger.classList.add('text-gray-800', 'font-medium');
+
+                                    // بستن منو
+                                    menu.classList.add('hidden');
+                                    arrow.classList.remove('rotate-180');
+                                });
+                            });
+                        });
+
+                        // بستن دراپ‌داون‌ها در صورت کلیک روی هرجای دیگر صفحه
+                        document.addEventListener('click', () => {
+                            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+                            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => svg.classList.remove('rotate-180'));
+                        });
+                    </script>
                 </div>
 
                 {{-- بخش سوم --}}
                 <div class="flex flex-col w-full mt-1 md:mt-2">
                     {{-- توضیحات --}}
                     <div class="flex flex-col w-full flex-1">
-                        <div class="absolute" style="left: 48.65%; top: 37.11%; width: 51.32%; height: 43.87%;">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 945.89 309.84"
-                                class="w-full h-full pointer-events-none absolute">
-                                <rect class="modern-box-crimson" x="0" y="0" width="945.89" height="309.84" rx="15" ry="15"/>
+                        <div class="absolute" style="left: 48.65%; top: 37.11%; width: 51.32%; height: 43.87%;" x-data="textareaAnimation">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 945.89 309.84" class="w-full h-full pointer-events-none absolute">
+                                <rect class="light-rect-textarea fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" 
+                                    x="0" y="0" width="945.89" height="309.84" rx="15" ry="15"/>
                             </svg>
-                            <textarea placeholder="توضیحات خود را اینجا بنویسید..." 
-                                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-2 md:p-4 lg:p-6 text-right resize-none text-[10px] sm:text-xs md:text-sm"
-                                    style="color: #1a1a1a;"
-                                    placeholder-style="color: #9CA3AF;"></textarea>
+                            <textarea @focus="triggerAnimation($el.parentElement)"
+                                    placeholder="توضیحات خود را اینجا بنویسید..." 
+                                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm"
+                                    style="color: #1a1a1a;"></textarea>
                         </div>
                     </div>
                 </div>
@@ -205,11 +277,23 @@
                         <input type="hidden" name="reservation_date" x-model="finalDate">
 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520.18 520.18" class="w-full h-full pointer-events-none absolute z-10">
-                            <rect class="modern-box-gold" x="0" y="0" width="520.18" height="520.18" rx="15" ry="15"/>
+                            <rect
+                                class="fill-white/40 stroke-[#B8860B] stroke-[2.5] [stroke-miterlimit:10] 
+                                        filter drop-shadow-[0_2px_8px_rgba(184,134,11,0.15)] 
+                                        transition-all duration-300 ease-[ease]
+                                        hover:stroke-[#DC2626] 
+                                        hover:drop-shadow-[0_4px_12px_rgba(220,38,38,0.2)]"
+                                x="0"
+                                y="0"
+                                width="520.18"
+                                height="520.18"
+                                rx="15"
+                                ry="15"
+                            />
                             <rect class="light-rect-calendar" x="0" y="0" width="520.18" height="520.18" rx="15" ry="15" 
                                 fill="none" 
                                 stroke="#ff0061" 
-                                stroke-width="6" 
+                                stroke-width="12" 
                                 stroke-dasharray="100 629.22" 
                                 style="opacity: 0;"/>
                         </svg>
@@ -333,11 +417,23 @@
 
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 289.98 520.18"
                             class="w-full h-full pointer-events-none absolute z-10">
-                            <rect class="modern-box-gold" x="0" y="0" width="289.98" height="520.18" rx="15" ry="15"/>
+                            <rect
+                                class="fill-white/40 stroke-[#B8860B] stroke-[2.5] [stroke-miterlimit:10] 
+                                        filter drop-shadow-[0_2px_8px_rgba(184,134,11,0.15)] 
+                                        transition-all duration-300 ease-[ease]
+                                        hover:stroke-[#DC2626] 
+                                        hover:drop-shadow-[0_4px_12px_rgba(220,38,38,0.2)]"
+                                x="0"
+                                y="0"
+                                width="289.98"
+                                height="520.18"
+                                rx="15"
+                                ry="15"
+                            />
                             <rect class="light-rect-time" x="0" y="0" width="289.98" height="520.18" rx="15" ry="15" 
                                 fill="none" 
                                 stroke="#ff0061" 
-                                stroke-width="6" 
+                                stroke-width="12" 
                                 stroke-dasharray="100 629.22" 
                                 style="opacity: 0;"/>
                         </svg>
@@ -699,7 +795,19 @@
                     <div class="absolute" style="left: 31.36%; top: 88.81%; width: 38.76%; height: 11.12%;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 714.41 78.52"
                             class="w-full h-full pointer-events-none absolute">
-                            <rect class="modern-btn" x="0" y="0" width="714.41" height="78.52" rx="20" ry="20"/>
+                            <rect
+                                class="fill-red-600/90 stroke-[#B8860B] stroke-3 [stroke-miterlimit:10] 
+                                        filter drop-shadow-[0_4px_15px_rgba(220,38,38,0.3)] 
+                                        transition-all duration-300 ease-in-out
+                                        hover:fill-[#B8860B]/90 hover:stroke-[#DC2626] 
+                                        hover:drop-shadow-[0_6px_20px_rgba(184,134,11,0.4)]"
+                                x="0"
+                                y="0"
+                                width="714.41"
+                                height="78.52"
+                                rx="20"
+                                ry="20"
+                            />
                         </svg>
                         <button type="submit" 
                                 class="absolute inset-0 w-full h-full bg-transparent border-none outline-none cursor-pointer font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-[10px] sm:text-sm md:text-base lg:text-lg"
@@ -713,71 +821,24 @@
         </div>
     </div>
 </div>
-
+<div class="block lg:hidden">
+    
+</div>
 {{-- استایل مدرن SVG ها --}}
 <style>
-/* باکس‌های ورودی با حاشیه زرشکی */
-.modern-box-crimson {
-    fill: rgba(255, 255, 255, 0.4);
-    stroke: #DC2626;
-    stroke-width: 2.5;
-    stroke-miterlimit: 10;
-    filter: drop-shadow(0 2px 8px rgba(220, 38, 38, 0.15));
-    transition: all 0.3s ease;
-}
-.modern-box-crimson:hover {
-    stroke: #0022ff;
-    filter: drop-shadow(0 4px 12px rgba(184, 134, 11, 0.2));
-}
-
-/* باکس‌های تقویم و ساعت با حاشیه طلایی */
-.modern-box-gold {
-    fill: rgba(255, 255, 255, 0.4);
-    stroke: #B8860B;
-    stroke-width: 2.5;
-    stroke-miterlimit: 10;
-    filter: drop-shadow(0 2px 8px rgba(184, 134, 11, 0.15));
-    transition: all 0.3s ease;
-}
-.modern-box-gold:hover {
-    stroke: #DC2626;
-    filter: drop-shadow(0 4px 12px rgba(220, 38, 38, 0.2));
-}
-
-/* دکمه ثبت با گرادینت */
-.modern-btn {
-    fill: rgba(220, 38, 38, 0.9);
-    stroke: #B8860B;
-    stroke-width: 3;
-    stroke-miterlimit: 10;
-    filter: drop-shadow(0 4px 15px rgba(220, 38, 38, 0.3));
-    transition: all 0.3s ease;
-}
-.modern-btn:hover {
-    fill: rgba(184, 134, 11, 0.9);
-    stroke: #DC2626;
-    filter: drop-shadow(0 6px 20px rgba(184, 134, 11, 0.4));
-}
-/* برای حذف رنگ پس‌زمینه پیش‌فرض کروم */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-    /* استفاده از سایه داخلی برای خنثی کردن پس‌زمینه زرد کروم */
     -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-    /* تنظیم رنگ متن به همان رنگ دلخواه شما */
     -webkit-text-fill-color: #1a1a1a !important;
-    /* حفظ استایل‌های قبلی */
     transition: background-color 5000s ease-in-out 0s;
 }
-/* تنظیم برای textarea جهت هماهنگی با Autofill */
+
 textarea:-webkit-autofill,
 textarea:-webkit-autofill:hover,
 textarea:-webkit-autofill:focus {
-    /* حذف پس‌زمینه زرد کروم */
     -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-    /* تنظیم رنگ متن */
     -webkit-text-fill-color: #1a1a1a !important;
-    /* جلوگیری از تغییر ناگهانی رنگ پس‌زمینه */
     transition: background-color 5000s ease-in-out 0s;
 }
 </style>
@@ -793,11 +854,15 @@ textarea:-webkit-autofill:focus {
             if (this.isAnimating) return;
             this.isAnimating = true;
 
-            const runGsap = (selector, parent = document) => {
-                const target = parent.querySelector(selector);
+            const runGsap = (selector, context = document) => {
+                const target = context.querySelector(selector);
                 if (!target) return;
+                
+                // اطمینان از اینکه المان دیده می‌شود
+                gsap.set(target, { opacity: 1 });
+                
                 gsap.fromTo(target, 
-                    { strokeDashoffset: 729.22, opacity: 1 }, 
+                    { strokeDashoffset: 729.22 }, 
                     { 
                         strokeDashoffset: -1458.44, 
                         duration: 6, 
@@ -807,14 +872,19 @@ textarea:-webkit-autofill:focus {
                 );
             };
 
-            runGsap('.light-rect', el);
-            
-            // پیدا کردن باکس‌های تقویم و ساعت
+            // ۱. اجرای انیمیشن روی المانی که فوکوس شده (Input Parent)
+            // دقت کنید که کلاس rect در اینپوت‌ها را 'light-rect-input' گذاشتیم
+            runGsap('.light-rect-input', el);
+
+            // ۲. اجرای انیمیشن‌های قبلی (تقویم و ساعت) اگر موجود بودند
             const calendarBox = document.querySelector('[x-data*="datePicker"]')?.closest('.absolute.overflow-hidden');
             if (calendarBox) runGsap('.light-rect-calendar', calendarBox);
 
             const timeBox = document.querySelector('[x-data*="timePickerInline"]')?.closest('.absolute.overflow-hidden');
             if (timeBox) runGsap('.light-rect-time', timeBox);
+
+            // ۳. اجرای انیمیشن روی باکس اصلی اگر وجود داشت
+            runGsap('.light-rect', document); 
 
             setTimeout(() => { this.isAnimating = false; }, 6000);
         },
@@ -836,5 +906,82 @@ textarea:-webkit-autofill:focus {
     }));
 });
 </script>
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('formAnimation', () => ({
+        isAnimating: false,
 
+        triggerAnimation(el) {
+            if (this.isAnimating) return;
+            this.isAnimating = true;
+
+            const runGsap = (selector, context) => {
+                const target = context.querySelector(selector);
+                if (!target) return;
+                
+                // ۱. استایل اولیه برای انیمیشن (بدون دستکاری opacity)
+                gsap.set(target, { strokeDasharray: 729.22 });
+                
+                gsap.fromTo(target, 
+                    { strokeDashoffset: 729.22 }, 
+                    { 
+                        strokeDashoffset: -1458.44, 
+                        duration: 6, 
+                        ease: 'none',
+                        // ۲. استفاده از clearProps برای بازگشت به استایل CSS بعد از انیمیشن
+                        onComplete: () => { 
+                            gsap.set(target, { clearProps: "strokeDashoffset, strokeDasharray" }); 
+                        }
+                    }
+                );
+            };
+
+            // اجرای انیمیشن روی مستطیل همان فیلد (المان والد اینپوت)
+            runGsap('.light-rect-input', el);
+
+            setTimeout(() => { this.isAnimating = false; }, 6000);
+        }
+    }));
+});
+</script>
+<script>
+document.addEventListener('alpine:init', () => {
+    Alpine.data('textareaAnimation', () => ({
+        isAnimating: false,
+
+        triggerAnimation(el) {
+            if (this.isAnimating) return;
+            this.isAnimating = true;
+
+            const target = el.querySelector('.light-rect-textarea');
+            if (!target) {
+                this.isAnimating = false;
+                return;
+            }
+
+            // محاسبه محیط مستطیل: (945.89 + 309.84) * 2 = 2511.46
+            const perimeter = 2511.46;
+
+            // فقط strokeDasharray رو تنظیم کن، opacity رو دستکاری نکن
+            gsap.set(target, { strokeDasharray: perimeter });
+
+            gsap.fromTo(target, 
+                { strokeDashoffset: perimeter }, 
+                { 
+                    strokeDashoffset: -perimeter, 
+                    duration: 6, 
+                    ease: 'none',
+                    // clearProps برای برگردوندن به استایل اصلی CSS
+                    onComplete: () => { 
+                        gsap.set(target, { clearProps: "strokeDashoffset, strokeDasharray" }); 
+                    }
+                }
+            );
+
+            // جدا کردن ریست isAnimating از onComplete
+            setTimeout(() => { this.isAnimating = false; }, 6000);
+        }
+    }));
+});
+</script>
 @endsection
