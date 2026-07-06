@@ -190,59 +190,6 @@
                             </ul>
                         </div>
                     </div>
-
-                    {{-- جاوااسکریپت هوشمند برای مدیریت هردو دراپ‌داون --}}
-                    <script>
-                        document.querySelectorAll('.custom-dropdown-container').forEach(container => {
-                            const trigger = container.querySelector('.dropdown-trigger');
-                            const menu = container.querySelector('.dropdown-menu');
-                            const arrow = trigger.querySelector('svg');
-                            const hiddenInput = container.querySelector('input[type="hidden"]');
-                            const selectedText = container.querySelector('.selected-text');
-                            const items = container.querySelectorAll('li');
-
-                            // باز و بسته کردن منو با کلیک روی دکمه
-                            trigger.addEventListener('click', (e) => {
-                                e.stopPropagation();
-                                // بستن بقیه دراپ‌داون‌های باز در صفحه
-                                document.querySelectorAll('.dropdown-menu').forEach(m => {
-                                    if(m !== menu) m.classList.add('hidden');
-                                });
-                                document.querySelectorAll('.dropdown-trigger svg').forEach(svg => {
-                                    if(svg !== arrow) svg.classList.remove('rotate-180');
-                                });
-
-                                menu.classList.toggle('hidden');
-                                arrow.classList.toggle('rotate-180');
-                            });
-
-                            // مدیریت انتخاب گزینه‌ها
-                            items.forEach(item => {
-                                item.addEventListener('click', (e) => {
-                                    e.stopPropagation();
-                                    const value = item.getAttribute('data-value');
-                                    const text = item.textContent;
-
-                                    hiddenInput.value = value; // مقداردهی به اینپوت اصلی
-                                    selectedText.textContent = text; // تغییر متن نمایشی
-                                    
-                                    // تغییر رنگ متن به تیره پس از انتخاب
-                                    trigger.classList.remove('text-gray-400');
-                                    trigger.classList.add('text-gray-800', 'font-medium');
-
-                                    // بستن منو
-                                    menu.classList.add('hidden');
-                                    arrow.classList.remove('rotate-180');
-                                });
-                            });
-                        });
-
-                        // بستن دراپ‌داون‌ها در صورت کلیک روی هرجای دیگر صفحه
-                        document.addEventListener('click', () => {
-                            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
-                            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => svg.classList.remove('rotate-180'));
-                        });
-                    </script>
                 </div>
 
                 {{-- بخش سوم --}}
@@ -352,58 +299,6 @@
                         </div>
                     </div>
 
-                    <script>
-                        document.addEventListener('alpine:init', () => {
-                            Alpine.data('datePicker', () => ({
-                                showCalendar: false,
-                                selectedDate: '',
-                                finalDate: '',
-                                
-                                year: new persianDate().year(),
-                                month: new persianDate().month(),
-                                
-                                blockedDates: ['1406/4/4', '1406/4/5'],
-                                
-                                get viewDate() { 
-                                    return new persianDate([this.year, this.month, 1]); 
-                                },
-                                get currentYear() { return this.viewDate.year(); },
-                                get currentMonthName() { return this.viewDate.format('MMMM'); },
-                                get daysInMonth() { return this.viewDate.daysInMonth(); },
-                                get startDayOffset() { 
-                                    return this.viewDate.day(); 
-                                },
-
-                                changeMonth(amount) {
-                                    let newDate = this.viewDate.add('months', amount);
-                                    this.year = newDate.year();
-                                    this.month = newDate.month();
-                                },
-
-                                selectDate(day) {
-                                    if (this.isBlocked(day)) return;
-                                    this.selectedDate = `${this.year}/${this.month}/${day}`;
-                                },
-
-                                confirmDate() {
-                                    if (!this.selectedDate) return;
-                                    this.finalDate = this.selectedDate;
-                                    this.$dispatch('date-confirmed', { date: this.finalDate });
-                                    this.showCalendar = false;
-                                },
-
-                                isSelected(day) {
-                                    return this.selectedDate === `${this.year}/${this.month}/${day}`;
-                                },
-
-                                isBlocked(day) {
-                                    let dateStr = `${this.year}/${this.month}/${day}`;
-                                    return this.blockedDates.includes(dateStr);
-                                }
-                            }));
-                        });
-                    </script>
-
                     {{-- ساعت --}}
                     <div class="absolute overflow-hidden"
                         style="left: 0.027%; top: 7.32%; width: 15.73%; height: 73.66%;
@@ -437,74 +332,6 @@
                                 stroke-dasharray="100 629.22" 
                                 style="opacity: 0;"/>
                         </svg>
-
-                        <style>
-                            .wheel-column {
-                                position: relative;
-                                width: 45%;
-                                height: 120px;
-                                overflow: hidden;
-                                border-radius: 12px;
-                                background: rgba(248, 250, 252, 0.5);
-                                box-shadow: inset 0 0 10px rgba(220, 38, 38, 0.1);
-                                user-select: none;
-                                touch-action: pan-y;
-                                outline: none;
-                            }
-                            .wheel-column:focus-visible {
-                                box-shadow: 0 0 0 2px #DC2626;
-                            }
-                            .wheel-scroll {
-                                height: 100%;
-                                overflow-y: auto;
-                                scrollbar-width: none;
-                                -ms-overflow-style: none;
-                                cursor: default;
-                                padding: 40px 0;
-                            }
-                            .wheel-scroll::-webkit-scrollbar {
-                                display: none;
-                            }
-                            .wheel-item {
-                                height: 40px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-                                font-size: 1.2rem;
-                                color: #94a3b8;
-                                transition: all 0.2s;
-                                cursor: pointer;
-                            }
-                            .wheel-item.selected {
-                                font-size: 1.6rem;
-                                font-weight: bold;
-                                color: #DC2626;
-                                background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(184, 134, 11, 0.1));
-                                border-radius: 8px;
-                                margin: 0 8px;
-                            }
-                            .wheel-column::before,
-                            .wheel-column::after {
-                                content: '';
-                                position: absolute;
-                                left: 0;
-                                right: 0;
-                                height: 30%;
-                                z-index: 2;
-                                pointer-events: none;
-                            }
-                            .wheel-column::before {
-                                top: 0;
-                                background: linear-gradient(to bottom, rgba(248, 250, 252, 0.5) 0%, transparent 100%);
-                            }
-                            .wheel-column::after {
-                                bottom: 0;
-                                background: linear-gradient(to top, rgba(248, 250, 252, 0.5) 0%, transparent 100%);
-                            }
-                            .wheel-scroll.dragging {
-                                cursor: grabbing;
-                            }
-                        </style>
 
                         <div class="relative h-full w-full">
 
@@ -550,19 +377,19 @@
                                    style="color: #B8860B;"></p>
 
                                 <div class="flex items-center justify-center gap-2 w-full" style="height: 160px;">
-                                    <div class="wheel-column"
+                                    <div class="relative w-[45%] h-30 overflow-hidden rounded-xl bg-[rgba(248,250,252,0.5)] shadow-[inset_0_0_10px_rgba(220,38,38,0.1)] select-none touch-pan-y outline-none focus-visible:shadow-[0_0_0_2px_#DC2626] before:content-[''] before:absolute before:left-0 before:right-0 before:top-0 before:h-[30%] before:z-2 before:pointer-events-none before:bg-[linear-gradient(to_bottom,rgba(248,250,252,0.5)_0%,transparent_100%)] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[30%] after:z-2 after:pointer-events-none after:bg-[linear-gradient(to_top,rgba(248,250,252,0.5)_0%,transparent_100%)]"
                                         tabindex="0"
                                         @contextmenu.prevent
                                         @mousedown.right="startDrag($event, 'hour')"
                                         @keydown="onKeydown($event, 'hour')"
                                         x-ref="hourColumn">
-                                        <div class="wheel-scroll"
-                                            :class="{ 'dragging': dragging.active && dragging.type === 'hour' }"
+                                        <div class="h-full overflow-y-auto scrollbar-none! [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden cursor-default py-10" 
+                                            :class="{ 'cursor-grabbing': dragging.active && dragging.type === 'hour' }"
                                             @scroll="onScroll('hour')"
                                             x-ref="hourScroll">
                                             <template x-for="h in 24" :key="h">
-                                                <div class="wheel-item"
-                                                    :class="{ 'selected': (h-1) === hourIndex }"
+                                                <div class="h-10 flex items-center justify-center text-[1.2rem] text-[#94a3b8] transition-all duration-200 cursor-pointer"
+                                                    :class="{ 'text-[1.6rem] font-bold text-[#DC2626] bg-[linear-gradient(135deg,rgba(220,38,38,0.1),rgba(184,134,11,0.1))] rounded-lg mx-2': (h-1) === hourIndex }"
                                                     @click="clickItem(h-1, 'hour')"
                                                     x-text="('0'+(h-1)).slice(-2)"></div>
                                             </template>
@@ -571,19 +398,19 @@
 
                                     <span class="text-xl font-bold" style="color: #DC2626;">:</span>
 
-                                    <div class="wheel-column"
+                                    <div class="relative w-[45%] h-30 overflow-hidden rounded-xl bg-[rgba(248,250,252,0.5)] shadow-[inset_0_0_10px_rgba(220,38,38,0.1)] select-none touch-pan-y outline-none focus-visible:shadow-[0_0_0_2px_#DC2626] before:content-[''] before:absolute before:left-0 before:right-0 before:top-0 before:h-[30%] before:z-2 before:pointer-events-none before:bg-[linear-gradient(to_bottom,rgba(248,250,252,0.5)_0%,transparent_100%)] after:content-[''] after:absolute after:left-0 after:right-0 after:bottom-0 after:h-[30%] after:z-2 after:pointer-events-none after:bg-[linear-gradient(to_top,rgba(248,250,252,0.5)_0%,transparent_100%)]"
                                         tabindex="0"
                                         @contextmenu.prevent
                                         @mousedown.right="startDrag($event, 'minute')"
                                         @keydown="onKeydown($event, 'minute')"
                                         x-ref="minuteColumn">
-                                        <div class="wheel-scroll"
-                                            :class="{ 'dragging': dragging.active && dragging.type === 'minute' }"
+                                        <div class="h-full overflow-y-auto scrollbar-none! [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden cursor-default py-10" 
+                                            :class="{ 'cursor-grabbing': dragging.active && dragging.type === 'minute' }"
                                             @scroll="onScroll('minute')"
                                             x-ref="minuteScroll">
                                             <template x-for="m in 60" :key="m">
-                                                <div class="wheel-item"
-                                                    :class="{ 'selected': (m-1) === minuteIndex }"
+                                                <div class="h-10 flex items-center justify-center text-[1.2rem] text-[#94a3b8] transition-all duration-200 cursor-pointer"
+                                                    :class="{ 'text-[1.6rem] font-bold text-[#DC2626] bg-[linear-gradient(135deg,rgba(220,38,38,0.1),rgba(184,134,11,0.1))] rounded-lg mx-2': (m-1) === minuteIndex }"
                                                     @click="clickItem(m-1, 'minute')"
                                                     x-text="('0'+(m-1)).slice(-2)"></div>
                                             </template>
@@ -599,194 +426,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <script>
-                        function timePickerInline() {
-                            const ITEM_HEIGHT = 40;
-
-                            return {
-                                mode: 'split',
-                                entryTime: null,
-                                exitTime: null,
-                                hourIndex: 8,
-                                minuteIndex: 0,
-
-                                editingType: null,
-                                editingOriginalTime: null,
-
-                                dragging: {
-                                    active: false,
-                                    type: null,
-                                    startY: 0,
-                                    startScroll: 0
-                                },
-
-                                initPicker() {
-                                    window.addEventListener('mousemove', this.onMouseMove.bind(this));
-                                    window.addEventListener('mouseup', this.stopDrag.bind(this));
-                                },
-
-                                openPicker(type) {
-                                    this.editingType = type;
-                                    this.editingOriginalTime = type === 'entry' ? this.entryTime : this.exitTime;
-
-                                    const currentTime = type === 'entry' ? this.entryTime : this.exitTime;
-                                    if (currentTime) {
-                                        const [h, m] = currentTime.split(':').map(Number);
-                                        this.hourIndex = h;
-                                        this.minuteIndex = m;
-                                    } else {
-                                        const now = new Date();
-                                        this.hourIndex = now.getHours();
-                                        this.minuteIndex = now.getMinutes();
-                                    }
-
-                                    this.mode = type === 'entry' ? 'entry-edit' : 'exit-edit';
-
-                                    this.$nextTick(() => {
-                                        this.scrollToIndex('hour', false);
-                                        this.scrollToIndex('minute', false);
-                                    });
-                                },
-
-                                scrollToIndex(type, smooth = true) {
-                                    const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-                                    const index = type === 'hour' ? this.hourIndex : this.minuteIndex;
-                                    if (scrollRef) {
-                                        scrollRef.scrollTo({
-                                            top: index * ITEM_HEIGHT,
-                                            behavior: smooth ? 'smooth' : 'instant'
-                                        });
-                                    }
-                                },
-
-                                onScroll(type) {
-                                    const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-                                    if (!scrollRef) return;
-                                    const rawIndex = Math.round(scrollRef.scrollTop / ITEM_HEIGHT);
-                                    if (type === 'hour') {
-                                        this.hourIndex = Math.min(23, Math.max(0, rawIndex));
-                                    } else {
-                                        this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
-                                    }
-                                },
-
-                                startDrag(event, type) {
-                                    if (event.button !== 2) return;
-                                    event.preventDefault();
-                                    event.stopPropagation();
-
-                                    const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-                                    this.dragging.active = true;
-                                    this.dragging.type = type;
-                                    this.dragging.startY = event.clientY;
-                                    this.dragging.startScroll = scrollRef.scrollTop;
-                                },
-
-                                onMouseMove(event) {
-                                    if (!this.dragging.active) return;
-                                    const deltaY = event.clientY - this.dragging.startY;
-                                    let newScrollTop = this.dragging.startScroll - deltaY;
-
-                                    const maxIndex = this.dragging.type === 'hour' ? 23 : 59;
-                                    const maxScroll = maxIndex * ITEM_HEIGHT;
-                                    newScrollTop = Math.max(0, Math.min(maxScroll, newScrollTop));
-
-                                    const scrollRef = this.dragging.type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-                                    if (scrollRef) {
-                                        scrollRef.scrollTop = newScrollTop;
-                                    }
-                                },
-
-                                stopDrag() {
-                                    if (!this.dragging.active) return;
-                                    const type = this.dragging.type;
-                                    this.dragging.active = false;
-                                    this.dragging.type = null;
-                                    this.$nextTick(() => {
-                                        this.scrollToIndex(type, true);
-                                    });
-                                },
-
-                                clickItem(index, type) {
-                                    if (type === 'hour') {
-                                        this.hourIndex = index;
-                                    } else {
-                                        this.minuteIndex = index;
-                                    }
-                                    this.scrollToIndex(type, true);
-                                },
-
-                                onKeydown(event, type) {
-                                    const keys = ['ArrowUp', 'ArrowDown', 'Enter', 'Escape'];
-                                    if (!keys.includes(event.key)) return;
-
-                                    event.preventDefault();
-
-                                    if (event.key === 'ArrowUp') {
-                                        if (type === 'hour') {
-                                            this.hourIndex = (this.hourIndex + 1) % 24;
-                                        } else {
-                                            this.minuteIndex = (this.minuteIndex + 1) % 60;
-                                        }
-                                        this.scrollToIndex(type, true);
-                                    } else if (event.key === 'ArrowDown') {
-                                        if (type === 'hour') {
-                                            this.hourIndex = (this.hourIndex - 1 + 24) % 24;
-                                        } else {
-                                            this.minuteIndex = (this.minuteIndex - 1 + 60) % 60;
-                                        }
-                                        this.scrollToIndex(type, true);
-                                    } else if (event.key === 'Enter') {
-                                        this.confirmTime();
-                                    } else if (event.key === 'Escape') {
-                                        this.cancelEdit();
-                                    }
-                                },
-
-                                cancelEdit() {
-                                    if (this.editingType === 'entry') {
-                                        this.entryTime = this.editingOriginalTime;
-                                        if (this.editingOriginalTime) {
-                                            this.$dispatch('entry-time-confirmed', { time: this.editingOriginalTime });
-                                        } else {
-                                            this.$dispatch('entry-time-confirmed', { time: '' });
-                                        }
-                                    } else if (this.editingType === 'exit') {
-                                        this.exitTime = this.editingOriginalTime;
-                                        if (this.editingOriginalTime) {
-                                            this.$dispatch('exit-time-confirmed', { time: this.editingOriginalTime });
-                                        } else {
-                                            this.$dispatch('exit-time-confirmed', { time: '' });
-                                        }
-                                    }
-                                    this.mode = 'split';
-                                },
-
-                                confirmTime() {
-                                    const hour = ('0' + this.hourIndex).slice(-2);
-                                    const minute = ('0' + this.minuteIndex).slice(-2);
-                                    const timeStr = `${hour}:${minute}`;
-
-                                    if (this.mode === 'entry-edit') {
-                                        this.entryTime = timeStr;
-                                        this.$dispatch('entry-time-confirmed', { time: timeStr });
-                                    } else if (this.mode === 'exit-edit') {
-                                        this.exitTime = timeStr;
-                                        this.$dispatch('exit-time-confirmed', { time: timeStr });
-                                    }
-
-                                    this.mode = 'split';
-                                },
-
-                                destroy() {
-                                    window.removeEventListener('mousemove', this.onMouseMove);
-                                    window.removeEventListener('mouseup', this.stopDrag);
-                                }
-                            }
-                        }
-                    </script>
-
                 </div>
 
                 {{-- بخش پنجم --}}
@@ -824,6 +463,7 @@
 <div class="block lg:hidden">
     
 </div>
+
 {{-- استایل مدرن SVG ها --}}
 <style>
 input:-webkit-autofill,
@@ -906,6 +546,58 @@ textarea:-webkit-autofill:focus {
     }));
 });
 </script>
+{{-- جاوااسکریپت هوشمند برای مدیریت هردو دراپ‌داون --}}
+<script>
+    document.querySelectorAll('.custom-dropdown-container').forEach(container => {
+        const trigger = container.querySelector('.dropdown-trigger');
+        const menu = container.querySelector('.dropdown-menu');
+        const arrow = trigger.querySelector('svg');
+        const hiddenInput = container.querySelector('input[type="hidden"]');
+        const selectedText = container.querySelector('.selected-text');
+        const items = container.querySelectorAll('li');
+
+        // باز و بسته کردن منو با کلیک روی دکمه
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            // بستن بقیه دراپ‌داون‌های باز در صفحه
+            document.querySelectorAll('.dropdown-menu').forEach(m => {
+                if(m !== menu) m.classList.add('hidden');
+            });
+            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => {
+                if(svg !== arrow) svg.classList.remove('rotate-180');
+            });
+
+            menu.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        });
+
+        // مدیریت انتخاب گزینه‌ها
+        items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const value = item.getAttribute('data-value');
+                const text = item.textContent;
+
+                hiddenInput.value = value; // مقداردهی به اینپوت اصلی
+                selectedText.textContent = text; // تغییر متن نمایشی
+                
+                // تغییر رنگ متن به تیره پس از انتخاب
+                trigger.classList.remove('text-gray-400');
+                trigger.classList.add('text-gray-800', 'font-medium');
+
+                // بستن منو
+                menu.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            });
+        });
+    });
+
+    // بستن دراپ‌داون‌ها در صورت کلیک روی هرجای دیگر صفحه
+    document.addEventListener('click', () => {
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+        document.querySelectorAll('.dropdown-trigger svg').forEach(svg => svg.classList.remove('rotate-180'));
+    });
+</script>
 <script>
 document.addEventListener('alpine:init', () => {
     Alpine.data('formAnimation', () => ({
@@ -983,5 +675,242 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
+</script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('datePicker', () => ({
+            showCalendar: false,
+            selectedDate: '',
+            finalDate: '',
+            
+            year: new persianDate().year(),
+            month: new persianDate().month(),
+            
+            blockedDates: ['1406/4/4', '1406/4/5'],
+            
+            get viewDate() { 
+                return new persianDate([this.year, this.month, 1]); 
+            },
+            get currentYear() { return this.viewDate.year(); },
+            get currentMonthName() { return this.viewDate.format('MMMM'); },
+            get daysInMonth() { return this.viewDate.daysInMonth(); },
+            get startDayOffset() { 
+                return this.viewDate.day(); 
+            },
+
+            changeMonth(amount) {
+                let newDate = this.viewDate.add('months', amount);
+                this.year = newDate.year();
+                this.month = newDate.month();
+            },
+
+            selectDate(day) {
+                if (this.isBlocked(day)) return;
+                this.selectedDate = `${this.year}/${this.month}/${day}`;
+            },
+
+            confirmDate() {
+                if (!this.selectedDate) return;
+                this.finalDate = this.selectedDate;
+                this.$dispatch('date-confirmed', { date: this.finalDate });
+                this.showCalendar = false;
+            },
+
+            isSelected(day) {
+                return this.selectedDate === `${this.year}/${this.month}/${day}`;
+            },
+
+            isBlocked(day) {
+                let dateStr = `${this.year}/${this.month}/${day}`;
+                return this.blockedDates.includes(dateStr);
+            }
+        }));
+    });
+</script>
+<script>
+    function timePickerInline() {
+        const ITEM_HEIGHT = 40;
+
+        return {
+            mode: 'split',
+            entryTime: null,
+            exitTime: null,
+            hourIndex: 8,
+            minuteIndex: 0,
+
+            editingType: null,
+            editingOriginalTime: null,
+
+            dragging: {
+                active: false,
+                type: null,
+                startY: 0,
+                startScroll: 0
+            },
+
+            initPicker() {
+                window.addEventListener('mousemove', this.onMouseMove.bind(this));
+                window.addEventListener('mouseup', this.stopDrag.bind(this));
+            },
+
+            openPicker(type) {
+                this.editingType = type;
+                this.editingOriginalTime = type === 'entry' ? this.entryTime : this.exitTime;
+
+                const currentTime = type === 'entry' ? this.entryTime : this.exitTime;
+                if (currentTime) {
+                    const [h, m] = currentTime.split(':').map(Number);
+                    this.hourIndex = h;
+                    this.minuteIndex = m;
+                } else {
+                    const now = new Date();
+                    this.hourIndex = now.getHours();
+                    this.minuteIndex = now.getMinutes();
+                }
+
+                this.mode = type === 'entry' ? 'entry-edit' : 'exit-edit';
+
+                this.$nextTick(() => {
+                    this.scrollToIndex('hour', false);
+                    this.scrollToIndex('minute', false);
+                });
+            },
+
+            scrollToIndex(type, smooth = true) {
+                const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
+                const index = type === 'hour' ? this.hourIndex : this.minuteIndex;
+                if (scrollRef) {
+                    scrollRef.scrollTo({
+                        top: index * ITEM_HEIGHT,
+                        behavior: smooth ? 'smooth' : 'instant'
+                    });
+                }
+            },
+
+            onScroll(type) {
+                const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
+                if (!scrollRef) return;
+                const rawIndex = Math.round(scrollRef.scrollTop / ITEM_HEIGHT);
+                if (type === 'hour') {
+                    this.hourIndex = Math.min(23, Math.max(0, rawIndex));
+                } else {
+                    this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
+                }
+            },
+
+            startDrag(event, type) {
+                if (event.button !== 2) return;
+                event.preventDefault();
+                event.stopPropagation();
+
+                const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
+                this.dragging.active = true;
+                this.dragging.type = type;
+                this.dragging.startY = event.clientY;
+                this.dragging.startScroll = scrollRef.scrollTop;
+            },
+
+            onMouseMove(event) {
+                if (!this.dragging.active) return;
+                const deltaY = event.clientY - this.dragging.startY;
+                let newScrollTop = this.dragging.startScroll - deltaY;
+
+                const maxIndex = this.dragging.type === 'hour' ? 23 : 59;
+                const maxScroll = maxIndex * ITEM_HEIGHT;
+                newScrollTop = Math.max(0, Math.min(maxScroll, newScrollTop));
+
+                const scrollRef = this.dragging.type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
+                if (scrollRef) {
+                    scrollRef.scrollTop = newScrollTop;
+                }
+            },
+
+            stopDrag() {
+                if (!this.dragging.active) return;
+                const type = this.dragging.type;
+                this.dragging.active = false;
+                this.dragging.type = null;
+                this.$nextTick(() => {
+                    this.scrollToIndex(type, true);
+                });
+            },
+
+            clickItem(index, type) {
+                if (type === 'hour') {
+                    this.hourIndex = index;
+                } else {
+                    this.minuteIndex = index;
+                }
+                this.scrollToIndex(type, true);
+            },
+
+            onKeydown(event, type) {
+                const keys = ['ArrowUp', 'ArrowDown', 'Enter', 'Escape'];
+                if (!keys.includes(event.key)) return;
+
+                event.preventDefault();
+
+                if (event.key === 'ArrowUp') {
+                    if (type === 'hour') {
+                        this.hourIndex = (this.hourIndex + 1) % 24;
+                    } else {
+                        this.minuteIndex = (this.minuteIndex + 1) % 60;
+                    }
+                    this.scrollToIndex(type, true);
+                } else if (event.key === 'ArrowDown') {
+                    if (type === 'hour') {
+                        this.hourIndex = (this.hourIndex - 1 + 24) % 24;
+                    } else {
+                        this.minuteIndex = (this.minuteIndex - 1 + 60) % 60;
+                    }
+                    this.scrollToIndex(type, true);
+                } else if (event.key === 'Enter') {
+                    this.confirmTime();
+                } else if (event.key === 'Escape') {
+                    this.cancelEdit();
+                }
+            },
+
+            cancelEdit() {
+                if (this.editingType === 'entry') {
+                    this.entryTime = this.editingOriginalTime;
+                    if (this.editingOriginalTime) {
+                        this.$dispatch('entry-time-confirmed', { time: this.editingOriginalTime });
+                    } else {
+                        this.$dispatch('entry-time-confirmed', { time: '' });
+                    }
+                } else if (this.editingType === 'exit') {
+                    this.exitTime = this.editingOriginalTime;
+                    if (this.editingOriginalTime) {
+                        this.$dispatch('exit-time-confirmed', { time: this.editingOriginalTime });
+                    } else {
+                        this.$dispatch('exit-time-confirmed', { time: '' });
+                    }
+                }
+                this.mode = 'split';
+            },
+
+            confirmTime() {
+                const hour = ('0' + this.hourIndex).slice(-2);
+                const minute = ('0' + this.minuteIndex).slice(-2);
+                const timeStr = `${hour}:${minute}`;
+
+                if (this.mode === 'entry-edit') {
+                    this.entryTime = timeStr;
+                    this.$dispatch('entry-time-confirmed', { time: timeStr });
+                } else if (this.mode === 'exit-edit') {
+                    this.exitTime = timeStr;
+                    this.$dispatch('exit-time-confirmed', { time: timeStr });
+                }
+
+                this.mode = 'split';
+            },
+
+            destroy() {
+                window.removeEventListener('mousemove', this.onMouseMove);
+                window.removeEventListener('mouseup', this.stopDrag);
+            }
+        }
+    }
 </script>
 @endsection
