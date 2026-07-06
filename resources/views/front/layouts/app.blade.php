@@ -62,7 +62,7 @@
 
     @font-face {
         font-family: 'Vazirmatn';
-        src: url('assets/fonts/vazirmatn/Vazirmatn-Bold.woff2') format('woff2');
+        src: url('/assets/fonts/vazirmatn/Vazirmatn-Bold.woff2') format('woff2');
         font-weight: 700;
         font-style: normal;
         font-display: swap;
