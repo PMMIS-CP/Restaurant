@@ -14,13 +14,15 @@
 
             {{-- متن هشدار --}}
             <div class="flex flex-col gap-1 md:gap-2">
-                <div class="absolute" style="left: 44.7%; top: -3.5%; width: 54.365%;">
-                    <!-- باکس باریک با حاشیه قرمز و افکت چشمک‌زن -->
-                    <div class="border border-red-500 bg-red-50 p-2 rounded animate-blink">
-                        <p class="text-red-600 font-bold leading-tight text-[8px] sm:text-[10px] md:text-[12px] lg:text-[14.5px]">
-                            فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
-                        </p>
-                    </div>
+                <div class="absolute inset-0 w-full h-full pointer-events-none"></div>
+                
+                <div class="absolute hidden md:flex animate-pulse border-2 border-red-600/50 bg-red-50/10 px-4 py-2 rounded-full items-center justify-center translate-y-2 overflow-hidden" 
+                    style="left: 44.7%; top: -9.5%; width: 55%;">
+                    
+                    <p class="text-red-600 font-bold leading-tight whitespace-nowrap text-[8px] sm:text-[13px] md:text-[12px] lg:text-[14.5px]"
+                    style="text-shadow: 0 0 5px rgba(220, 38, 38, 0.3);">
+                        فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
+                    </p>
                 </div>
             </div>
 
@@ -304,12 +306,11 @@
 
 
 {{-- نسخه موبایل --}}
-<div class="block lg:hidden relative min-h-screen w-full bg-cover bg-center bg-fixed" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
+<div class="block lg:hidden relative min-h-screen w-full bg-cover bg-center bg-fixed" style="background-image: url('{{ asset('assets/images/22.webp') }}');">
     
-    {{-- لایه تیره با تم کرمی برای موبایل --}}
-    <div class="absolute inset-0 bg-amber-50/90 backdrop-blur-sm z-0"></div>
-
-    <div class="relative z-10 w-full max-w-md mx-auto p-4 pt-8 flex flex-col gap-6 pb-20">
+    {{-- لایه تیره با تم کرمی ملایم‌تر برای موبایل --}}
+    <div class="absolute inset-0 bg-amber-50/75 z-0"></div>
+    <div class="relative z-10 w-full max-w-md mx-auto p-4 pt-20 flex flex-col gap-6 pb-20">
         
         {{-- ۱. متن هشدار --}}
         <div class="w-full bg-white/40 backdrop-blur-md border border-red-600/30 rounded-xl p-3 shadow-sm text-center">
