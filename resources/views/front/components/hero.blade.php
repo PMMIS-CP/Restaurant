@@ -29,14 +29,17 @@
             میز خود را در کوتاه‌ترین زمان رزرو کنید و از منوی بی‌نظیر ما لذت ببرید.
         </p>
 
-        <div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
-            <a href="#order" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-600 text-gray-900 font-bold text-lg px-8 py-3.5 rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-300 transform hover:-translate-y-1 text-center">
-                سفارش آنلاین
-            </a>
-            <a href="#reserve" class="w-full sm:w-auto bg-transparent hover:bg-white border-2 border-white text-white hover:text-black font-bold text-lg px-8 py-3.5 rounded-xl transition-all duration-300 transform hover:-translate-y-1 text-center">
-                رزرو میز
-            </a>
-        </div>
+<div class="flex flex-col sm:flex-row gap-4 w-full sm:w-auto pt-4">
+    <a href="/menu" class="w-full sm:w-auto bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-lg px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center">
+        منوی سالن
+    </a>
+    <a href="/reserve" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-lg px-8 py-4 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 text-center">
+        رزرو میز
+    </a>
+    <a href="/menu/takeout" class="w-full sm:w-auto bg-rose-900 hover:bg-rose-800 text-white border border-rose-700 font-semibold text-lg px-8 py-4 rounded-2xl shadow-lg shadow-rose-900/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center">
+        منوی بیرون‌بر
+    </a>
+</div>
         
     </div>
 </div>

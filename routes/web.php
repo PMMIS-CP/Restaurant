@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
-Route::get('/reserve', [reserveController::class, 'index'])->name('reserve');
+Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
+Route::get('/menu/takeout', [MenuController::class, 'takeout'])->name('menu.takeout');
 
 require __DIR__.'/auth.php';

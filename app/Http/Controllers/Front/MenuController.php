@@ -13,5 +13,14 @@ class MenuController extends Controller
             'hideHeader' => true,
             'hideFooter' => true
         ]);
+        
+    }
+
+    public function takeout()
+    {
+        return view('front.pages.takeout', [
+            'hideHeader' => true,
+            'hideFooter' => true
+        ]);
     }
 }
