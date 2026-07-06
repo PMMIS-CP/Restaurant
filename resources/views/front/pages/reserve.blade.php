@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 @section('title', 'رزرو')
 @section('content')
-
+@include('front.components.reserveheader')
 {{-- نسخه دسکتاپ --}}
 <div class="hidden lg:block relative min-h-screen w-full bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
     <div class="absolute inset-0 bg-amber-50/80 backdrop-blur-[2px]"
@@ -15,15 +15,11 @@
             {{-- متن هشدار --}}
             <div class="flex flex-col gap-1 md:gap-2">
                 <div class="absolute inset-0 w-full h-full pointer-events-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1843.22 706.24" class="w-full h-full">
-                        <line class="fill-none stroke-red-600 animate-pulse" x1="1063.66" y1="0.5" x2="1842.72" y2="0.5"
-                              style="stroke-width: 3px; stroke-miterlimit: 10; filter: drop-shadow(0 0 6px rgba(220, 38, 38, 0.4));"/>
-                    </svg>
                 </div>
-                <div class="absolute" style="left: 57.7%; top: -3.5%; width: 42.4%;">
+                <div class="absolute" style="left: 44.7%; top: -3.5%; width: 54.365%;">
                     <p class="text-red-600 font-bold leading-tight text-[8px] sm:text-[10px] md:text-[12px] lg:text-[14.5px]"
                        style="text-shadow: 0 0 10px rgba(220, 38, 38, 0.3);">
-                        برای ثبت درخواست رزرو رستوران سنتی کاخ موراکو فرم زیر را تکمیل کنید تا با شما تماس بگیریم.
+                       فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
                     </p>
                 </div>
             </div>
@@ -194,15 +190,15 @@
                                 <div class="flex justify-between items-center mb-1 md:mb-2" x-data="{ isRTL: document.documentElement.dir === 'rtl' || getComputedStyle(document.documentElement).direction === 'rtl' }">
                                     <!-- دکمه ماه قبل -->
                                     <button @click="changeMonth(-1)" type="button"
-                                            class="p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm"
+                                            class="relative overflow-hidden p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm font-bold ripple-effect rounded-full"
                                             style="color: #DC2626;">
                                         <!-- فلش چپ برای LTR، فلش راست برای RTL -->
                                         <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block">
+                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
                                             <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                                         </svg>
                                         <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block">
+                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
                                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
@@ -214,15 +210,15 @@
 
                                     <!-- دکمه ماه بعد -->
                                     <button @click="changeMonth(1)" type="button"
-                                            class="p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm"
+                                            class="relative overflow-hidden p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm font-bold ripple-effect rounded-full"
                                             style="color: #DC2626;">
                                         <!-- فلش راست برای LTR، فلش چپ برای RTL -->
                                         <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block">
+                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
                                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                                         </svg>
                                         <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block">
+                                            class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
                                             <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                                         </svg>
                                     </button>
@@ -243,7 +239,7 @@
                         </div>
 
                         {{-- ساعت --}}
-                        <div class="absolute overflow-hidden" style="left: 0.027%; top: 7.32%; width: 15.73%; height: 73.66%; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.15);" x-data="timePickerInline()" x-init="initPicker()">
+                        <div class="absolute overflow-hidden" style="left: 0.027%; top: 7.32%; width: 15.73%; height: 73.66%; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.15);" x-data="timePickerInline()">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 289.98 520.18" class="w-full h-full pointer-events-none absolute z-10">
                                 <rect class="fill-white/40 stroke-[#B8860B] stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(184,134,11,0.15)] transition-all duration-300 ease hover:stroke-[#DC2626] hover:drop-shadow-[0_4px_12px_rgba(220,38,38,0.2)]" x="0" y="0" width="289.98" height="520.18" rx="15" ry="15"/>
                                 <rect class="light-rect-time" x="0" y="0" width="289.98" height="520.18" rx="15" ry="15" fill="none" stroke="#ff0061" stroke-width="12" stroke-dasharray="100 629.22" style="opacity: 0;"/>
@@ -251,10 +247,16 @@
                             <div class="relative h-full w-full">
                                 <div x-show="mode === 'split'" class="h-full flex flex-col">
                                     <div @click="openPicker('entry')" class="flex-1 flex items-center justify-center cursor-pointer transition-all duration-200" style="border-bottom: 1px solid rgba(220, 38, 38, 0.2);">
-                                        <span class="text-sm sm:text-base" style="color: #B8860B;">ساعت ورودی: <br/><span x-text="entryTime || '--:--'" class="font-mono" style="color: #DC2626;"></span></span>
+                                        <span class="text-sm sm:text-base flex items-center gap-2" style="color: #B8860B;">
+                                            ساعت ورودی:
+                                            <span x-text="entryTime || '--:--'" class="font-mono" style="color: #DC2626;"></span>
+                                        </span>
                                     </div>
                                     <div @click="openPicker('exit')" class="flex-1 flex items-center justify-center cursor-pointer transition-all duration-200">
-                                        <span class="text-sm sm:text-base" style="color: #B8860B;">ساعت خروجی: <br/><span x-text="exitTime || '--:--'" class="font-mono" style="color: #DC2626;"></span></span>
+                                        <span class="text-sm sm:text-base flex items-center gap-2" style="color: #B8860B;">
+                                            ساعت خروجی:
+                                            <span x-text="exitTime || '--:--'" class="font-mono" style="color: #DC2626;"></span>
+                                        </span>
                                     </div>
                                 </div>
                                 <div x-show="mode === 'entry-edit' || mode === 'exit-edit'" class="h-full flex flex-col items-center justify-center p-2" dir="ltr">
@@ -312,7 +314,7 @@
         {{-- ۱. متن هشدار --}}
         <div class="w-full bg-white/40 backdrop-blur-md border border-red-600/30 rounded-xl p-3 shadow-sm text-center">
             <p class="text-red-600 font-bold leading-relaxed text-xs animate-pulse">
-                برای ثبت درخواست رزرو رستوران سنتی کاخ موراکو فرم زیر را تکمیل کنید تا با شما تماس بگیریم.
+               فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
             </p>
         </div>
 
@@ -433,42 +435,42 @@
                     <div class="flex justify-between items-center mb-2" 
                         x-data="{ isRTL: document.documentElement.dir === 'rtl' || getComputedStyle(document.documentElement).direction === 'rtl' }">
                     
-                    <!-- دکمه ماه قبل -->
-                    <button @click="changeMonth(-1)" type="button" 
-                            class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
-                            style="color: #DC2626;">
-                        <!-- LTR: فلش به چپ -->
-                        <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            class="w-3.5 h-3.5 inline-block pointer-events-none">
-                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <!-- RTL: فلش به راست -->
-                        <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            class="w-3.5 h-3.5 inline-block pointer-events-none">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
+                        <!-- دکمه ماه قبل -->
+                        <button @click="changeMonth(-1)" type="button" 
+                                class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
+                                style="color: #DC2626;">
+                            <!-- LTR: فلش به چپ -->
+                            <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="w-3.5 h-3.5 inline-block pointer-events-none">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <!-- RTL: فلش به راست -->
+                            <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="w-3.5 h-3.5 inline-block pointer-events-none">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
 
-                    <!-- عنوان ماه و سال -->
-                    <span class="font-bold text-[10px]" 
-                            x-text="currentMonthName + ' ' + currentYear" 
-                            style="color: #B8860B;"></span>
+                        <!-- عنوان ماه و سال -->
+                        <span class="font-bold text-[10px]" 
+                                x-text="currentMonthName + ' ' + currentYear" 
+                                style="color: #B8860B;"></span>
 
-                    <!-- دکمه ماه بعد -->
-                    <button @click="changeMonth(1)" type="button" 
-                            class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
-                            style="color: #DC2626;">
-                        <!-- LTR: فلش به راست -->
-                        <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            class="w-3.5 h-3.5 inline-block pointer-events-none">
-                        <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-                        </svg>
-                        <!-- RTL: فلش به چپ -->
-                        <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                            class="w-3.5 h-3.5 inline-block pointer-events-none">
-                        <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
-                        </svg>
-                    </button>
+                        <!-- دکمه ماه بعد -->
+                        <button @click="changeMonth(1)" type="button" 
+                                class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
+                                style="color: #DC2626;">
+                            <!-- LTR: فلش به راست -->
+                            <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="w-3.5 h-3.5 inline-block pointer-events-none">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                            </svg>
+                            <!-- RTL: فلش به چپ -->
+                            <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                class="w-3.5 h-3.5 inline-block pointer-events-none">
+                            <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
                     </div>
                     <div class="grid grid-cols-7 text-center text-[9px] mb-1 font-bold" style="color: #DC2626;">
                         <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
@@ -488,7 +490,7 @@
             </div>
 
             {{-- ساعت (۲ ستون) --}}
-            <div class="col-span-2 relative rounded-2xl bg-white/40 backdrop-blur-md border border-red-600/20 shadow-sm" x-data="timePickerInline()" x-init="initPicker()">
+            <div class="col-span-2 relative rounded-2xl bg-white/40 backdrop-blur-md border border-red-600/20 shadow-sm" x-data="timePickerInline()">
                 <svg viewBox="0 0 289.98 520.18" preserveAspectRatio="none" class="w-full h-full pointer-events-none absolute inset-0 z-0">
                     <rect class="light-rect-time" x="2" y="2" width="285" height="516" rx="15" ry="15" fill="none" stroke="#ff0061" stroke-width="12" stroke-dasharray="100 629.22" style="opacity: 0;"/>
                 </svg>
@@ -509,7 +511,7 @@
                         <p class="text-center font-bold mb-2 text-[10px]" x-text="mode === 'entry-edit' ? 'ورودی' : 'خروجی'" style="color: #B8860B;"></p>
                         <div class="flex items-center justify-center gap-1 w-full h-37.5">
                             <div class="relative w-1/2 h-full overflow-hidden rounded-lg bg-white/50 shadow-inner" tabindex="0" @mousedown.right="startDrag($event, 'hour')" @keydown="onKeydown($event, 'hour')" x-ref="hourColumn">
-                                <div class="h-full overflow-y-auto scrollbar-none! [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-10" @scroll="onScroll('hour')" x-ref="hourScroll">
+                                <div class="h-full overflow-y-auto scrollbar-none! [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-13" @scroll="onScroll('hour')" x-ref="hourScroll">
                                     <template x-for="h in 24" :key="h">
                                         <div class="h-10 flex items-center justify-center text-[1rem] text-[#94a3b8] cursor-pointer" :class="{ 'text-[1.2rem] font-bold text-[#DC2626] bg-[rgba(220,38,38,0.1)] rounded mx-1': (h-1) === hourIndex }" @click="clickItem(h-1, 'hour')" x-text="('0'+(h-1)).slice(-2)"></div>
                                     </template>
@@ -517,7 +519,7 @@
                             </div>
                             <span class="text-sm font-bold" style="color: #DC2626;">:</span>
                             <div class="relative w-1/2 h-full overflow-hidden rounded-lg bg-white/50 shadow-inner" tabindex="0" @mousedown.right="startDrag($event, 'minute')" @keydown="onKeydown($event, 'minute')" x-ref="minuteColumn">
-                                <div class="h-full overflow-y-auto scrollbar-none! [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-10" @scroll="onScroll('minute')" x-ref="minuteScroll">
+                                <div class="h-full overflow-y-auto scrollbar-none! [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden py-13" @scroll="onScroll('minute')" x-ref="minuteScroll">
                                     <template x-for="m in 60" :key="m">
                                         <div class="h-10 flex items-center justify-center text-[1rem] text-[#94a3b8] cursor-pointer" :class="{ 'text-[1.2rem] font-bold text-[#DC2626] bg-[rgba(220,38,38,0.1)] rounded mx-1': (m-1) === minuteIndex }" @click="clickItem(m-1, 'minute')" x-text="('0'+(m-1)).slice(-2)"></div>
                                     </template>
@@ -742,109 +744,229 @@ input:-webkit-autofill:focus {
 </script>
 
 <script>
- function timePickerInline() {
-    const ITEM_HEIGHT = 40;
+function timePickerInline() {
+    const ITEM_HEIGHT = 40; // ارتفاع هر آیتم به پیکسل
+    
     return {
-        mode: 'split', entryTime: null, exitTime: null, hourIndex: 8, minuteIndex: 0,
-        editingType: null, editingOriginalTime: null,
+        mode: 'split', 
+        entryTime: null, 
+        exitTime: null, 
+        hourIndex: 8, 
+        minuteIndex: 0,
+        editingType: null, 
+        editingOriginalTime: null,
         dragging: { active: false, type: null, startY: 0, startScroll: 0 },
+        scrollTimeout: { hour: null, minute: null },
 
-        initPicker() {
-            window.addEventListener('mousemove', this.onMouseMove.bind(this));
-            window.addEventListener('mouseup', this.stopDrag.bind(this));
+        // ذخیره رفرنس توابع برای حذف صحیح از حافظه
+        _boundPointerMove: null,
+        _boundPointerUp: null,
+        lastScrollTime: 0,
+        // متد پیش‌فرض Alpine.js برای راه‌اندازی کامپوننت
+        init() {
+            this._boundPointerMove = this.onPointerMove.bind(this);
+            this._boundPointerUp = this.stopDrag.bind(this);
+
+            window.addEventListener('pointermove', this._boundPointerMove);
+            window.addEventListener('pointerup', this._boundPointerUp);
+            window.addEventListener('pointercancel', this._boundPointerUp);
+            
+            // اگر نیاز به مقداردهی اولیه خاصی دارید، همین‌جا انجام دهید
+            console.log("Picker Initialized"); 
         },
+
         openPicker(type) {
             this.editingType = type;
+            // ذخیره زمان قبلی برای قابلیت Cancel
             this.editingOriginalTime = type === 'entry' ? this.entryTime : this.exitTime;
-            const currentTime = type === 'entry' ? this.entryTime : this.exitTime;
-            if (currentTime) {
+            const currentTime = this.editingOriginalTime;
+
+            if (currentTime && currentTime.includes(':')) {
                 const [h, m] = currentTime.split(':').map(Number);
-                this.hourIndex = h; this.minuteIndex = m;
+                this.hourIndex = isNaN(h) ? 0 : Math.min(23, Math.max(0, h));
+                this.minuteIndex = isNaN(m) ? 0 : Math.min(59, Math.max(0, m));
             } else {
                 const now = new Date();
-                this.hourIndex = now.getHours(); this.minuteIndex = now.getMinutes();
+                this.hourIndex = now.getHours();
+                this.minuteIndex = now.getMinutes();
             }
+
             this.mode = type === 'entry' ? 'entry-edit' : 'exit-edit';
-            this.$nextTick(() => { this.scrollToIndex('hour', false); this.scrollToIndex('minute', false); });
+            
+            // بازنشانی موقعیت اسکرول پس از رندر شدن DOM
+            this.$nextTick(() => {
+                this.scrollToIndex('hour', false);
+                this.scrollToIndex('minute', false);
+            });
         },
+
         scrollToIndex(type, smooth = true) {
             const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
             const index = type === 'hour' ? this.hourIndex : this.minuteIndex;
-            if (scrollRef) scrollRef.scrollTo({ top: index * ITEM_HEIGHT, behavior: smooth ? 'smooth' : 'instant' });
+            
+            if (scrollRef) {
+                scrollRef.scrollTo({
+                    top: index * ITEM_HEIGHT,
+                    behavior: smooth ? 'smooth' : 'auto'
+                });
+            }
         },
+
         onScroll(type) {
             const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            if (!scrollRef) return;
+            if (!scrollRef || this.dragging.active) return;
+
+            // جلوگیری از تداخل اسکرول با رفتارهای انیمیشنی (Debounce)
+            clearTimeout(this.scrollTimeout[type]);
+            
             const rawIndex = Math.round(scrollRef.scrollTop / ITEM_HEIGHT);
-            if (type === 'hour') this.hourIndex = Math.min(23, Math.max(0, rawIndex));
-            else this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
+            if (type === 'hour') {
+                this.hourIndex = Math.min(23, Math.max(0, rawIndex));
+            } else {
+                this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
+            }
+
+            // قفل شدن روی نزدیک‌ترین آیتم پس از اتمام اسکرول طبیعی
+            this.scrollTimeout[type] = setTimeout(() => {
+                this.scrollToIndex(type, true);
+            }, 150);
         },
+
         startDrag(event, type) {
-            if (event.button !== 2) return; // Right click drag logic
-            event.preventDefault(); event.stopPropagation();
+            // اگر رویداد ماوس بود، فقط به کلیک چپ (دکمه 0) اجازه داده شود
+            if (event.pointerType === 'mouse' && event.button !== 0) return;
+            
             const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            this.dragging.active = true; this.dragging.type = type;
-            this.dragging.startY = event.clientY; this.dragging.startScroll = scrollRef.scrollTop;
+            if (!scrollRef) return;
+
+            event.preventDefault();
+            this.dragging.active = true;
+            this.dragging.type = type;
+            this.dragging.startY = event.clientY;
+            this.dragging.startScroll = scrollRef.scrollTop;
         },
-        onMouseMove(event) {
+
+        onPointerMove(event) {
             if (!this.dragging.active) return;
+            
             const deltaY = event.clientY - this.dragging.startY;
             let newScrollTop = this.dragging.startScroll - deltaY;
+            
             const maxScroll = (this.dragging.type === 'hour' ? 23 : 59) * ITEM_HEIGHT;
             newScrollTop = Math.max(0, Math.min(maxScroll, newScrollTop));
+            
             const scrollRef = this.dragging.type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            if (scrollRef) scrollRef.scrollTop = newScrollTop;
+            if (scrollRef) {
+                scrollRef.scrollTop = newScrollTop;
+                
+                // به‌روزرسانی زنده ایندکس‌ها در حین درگ کردن برای تجربه کاربری نرم‌تر
+                const rawIndex = Math.round(newScrollTop / ITEM_HEIGHT);
+                if (this.dragging.type === 'hour') {
+                    this.hourIndex = Math.min(23, Math.max(0, rawIndex));
+                } else {
+                    this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
+                }
+            }
         },
+
         stopDrag() {
             if (!this.dragging.active) return;
             const type = this.dragging.type;
-            this.dragging.active = false; this.dragging.type = null;
-            this.$nextTick(() => { this.scrollToIndex(type, true); });
+            this.dragging.active = false;
+            this.dragging.type = null;
+            
+            // هدایت نرم به موقعیت صحیح پس از رها کردن درگ
+            this.$nextTick(() => {
+                this.scrollToIndex(type, true);
+            });
         },
+
+        // بهبود تجربه دسکتاپ: تغییر زمان با چرخ موس (Mouse Wheel)
+        onWheel(event, type) {
+            event.preventDefault();
+            
+            // افزایش زمان تأخیر برای جلوگیری از اسکرول سریع و خشک
+            const THROTTLE_TIME = 200; 
+            const now = Date.now();
+            
+            if (now - this.lastScrollTime < THROTTLE_TIME) return;
+            
+            this.lastScrollTime = now;
+            // استفاده از Math.sign برای اینکه جهت اسکرول فقط ۱ یا ۱- باشد
+            const direction = Math.sign(event.deltaY); 
+            
+            if (type === 'hour') {
+                this.hourIndex = (this.hourIndex + direction + 24) % 24;
+            } else {
+                this.minuteIndex = (this.minuteIndex + direction + 60) % 60;
+            }
+            this.scrollToIndex(type, true);
+        },
+
         clickItem(index, type) {
             if (type === 'hour') this.hourIndex = index; else this.minuteIndex = index;
             this.scrollToIndex(type, true);
         },
+
         onKeydown(event, type) {
             const keys = ['ArrowUp', 'ArrowDown', 'Enter', 'Escape'];
             if (!keys.includes(event.key)) return;
             event.preventDefault();
+
             if (event.key === 'ArrowUp') {
-                if (type === 'hour') this.hourIndex = (this.hourIndex + 1) % 24; else this.minuteIndex = (this.minuteIndex + 1) % 60;
+                if (type === 'hour') this.hourIndex = (this.hourIndex - 1 + 24) % 24;
+                else this.minuteIndex = (this.minuteIndex - 1 + 60) % 60;
                 this.scrollToIndex(type, true);
             } else if (event.key === 'ArrowDown') {
-                if (type === 'hour') this.hourIndex = (this.hourIndex - 1 + 24) % 24; else this.minuteIndex = (this.minuteIndex - 1 + 60) % 60;
+                if (type === 'hour') this.hourIndex = (this.hourIndex + 1) % 24;
+                // اصلاح باگ باقیمانده برای دقیقاً 60 دقیقه
+                else this.minuteIndex = (this.minuteIndex + 1) % 60; 
                 this.scrollToIndex(type, true);
-            } else if (event.key === 'Enter') { this.confirmTime(); } 
-            else if (event.key === 'Escape') { this.cancelEdit(); }
+            } else if (event.key === 'Enter') { 
+                this.confirmTime(); 
+            } else if (event.key === 'Escape') { 
+                this.cancelEdit(); 
+            }
         },
+
         cancelEdit() {
+            const rollbackTime = this.editingOriginalTime || '';
             if (this.editingType === 'entry') {
-                this.entryTime = this.editingOriginalTime;
-                this.$dispatch('entry-time-confirmed', { time: this.editingOriginalTime || '' });
+                this.entryTime = rollbackTime;
+                this.$dispatch('entry-time-confirmed', { time: rollbackTime });
             } else {
-                this.exitTime = this.editingOriginalTime;
-                this.$dispatch('exit-time-confirmed', { time: this.editingOriginalTime || '' });
+                this.exitTime = rollbackTime;
+                this.$dispatch('exit-time-confirmed', { time: rollbackTime });
             }
             this.mode = 'split';
         },
+
         confirmTime() {
-            const timeStr = `${('0'+this.hourIndex).slice(-2)}:${('0'+this.minuteIndex).slice(-2)}`;
-            if (this.mode === 'entry-edit') {
+            // ساخت فرمت دو رقمی استاندارد (مثال: 05:09) با استفاده از padStart
+            const formattedHour = String(this.hourIndex).padStart(2, '0');
+            const formattedMinute = String(this.minuteIndex).padStart(2, '0');
+            const timeStr = `${formattedHour}:${formattedMinute}`;
+
+            if (this.editingType === 'entry' || this.mode === 'entry-edit') {
                 this.entryTime = timeStr;
                 this.$dispatch('entry-time-confirmed', { time: timeStr });
-            } else if (this.mode === 'exit-edit') {
+            } else {
                 this.exitTime = timeStr;
                 this.$dispatch('exit-time-confirmed', { time: timeStr });
             }
             this.mode = 'split';
         },
+
+        // متد پاکسازی برای جلوگیری از هدررفت حافظه در زمان خروج از صفحه/حذف کامپوننت
         destroy() {
-            window.removeEventListener('mousemove', this.onMouseMove);
-            window.removeEventListener('mouseup', this.stopDrag);
+            window.removeEventListener('pointermove', this._boundPointerMove);
+            window.removeEventListener('pointerup', this._boundPointerUp);
+            window.removeEventListener('pointercancel', this._boundPointerUp);
+            clearTimeout(this.scrollTimeout.hour);
+            clearTimeout(this.scrollTimeout.minute);
         }
     }
- }
+}
 </script>
 
 <script>
