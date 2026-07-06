@@ -14,13 +14,13 @@
 
             {{-- متن هشدار --}}
             <div class="flex flex-col gap-1 md:gap-2">
-                <div class="absolute inset-0 w-full h-full pointer-events-none">
-                </div>
                 <div class="absolute" style="left: 44.7%; top: -3.5%; width: 54.365%;">
-                    <p class="text-red-600 font-bold leading-tight text-[8px] sm:text-[10px] md:text-[12px] lg:text-[14.5px]"
-                       style="text-shadow: 0 0 10px rgba(220, 38, 38, 0.3);">
-                       فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
-                    </p>
+                    <!-- باکس باریک با حاشیه قرمز و افکت چشمک‌زن -->
+                    <div class="border border-red-500 bg-red-50 p-2 rounded animate-blink">
+                        <p class="text-red-600 font-bold leading-tight text-[8px] sm:text-[10px] md:text-[12px] lg:text-[14.5px]">
+                            فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
+                        </p>
+                    </div>
                 </div>
             </div>
 
