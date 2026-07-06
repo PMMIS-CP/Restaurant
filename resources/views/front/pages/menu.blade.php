@@ -132,16 +132,67 @@
     }
 @endphp
 
+<style>
+    :root {
+        --royal-yellow: #FFD700;
+        --royal-yellow-dark: #B8860B;
+        --royal-yellow-light: #FFED4A;
+        --crimson: #DC143C;
+        --crimson-dark: #8B0000;
+        --crimson-light: #FF6B6B;
+        --dark-bg: #0a0a0a;
+        --dark-panel: #1a1a1a;
+        --dark-border: #2a2a2a;
+    }
+
+    @keyframes shimmer {
+        0% {
+            background-position: -200% center;
+        }
+        100% {
+            background-position: 200% center;
+        }
+    }
+
+    .shimmer-text {
+        background: linear-gradient(
+            90deg,
+            var(--royal-yellow) 0%,
+            var(--royal-yellow-light) 25%,
+            var(--crimson-light) 50%,
+            var(--royal-yellow-light) 75%,
+            var(--royal-yellow) 100%
+        );
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 3s linear infinite;
+    }
+</style>
+
 <div class="min-h-screen bg-[#090506] text-gray-100 antialiased selection:bg-[#bc1c24] selection:text-white">
 
-    <div class="relative overflow-hidden py-12 text-center border-b border-[#dfb15b]/10 bg-linear-to-b from-[#160b0d] to-[#090506]">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(188,28,36,0.08)_0%,transparent_70%)]"></div>
-        <div class="opacity-5 absolute inset-0 pointer-events-none mix-blend-overlay bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MCIgaGVpZ2h0PSI2MCIgdmlld0JveD0iMCAwIDYwIDYwIj48cGF0aCBkPSJNMzAgMEwwIDMwbDMwIDMwbDMwLTMwek0zMCA1TDUgMzBsMjUgMjVsMjUtMjV6IiBmaWxsPSIjZGZiMTViIiBmaWxsLW9wYWNpdHk9Ii4xIi8+PC9zdmc+')] bg-repeat"></div>
+    <div class="relative overflow-hidden py-16 text-center border-b-2 border-[#FFD700]/20 bg-linear-to-b from-[#1a0a0a] to-[#0a0a0a]">
+        <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.1)_0%,rgba(255,215,0,0.05)_50%,transparent_70%)]"></div>
         
-        <h1 class="text-3xl md:text-5xl font-black tracking-wide text-transparent bg-clip-text bg-linear-to-r from-[#ffd700] via-[#dfb15b] to-[#b8860b] drop-shadow-[0_2px_10px_rgba(223,177,91,0.2)]">
-        </h1>
-        <p class="mt-3 text-xs md:text-sm tracking-[0.2em] uppercase text-[#dfb15b]/60">
-        </p>
+        <div class="absolute inset-0 opacity-5 pointer-events-none">
+            <div class="absolute top-0 left-0 w-full h-full" style="background-image: repeating-linear-gradient(45deg, #FFD700 0px, #FFD700 1px, transparent 1px, transparent 20px), repeating-linear-gradient(-45deg, #DC143C 0px, #DC143C 1px, transparent 1px, transparent 20px);"></div>
+        </div>
+        
+        <div class="relative z-10">
+            <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
+                منوی سالن
+            </h1>
+            <p class="mt-4 text-sm md:text-base uppercase text-[#FFD700]/70 font-medium">
+                از منوی رستوران ما لذت ببرید!
+            </p>
+            <div class="mt-6 flex justify-center gap-3">
+                <span class="w-16 h-0.5 bg-linear-to-r from-transparent via-[#FFD700] to-transparent"></span>
+                <span class="w-3 h-3 bg-[#DC143C] rounded-full shadow-[0_0_10px_rgba(220,20,60,0.5)]"></span>
+                <span class="w-16 h-0.5 bg-linear-to-r from-transparent via-[#FFD700] to-transparent"></span>
+            </div>
+        </div>
     </div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-6 relative z-30">
