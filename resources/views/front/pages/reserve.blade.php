@@ -456,12 +456,12 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
+
 <div class="block lg:hidden">
-    
+    {{-- استایل موبایل در اینجا قرار می‌گیره --}}
 </div>
 
 {{-- استایل مدرن SVG ها --}}
@@ -469,14 +469,6 @@
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
-    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
-    -webkit-text-fill-color: #1a1a1a !important;
-    transition: background-color 5000s ease-in-out 0s;
-}
-
-textarea:-webkit-autofill,
-textarea:-webkit-autofill:hover,
-textarea:-webkit-autofill:focus {
     -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
     -webkit-text-fill-color: #1a1a1a !important;
     transition: background-color 5000s ease-in-out 0s;
@@ -546,7 +538,6 @@ textarea:-webkit-autofill:focus {
     }));
 });
 </script>
-{{-- جاوااسکریپت هوشمند برای مدیریت هردو دراپ‌داون --}}
 <script>
     document.querySelectorAll('.custom-dropdown-container').forEach(container => {
         const trigger = container.querySelector('.dropdown-trigger');
