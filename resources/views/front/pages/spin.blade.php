@@ -1,7 +1,7 @@
 @extends('front.layouts.app')
 
 @section('content')
-<div class="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-zinc-900 via-[#1a0b0b] to-zinc-900 p-4 relative overflow-hidden"
+<div class="flex flex-col items-center justify-center min-h-screen bg-linear-to-br from-zinc-900 via-[#1a0b0b] to-zinc-900 p-4 relative overflow-hidden"
      x-data="spinWheel">
 
     <!-- ذرات پس‌زمینه طلایی -->
@@ -15,11 +15,11 @@
     </div>
 
     <!-- حلقه بیرونی تزئینی زرشکی و طلایی (اکنون شامل فلش در مرکز) -->
-    <div class="relative w-[22rem] h-[22rem] md:w-[25rem] md:h-[25rem] flex items-center justify-center">
+    <div class="relative w-88 h-88 md:w-100 md:h-100 flex items-center justify-center">
         <!-- حلقه درخشان بیرونی -->
-        <div class="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-600 via-red-800 to-yellow-700 p-[6px] shadow-[0_0_40px_rgba(220,38,38,0.5),0_0_80px_rgba(251,191,36,0.3)] animate-border-glow">
-            <div class="w-full h-full rounded-full bg-[#1c0a0a] p-[8px]">
-                <div class="w-full h-full rounded-full bg-gradient-to-tr from-red-950 via-zinc-900 to-red-950 p-[4px] shadow-inner relative">
+        <div class="absolute inset-0 rounded-full bg-linear-to-br from-yellow-600 via-red-800 to-yellow-700 p-1.5 shadow-[0_0_40px_rgba(220,38,38,0.5),0_0_80px_rgba(251,191,36,0.3)] animate-border-glow">
+            <div class="w-full h-full rounded-full bg-[#1c0a0a] p-2">
+                <div class="w-full h-full rounded-full bg-linear-to-tr from-red-950 via-zinc-900 to-red-950 p-1 shadow-inner relative">
                     
                     <!-- گردونه اصلی -->
                     <div class="relative w-full h-full"
@@ -138,7 +138,7 @@
     <!-- دکمه چرخش لوکس -->
     <button @click="spin()"
             :disabled="spinning"
-            class="mt-10 px-10 py-4 bg-gradient-to-r from-yellow-600 via-red-700 to-yellow-700 text-white rounded-full font-bold text-lg shadow-[0_0_30px_rgba(220,38,38,0.6)] 
+            class="mt-10 px-10 py-4 bg-linear-to-r from-yellow-600 via-red-700 to-yellow-700 text-white rounded-full font-bold text-lg shadow-[0_0_30px_rgba(220,38,38,0.6)] 
                    hover:shadow-[0_0_50px_rgba(251,191,36,0.8)] hover:scale-105 transition-all duration-300 ease-out
                    disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_0_30px_rgba(220,38,38,0.6)]
                    border border-yellow-400/60 tracking-widest uppercase relative overflow-hidden group">
@@ -153,7 +153,7 @@
             </svg>
         </span>
         <!-- افکت hover درخشان -->
-        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
+        <div class="absolute inset-0 bg-linear-to-r from-transparent via-yellow-300/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
     </button>
 
     <!-- نشان‌های کوچک تزئینی پایین صفحه (اختیاری، برای تقارن بصری) -->
