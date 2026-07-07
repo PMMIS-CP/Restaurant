@@ -45,6 +45,10 @@ class SpinController extends Controller
 
             $textRotation = $midAngle;
 
+            $lightRadius = 44; // شعاع نزدیک به لبه برای حلقه‌های نوری
+            $lightX = 50 + $lightRadius * cos(deg2rad($midSvg));
+            $lightY = 50 + $lightRadius * sin(deg2rad($midSvg));
+
             $wheelData[] = [
                 'prize' => $prize,
                 'startAngle' => $startAngle,
@@ -57,6 +61,8 @@ class SpinController extends Controller
                 'textX' => $textX,
                 'textY' => $textY,
                 'textRotation' => $textRotation,
+                'lightX' => $lightX,  // اضافه شود
+                'lightY' => $lightY,  // اضافه شود
             ];
         }
 
