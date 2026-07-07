@@ -64,7 +64,7 @@
                 رستوران
             </span>
             <div class="p-2 rounded-full border-2 border-yellow-600 group-hover:rotate-12 transition-transform duration-500">
-                <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-10 w-10 brightness-200">
+                <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-20 w-20 brightness-200">
             </div>
             <span class="text-2xl font-bold text-yellow-500 tracking-widest uppercase">
                 {{ config('app.name', 'رستوران') }}

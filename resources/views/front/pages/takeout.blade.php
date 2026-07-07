@@ -206,13 +206,19 @@
 <div class="min-h-screen bg-[#0a0a0a] text-gray-100 antialiased selection:bg-[#DC143C] selection:text-white">
 
     <div class="relative overflow-hidden py-16 text-center border-b-2 border-[#FFD700]/20 bg-linear-to-b from-[#1a0a0a] to-[#0a0a0a]">
+        <a href="{{ url('/') }}" class="hidden lg:block absolute right-35 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
+            <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
+        </a>
+        <a href="{{ url('/') }}" class="lg:hidden absolute right-1/2 top-15 -translate-y-1/2 translate-x-1/2 h-20 w-20 z-20">
+            <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
+        </a>
         <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,20,60,0.1)_0%,rgba(255,215,0,0.05)_50%,transparent_70%)]"></div>
         
         <div class="absolute inset-0 opacity-5 pointer-events-none">
             <div class="absolute top-0 left-0 w-full h-full" style="background-image: repeating-linear-gradient(45deg, #FFD700 0px, #FFD700 1px, transparent 1px, transparent 20px), repeating-linear-gradient(-45deg, #DC143C 0px, #DC143C 1px, transparent 1px, transparent 20px);"></div>
         </div>
         
-        <div class="relative z-10">
+        <div class="relative z-10 mt-10">
             <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
                 منوی بیرون‌بر
             </h1>

@@ -169,6 +169,11 @@
         -webkit-text-fill-color: transparent;
         animation: shimmer 3s linear infinite;
     }
+        #sticky-nav.is-scrolled {
+        background: rgba(28, 20, 22, 0.98);
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
 </style>
 
 <div class="min-h-screen bg-[#090506] text-gray-100 antialiased selection:bg-[#bc1c24] selection:text-white">
@@ -180,7 +185,7 @@
             <div class="absolute top-0 left-0 w-full h-full" style="background-image: repeating-linear-gradient(45deg, #FFD700 0px, #FFD700 1px, transparent 1px, transparent 20px), repeating-linear-gradient(-45deg, #DC143C 0px, #DC143C 1px, transparent 1px, transparent 20px);"></div>
         </div>
         
-        <div class="relative z-10">
+        <div class="relative z-10 mt-15">
             <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
                 منوی سالن
             </h1>
@@ -193,6 +198,12 @@
                 <span class="w-16 h-0.5 bg-linear-to-r from-transparent via-[#FFD700] to-transparent"></span>
             </div>
         </div>
+        <a href="{{ url('/') }}" class="hidden lg:block absolute left-35 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
+            <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
+        </a>
+        <a href="{{ url('/') }}" class="lg:hidden absolute right-1/2 top-15 -translate-y-1/2 translate-x-1/2 h-20 w-20 z-20">
+            <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
+        </a>
     </div>
 
 <div id="category-page" class="max-w-5xl mx-auto px-4 py-12 relative z-30">
@@ -255,53 +266,35 @@
                 </div>
             </div>
         </div>
-<nav id="sticky-nav" class="mt-5 sticky top-2.5 mx-0 sm:mx-auto w-full sm:max-w-304.5 z-50 bg-[#1c1416]/85 backdrop-blur-xl border border-[#dfb15b]/20 rounded-2xl transition-all duration-300 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(255,230,0,0.8)]">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center gap-2 sm:gap-3"> 
-            <button id="back-to-categories" class="flex items-center gap-1.5 px-3 sm:px-5 py-1.5 sm:py-2 text-[12px] sm:text-[13px] font-bold rounded-full bg-[#1c1416] border border-[#dfb15b]/30 text-gray-300 hover:text-white shrink-0 shadow-inner">
-                <svg class="w-4 h-4 transform rotate-180 text-[#bc1c24]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
-                </svg>
-                <span class="hidden sm:inline">بازگشت</span>
-            </button>
+        <nav id="sticky-nav" class="mt-5 sticky top-2.5 mx-0 sm:mx-auto w-full sm:max-w-304.5 z-50 bg-[#1c1416]/85 backdrop-blur-xl border border-[#dfb15b]/20 rounded-2xl transition-all duration-300 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(255,230,0,0.8)]">
+            <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 flex items-center gap-2 sm:gap-3"> 
+                <button id="back-to-categories" class="flex items-center gap-1.5 px-3 sm:px-5 py-1.5 sm:py-2 text-[12px] sm:text-[13px] font-bold rounded-full bg-[#1c1416] border border-[#dfb15b]/30 text-gray-300 hover:text-white shrink-0 shadow-inner">
+                    <svg class="w-4 h-4 transform rotate-180 text-[#bc1c24]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                    <span class="hidden sm:inline">بازگشت</span>
+                </button>
 
-            <div class="w-px h-6 bg-[#dfb15b]/20 mx-0.5"></div>
+                <div class="w-px h-6 bg-[#dfb15b]/20 mx-0.5"></div>
 
-            <div class="swiper categories-swiper overflow-hidden flex-1 min-w-0">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide w-auto!">
-                        <button data-category-target="all" class="cat-btn active px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border bg-[#bc1c24] border-[#bc1c24] text-white">
-                            همه منو
-                        </button>
-                    </div>
-                    @foreach($categories as $cat)
+                <div class="swiper categories-swiper overflow-hidden flex-1 min-w-0">
+                    <div class="swiper-wrapper">
                         <div class="swiper-slide w-auto!">
-                            <button data-category-target="{{ $cat }}" class="cat-btn px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border border-[#dfb15b]/10 text-gray-400 hover:text-[#ffd700] bg-[#140e10]">
-                                {{ $cat }}
+                            <button data-category-target="all" class="cat-btn active px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border bg-[#bc1c24] border-[#bc1c24] text-white">
+                                همه منو
                             </button>
                         </div>
-                    @endforeach
+                        @foreach($categories as $cat)
+                            <div class="swiper-slide w-auto!">
+                                <button data-category-target="{{ $cat }}" class="cat-btn px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border border-[#dfb15b]/10 text-gray-400 hover:text-[#ffd700] bg-[#140e10]">
+                                    {{ $cat }}
+                                </button>
+                            </div>
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
-    </nav>
-<style>
-    #sticky-nav.is-scrolled {
-        background: rgba(28, 20, 22, 0.98);
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-    }
-</style>
-<script>
-    window.addEventListener('scroll', () => {
-        const nav = document.getElementById('sticky-nav');
-        if (window.scrollY > 50) { // اگر بیشتر از ۵۰ پیکسل اسکرول شد
-            nav.classList.add('is-scrolled');
-        } else {
-            nav.classList.remove('is-scrolled');
-        }
-    });
-</script>
-
+        </nav>
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             
             <div id="empty-state" class="hidden text-center py-20 bg-[#140e10]/30 rounded-2xl border border-dashed border-[#dfb15b]/10 max-w-md mx-auto">
@@ -545,5 +538,14 @@
         });
     });
 </script>
-
+<script>
+    window.addEventListener('scroll', () => {
+        const nav = document.getElementById('sticky-nav');
+        if (window.scrollY > 50) {
+            nav.classList.add('is-scrolled');
+        } else {
+            nav.classList.remove('is-scrolled');
+        }
+    });
+</script>
 @endsection
