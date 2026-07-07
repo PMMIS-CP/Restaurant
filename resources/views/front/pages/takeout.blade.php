@@ -114,7 +114,15 @@
     $maxPrice = !empty($prices) ? max($prices) : 0;
     $minPrice = !empty($prices) ? min($prices) : 0;
 @endphp
-
+@php
+    // استخراج منحصر به فرد دسته‌بندی‌ها برای ساخت منوی اسلایدر بالا
+    $categories = array_unique(array_column($menu, 'نوع'));
+    
+    // محاسبه حداقل و حداکثر قیمت برای تنظیم خودکار اسلایدر فیلتر قیمت
+    $prices = array_column($menu, 'قیمت');
+    $maxPrice = !empty($prices) ? max($prices) : 0;
+    $minPrice = !empty($prices) ? min($prices) : 0;
+@endphp
 <style>
     .hide-scrollbar::-webkit-scrollbar {
         display: none;
@@ -219,7 +227,7 @@
         </div>
     </div>
 
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-30 mb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-30 mb-6">
         <div class="bg-[#140507]/80 backdrop-blur-xl border border-[#ffd700]/30 rounded-2xl p-5 shadow-[0_15px_40px_rgba(0,0,0,0.6),0_0_15px_rgba(255,215,0,0.1)]">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
                 
@@ -257,7 +265,77 @@
             </div>
         </div>
     </div>
+<nav id="sticky-nav" class="mb-10 sticky top-2.5 mx-0 sm:mx-auto w-full sm:max-w-304.5 z-50 bg-[#1c1416]/85 backdrop-blur-xl border border-[#dfb15b]/20 rounded-2xl transition-all duration-300 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(255,230,0,0.8)]">
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8"> 
+        <div class="swiper categories-swiper overflow-hidden">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide w-auto!">
+                    <button data-category-target="all" class="cat-btn active px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border bg-[#bc1c24] border-[#bc1c24] text-white">
+                        همه منو
+                    </button>
+                </div>
+                @foreach($categories as $cat)
+                    <div class="swiper-slide w-auto!">
+                        <button data-category-target="{{ $cat }}" class="cat-btn px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border border-[#dfb15b]/10 text-gray-400 hover:text-[#ffd700] bg-[#140e10]">
+                            {{ $cat }}
+                        </button>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </div>
+</nav>
+<style>
+    #sticky-nav.is-scrolled {
+        background: rgba(28, 20, 22, 0.98);
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+    .swiper-slide {
+        margin-right: 12px !important;
+        width: auto !important;
+    }
+</style>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // ۱. مقداردهی اولیه Swiper
+        const categorySwiper = new Swiper('.categories-swiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 12,
+            freeMode: true,
+            watchOverflow: true
+        });
 
+        // ۲. مدیریت افکت اسکرول (Sticky Scroll Effect)
+        const nav = document.getElementById('sticky-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('is-scrolled');
+            } else {
+                nav.classList.remove('is-scrolled');
+            }
+        });
+
+        // ۳. مدیریت کلیک روی دکمه‌های دسته‌بندی
+        const categoryButtons = document.querySelectorAll('.cat-btn');
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // حذف کلاس فعال از همه
+                categoryButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                    b.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                });
+                
+                // فعال کردن دکمه کلیک شده
+                btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                
+                // در صورت نیاز به اجرای فیلتر، تابع فیلتر خود را اینجا فراخوانی کنید
+                // filterEngine(); 
+            });
+        });
+    });
+</script>
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         
         <div id="empty-state" class="hidden text-center py-24 bg-[#140507]/50 rounded-3xl border border-dashed border-[#ffd700]/30 max-w-xl mx-auto backdrop-blur-md">

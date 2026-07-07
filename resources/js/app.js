@@ -14,11 +14,13 @@ import Swiper from 'swiper';
 import { EffectCards, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/effect-cards';
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import persianDate from 'persian-date';
-
+gsap.registerPlugin(ScrollTrigger);
+window.ScrollTrigger = ScrollTrigger;
 window.persianDate = persianDate;
 gsap.registerPlugin(Flip);
 window.gsap = gsap;

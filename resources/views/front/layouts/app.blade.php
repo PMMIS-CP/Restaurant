@@ -99,7 +99,7 @@
     }
     </style>
 </head>
-<body class="bg-gray-50 antialiased max-w-full overflow-x-hidden">
+<body class="bg-gray-50 antialiased max-w-full w-full">
 
     {{-- هدر --}}
     @if(!isset($hideHeader) || !$hideHeader)
@@ -107,7 +107,7 @@
     @endif
 
     {{-- محتوای اصلی --}}
-    <main class="min-h-screen max-w-full overflow-x-hidden">
+    <main class="min-h-screen max-w-full w-full">
         @yield('content')
     </main>
 
