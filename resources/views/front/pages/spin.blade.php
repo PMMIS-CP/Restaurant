@@ -4,7 +4,6 @@
 <div class="flex flex-col items-center justify-center min-h-screen bg-linear-to-br from-zinc-900 via-[#1a0b0b] to-zinc-900 p-4 relative overflow-hidden"
      x-data="spinWheel">
 
-    <!-- ذرات پس‌زمینه طلایی -->
     <div class="absolute inset-0 opacity-20 pointer-events-none" aria-hidden="true">
         <div class="absolute top-1/4 left-1/4 w-1 h-1 bg-yellow-400 rounded-full animate-float-slow"></div>
         <div class="absolute top-1/3 right-1/3 w-0.5 h-0.5 bg-yellow-300 rounded-full animate-float-medium" style="animation-delay: 0.5s;"></div>
@@ -14,37 +13,30 @@
         <div class="absolute top-1/5 right-1/2 w-0.5 h-0.5 bg-yellow-200 rounded-full animate-float-fast" style="animation-delay: 0.7s;"></div>
     </div>
 
-    <!-- حلقه بیرونی تزئینی زرشکی و طلایی (اکنون شامل فلش در مرکز) -->
     <div class="relative w-88 h-88 md:w-100 md:h-100 flex items-center justify-center">
-        <!-- حلقه درخشان بیرونی -->
         <div class="absolute inset-0 rounded-full bg-linear-to-br from-yellow-600 via-red-800 to-yellow-700 p-1.5 shadow-[0_0_40px_rgba(220,38,38,0.5),0_0_80px_rgba(251,191,36,0.3)] animate-border-glow">
             <div class="w-full h-full rounded-full bg-[#1c0a0a] p-2">
                 <div class="w-full h-full rounded-full bg-linear-to-tr from-red-950 via-zinc-900 to-red-950 p-1 shadow-inner relative">
                     
-                    <!-- گردونه اصلی -->
                     <div class="relative w-full h-full"
                          x-ref="wheel"
                          style="transform-origin: center center;">
-                        <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl transition-all duration-75">
+                        <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl">
                             <defs>
-                                <!-- بافت براق زرشکی -->
                                 <radialGradient id="crimsonGloss" cx="35%" cy="35%" r="65%">
                                     <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9" />
                                     <stop offset="70%" stop-color="#991b1b" />
                                     <stop offset="100%" stop-color="#450a0a" />
                                 </radialGradient>
-                                <!-- بافت طلایی سلطنتی -->
                                 <radialGradient id="goldRoyal" cx="30%" cy="30%" r="70%">
                                     <stop offset="0%" stop-color="#fef08a" />
                                     <stop offset="40%" stop-color="#facc15" />
                                     <stop offset="85%" stop-color="#b45309" />
                                     <stop offset="100%" stop-color="#78350f" />
                                 </radialGradient>
-                                <!-- سایه داخلی قطعات -->
                                 <filter id="segmentShadow">
                                     <feDropShadow dx="0.5" dy="0.5" stdDeviation="0.8" flood-color="#000" flood-opacity="0.6" />
                                 </filter>
-                                <!-- درخشش مرکز -->
                                 <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
                                     <stop offset="0%" stop-color="#fef3c7" />
                                     <stop offset="60%" stop-color="#d97706" />
@@ -52,32 +44,37 @@
                                 </radialGradient>
                             </defs>
 
-                            <!-- قطعات گردونه -->
                             @foreach($wheelData as $item)
                                 <path d="M50 50 L{{ $item['x1'] }} {{ $item['y1'] }} A50 50 0 0 1 {{ $item['x2'] }} {{ $item['y2'] }} Z"
                                       fill="{{ $item['prize']['color'] ?? '#dc2626' }}"
-                                      stroke="#fbbf24"
-                                      stroke-width="0.6"
+                                      :stroke="activeSegmentIndex === {{ $loop->index }} ? '#ffffff' : '#fbbf24'"
+                                      :stroke-width="activeSegmentIndex === {{ $loop->index }} ? '1.2' : '0.6'"
                                       filter="url(#segmentShadow)"
-                                      class="transition-colors duration-300" />
+                                      :class="{ 
+                                          'brightness-125 saturate-150 drop-shadow-lg z-10': activeSegmentIndex === {{ $loop->index }},
+                                          'brightness-60 opacity-95': activeSegmentIndex !== {{ $loop->index }} 
+                                      }"
+                                      class="transition-all duration-75 ease-linear" />
 
-                                <!-- حاشیه طلایی داخلی قطعه -->
                                 <path d="M50 50 L{{ $item['x1'] }} {{ $item['y1'] }} A50 50 0 0 1 {{ $item['x2'] }} {{ $item['y2'] }} Z"
                                       fill="none"
-                                      stroke="#fef3c7"
-                                      stroke-width="0.15"
-                                      opacity="0.5" />
+                                      :stroke="activeSegmentIndex === {{ $loop->index }} ? '#ffffff' : '#fef3c7'"
+                                      :stroke-width="activeSegmentIndex === {{ $loop->index }} ? '0.4' : '0.15'"
+                                      :opacity="activeSegmentIndex === {{ $loop->index }} ? '0.9' : '0.5'"
+                                      class="transition-all duration-75 ease-linear" />
 
-                                {{-- حلقه نوری تزئینی در لبه قطعه (نزدیک محیط) --}}
+                                {{-- حلقه نوری تزئینی در لبه قطعه --}}
                                 <circle cx="{{ $item['lightX'] }}" cy="{{ $item['lightY'] }}" r="1.5"
                                         fill="{{ $item['prize']['color'] ?? '#fbbf24' }}"
-                                        stroke="#fef3c7"
-                                        stroke-width="0.3"
-                                        class="animate-blink"
+                                        :stroke="activeSegmentIndex === {{ $loop->index }} ? '#ffffff' : '#fef3c7'"
+                                        :stroke-width="activeSegmentIndex === {{ $loop->index }} ? '0.8' : '0.3'"
+                                        :class="activeSegmentIndex === {{ $loop->index }} ? 'animate-pulse-glow brightness-150' : 'animate-blink'"
+                                        class="transition-all duration-75 ease-linear"
                                         style="animation-delay: {{ $loop->index * 0.15 }}s;" />
-                                <!-- متن جوایز -->
+                                        
                                 <text x="{{ $item['textX'] }}" y="{{ $item['textY'] }}"
-                                      class="text-[3.6px] font-extrabold fill-white select-none tracking-wider"
+                                      :class="activeSegmentIndex === {{ $loop->index }} ? 'fill-yellow-200 text-[4px]' : 'fill-white text-[3.6px]'"
+                                      class="font-extrabold select-none tracking-wider transition-all duration-75 ease-linear"
                                       text-anchor="middle"
                                       dominant-baseline="central"
                                       transform="rotate({{ $item['textRotation'] }}, {{ $item['textX'] }}, {{ $item['textY'] }})"
@@ -86,17 +83,13 @@
                                 </text>
                             @endforeach
 
-                            <!-- حلقه طلایی دور قطعات -->
                             <circle cx="50" cy="50" r="49.5" fill="none" stroke="#fbbf24" stroke-width="0.3" opacity="0.6" />
                             <circle cx="50" cy="50" r="49.8" fill="none" stroke="#fef3c7" stroke-width="0.15" opacity="0.4" />
 
-                            <!-- هاب مرکزی گردونه (بدون فلش، چون فلش ثابت روی آن قرار می‌گیرد) -->
                             <circle cx="50" cy="50" r="11" fill="#0f0505" stroke="#fbbf24" stroke-width="1.2" filter="url(#segmentShadow)" />
                             <circle cx="50" cy="50" r="9.5" fill="url(#centerGlow)" stroke="#fef3c7" stroke-width="0.8" />
                             <circle cx="50" cy="50" r="5.5" fill="#dc2626" stroke="#fbbf24" stroke-width="0.6" />
-                            <!-- نقطه مرکزی درخشان -->
                             <circle cx="50" cy="50" r="1.8" fill="#fef08a" stroke="#92400e" stroke-width="0.3" />
-                            <!-- دایره‌های کوچک تزئینی دور هاب -->
                             <circle cx="50" cy="42.5" r="1" fill="#fef3c7" opacity="0.9" />
                             <circle cx="50" cy="57.5" r="1" fill="#fef3c7" opacity="0.9" />
                             <circle cx="42.5" cy="50" r="1" fill="#fef3c7" opacity="0.9" />
@@ -104,7 +97,6 @@
                         </svg>
                     </div>
 
-                    <!-- فلش ثابت در مرکز گردونه (داخل همین container، روی گردونه سوار می‌شود) -->
                     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none drop-shadow-[0_0_20px_rgba(255,215,0,0.9)]"
                          style="width: 48px; height: 58px; margin-top: -29px;">
                         <svg width="48" height="58" viewBox="0 0 40 50" class="w-full h-full">
@@ -121,10 +113,8 @@
                                     </feMerge>
                                 </filter>
                             </defs>
-                            <!-- مثلث رو به بالا، نوک تیز به سمت لبه گردونه -->
                             <path d="M20 2 L4 42 L36 42 Z" fill="url(#needleGradFixed)" stroke="#fbbf24" stroke-width="0.8" filter="url(#needleGlowFixed)" />
                             <path d="M20 2 L9 42 L31 42 Z" fill="#dc2626" opacity="0.7" />
-                            <!-- پایه فلش در مرکز -->
                             <circle cx="20" cy="42" r="4" fill="#fef3c7" stroke="#92400e" stroke-width="0.8" />
                             <circle cx="20" cy="42" r="2" fill="#dc2626" />
                         </svg>
@@ -135,7 +125,6 @@
         </div>
     </div>
 
-    <!-- دکمه چرخش لوکس -->
     <button @click="spin()"
             :disabled="spinning"
             class="mt-10 px-10 py-4 bg-linear-to-r from-yellow-600 via-red-700 to-yellow-700 text-white rounded-full font-bold text-lg shadow-[0_0_30px_rgba(220,38,38,0.6)] 
@@ -152,11 +141,9 @@
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>
         </span>
-        <!-- افکت hover درخشان -->
         <div class="absolute inset-0 bg-linear-to-r from-transparent via-yellow-300/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-in-out"></div>
     </button>
 
-    <!-- نشان‌های کوچک تزئینی پایین صفحه (اختیاری، برای تقارن بصری) -->
     <div class="mt-6 flex gap-3 opacity-40">
         <div class="w-1.5 h-1.5 bg-yellow-400 rounded-full shadow-[0_0_8px_#fbbf24] animate-pulse-slow"></div>
         <div class="w-1.5 h-1.5 bg-red-500 rounded-full shadow-[0_0_8px_#dc2626] animate-pulse-medium" style="animation-delay: 0.3s;"></div>
@@ -201,87 +188,114 @@
     .animate-pulse-medium { animation: pulse-medium 2s ease-in-out infinite; }
     .animate-pulse-fast { animation: pulse-medium 1.2s ease-in-out infinite; }
     @keyframes blink {
-    0%, 100% {
-        opacity: 0.25;
-        filter: drop-shadow(0 0 1px currentColor);
+        0%, 100% {
+            opacity: 0.25;
+            filter: drop-shadow(0 0 1px currentColor);
+        }
+        50% {
+            opacity: 1;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
     }
-    50% {
-        opacity: 1;
-        filter: drop-shadow(0 0 5px currentColor);
-    }
-}
-
-.animate-blink {
-    animation: blink 1.4s ease-in-out infinite;
-}
+    .animate-blink { animation: blink 1.4s ease-in-out infinite; }
 </style>
+
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('spinWheel', () => ({
             spinning: false,
             currentRotation: 0,
+            activeSegmentIndex: 0, // ذخیره ایندکس فعلی زیر فلش
             prizes: @json($prizes),
             total: @json($total),
             sliceAngle: 360 / @json($total),
 
+            init() {
+                // اعمال استایل فعال در لحظه لود صفحه
+                this.updateActiveSegment();
+            },
+
+            // تابع محاسبه قطعه‌ای که هم‌اکنون در زاویه صفر (بالا/فلش) قرار دارد
+            updateActiveSegment() {
+                // گرفتن چرخش فعلی، چه در حال انیمیشن باشد و چه ثابت
+                let rotation = this.spinning 
+                    ? gsap.getProperty(this.$refs.wheel, "rotation") 
+                    : this.currentRotation;
+                
+                if (rotation === undefined) rotation = 0;
+
+                // تبدیل چرخش‌های منفی و اعداد بزرگ به بازه استاندارد 0 تا 360
+                let normalizedRotation = rotation % 360;
+                if (normalizedRotation < 0) normalizedRotation += 360;
+                
+                // محاسبه زاویه معادل روی گردونه ثابت (چرخش برعکس عقربه‌ها)
+                let pointingAngle = (360 - normalizedRotation) % 360;
+                
+                // به دست آوردن ایندکس
+                this.activeSegmentIndex = Math.floor(pointingAngle / this.sliceAngle);
+            },
+
             spin() {
-    if (this.spinning) return;
-    this.spinning = true;
+                if (this.spinning) return;
+                this.spinning = true;
 
-    // نرمالایز کردن موقعیت فعلی قبل از شروع
-    this.currentRotation = ((this.currentRotation % 360) + 360) % 360;
-    gsap.set(this.$refs.wheel, { rotation: this.currentRotation });
+                // نرمالایز کردن موقعیت فعلی قبل از شروع
+                this.currentRotation = ((this.currentRotation % 360) + 360) % 360;
+                gsap.set(this.$refs.wheel, { rotation: this.currentRotation });
 
-    // انتخاب تصادفی گزینه برنده
-    const winnerIndex = Math.floor(Math.random() * this.prizes.length);
-    const winner = this.prizes[winnerIndex];
-    
-    // محاسبه زاویه وسط گزینه برنده
-    const sliceMiddleAngle = (winnerIndex * this.sliceAngle) + (this.sliceAngle / 2);
-    
-    // محاسبه فاصله تا گزینه برنده
-    let distance = (360 - sliceMiddleAngle - this.currentRotation + 360) % 360;
-    if (distance < 0) distance += 360;
-    
-    // اضافه کردن تعداد دور کامل
-    const fullSpins = (5 + Math.floor(Math.random() * 4)) * 360;
-    const targetRotation = this.currentRotation + distance + fullSpins;
+                // انتخاب تصادفی گزینه برنده
+                const winnerIndex = Math.floor(Math.random() * this.prizes.length);
+                const winner = this.prizes[winnerIndex];
+                
+                // محاسبه زاویه وسط گزینه برنده
+                const sliceMiddleAngle = (winnerIndex * this.sliceAngle) + (this.sliceAngle / 2);
+                
+                // محاسبه فاصله تا گزینه برنده
+                let distance = (360 - sliceMiddleAngle - this.currentRotation + 360) % 360;
+                if (distance < 0) distance += 360;
+                
+                // اضافه کردن تعداد دور کامل
+                const fullSpins = (5 + Math.floor(Math.random() * 4)) * 360;
+                const targetRotation = this.currentRotation + distance + fullSpins;
 
-    const tl = gsap.timeline({
-        onComplete: () => {
-            // ذخیره موقعیت نهایی نرمالایز شده
-            this.currentRotation = ((targetRotation % 360) + 360) % 360;
-            gsap.set(this.$refs.wheel, { rotation: this.currentRotation });
-            
-            this.spinning = false;
-            
-            setTimeout(() => {
-                alert('🎉 تبریک! شما برنده شدید: ' + winner.name);
-            }, 100);
-        }
-    });
+                const tl = gsap.timeline({
+                    // در هر فریم انیمیشن، استایل قطعه فعال آپدیت می‌شود
+                    onUpdate: () => {
+                        this.updateActiveSegment();
+                    },
+                    onComplete: () => {
+                        // ذخیره موقعیت نهایی نرمالایز شده
+                        this.currentRotation = ((targetRotation % 360) + 360) % 360;
+                        gsap.set(this.$refs.wheel, { rotation: this.currentRotation });
+                        
+                        this.spinning = false;
+                        this.updateActiveSegment(); // همگام‌سازی نهایی
+                        
+                        setTimeout(() => {
+                            alert('🎉 تبریک! شما برنده شدید: ' + winner.name);
+                        }, 100);
+                    }
+                });
 
-    // 1. حرکت نرم به عقب (حالا با عدد کوچیک درست کار می‌کنه)
-    tl.to(this.$refs.wheel, {
-        rotation: this.currentRotation - 40,
-        duration: 0.6,
-        ease: "power1.inOut"
-    })
-
-    // 2. چرخش اصلی
-    .to(this.$refs.wheel, {
-        rotation: targetRotation + 12,
-        duration: 13,
-        ease: "cubic-bezier(0.25, 0.1, 0.6, 1.0)"
-    })
-
-    // 3. برگشت نرم به نقطه نهایی
-    .to(this.$refs.wheel, {
-        rotation: targetRotation,
-        duration: 0.6,
-        ease: "back.out(1.5)"
-    });
-}
+                // 1. حرکت نرم به عقب
+                tl.to(this.$refs.wheel, {
+                    rotation: this.currentRotation - 40,
+                    duration: 0.6,
+                    ease: "power1.inOut"
+                })
+                // 2. چرخش اصلی
+                .to(this.$refs.wheel, {
+                    rotation: targetRotation + 12,
+                    duration: 30,
+                    ease: "cubic-bezier(0.25, 0.1, 0.6, 1.0)"
+                })
+                // 3. برگشت نرم به نقطه نهایی
+                .to(this.$refs.wheel, {
+                    rotation: targetRotation,
+                    duration: 0.6,
+                    ease: "back.out(1.5)"
+                });
+            }
         }));
     });
 </script>
