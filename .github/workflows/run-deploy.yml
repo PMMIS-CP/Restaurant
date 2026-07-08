@@ -108,25 +108,34 @@ jobs:
     - name: Expose with Bore
       id: bore_expose
       run: |
-        # اجرای bore در پس‌زمینه و هدایت خروجی به فایل
+        # اجرای bore در پس‌زمینه
         ./bore local 8080 --to bore.pub > bore.log 2>&1 &
         
         echo "⏳ در انتظار دریافت پورت از bore..."
         
-        # تلاش تا ۱۰ بار برای پیدا کردن پورت (افزایش زمان برای اطمینان)
         REMOTE_PORT=""
         for i in {1..10}; do
           sleep 3
-          # استفاده از tr و cut برای استخراج دقیق عدد
-          REMOTE_PORT=$(grep "remote_port=" bore.log | tail -n 1 | sed 's/.*remote_port=\([0-9]*\).*/\1/')
-          if [ -n "$REMOTE_PORT" ]; then
+          
+          # دیباگ: نمایش محتوای لاگ در هر تکرار برای اطمینان از اینکه فایل خالی نیست
+          echo "DEBUG: iteration $i - content of bore.log:"
+          cat bore.log | head -n 5
+          
+          # استخراج پورت
+          RAW_LINE=$(grep "remote_port=" bore.log | tail -n 1)
+          REMOTE_PORT=$(echo "$RAW_LINE" | awk -F'remote_port=' '{print $2}' | cut -d' ' -f1 | tr -d '\r')
+          
+          # دیباگ: نمایش مقدار استخراج شده
+          echo "DEBUG: extracted port value is '$REMOTE_PORT'"
+          
+          if [ -n "$REMOTE_PORT" ] && [ "$REMOTE_PORT" != "null" ]; then
             break
           fi
         done
 
         if [ -z "$REMOTE_PORT" ]; then
-          echo "❌ خطا: پورتی از bore دریافت نشد!"
-          echo "محتوای لاگ:"
+          echo "❌ خطا: پورت پیدا نشد!"
+          echo "--- FINAL LOG DUMP ---"
           cat bore.log
           exit 1
         fi
