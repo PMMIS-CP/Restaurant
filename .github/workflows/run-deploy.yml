@@ -81,7 +81,7 @@ jobs:
         sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)/database/database.sqlite"'|' .env
         
         # تنظیمات دیباگ و بهینه‌سازی
-        sed -i 's/^APP_DEBUG=.*/APP_DEBUG=false/' .env
+        sed -i 's/^APP_DEBUG=.*/APP_DEBUG=true/' .env
         
         # تنظیمات فشرده‌سازی و حذف کامنت
         # بررسی وجود کلیدها و تغییر مقدار آن‌ها
