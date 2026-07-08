@@ -1,5 +1,5 @@
 {{-- فوتر مدرن با رنگ‌های زرشکی و زرد سلطنتی --}}
-<footer class="bg-gradient-to-b from-[#5C0A1E] to-[#3A0512] text-gray-200 border-t-4 border-[#F5C518]">
+<footer class="bg-linear-to-b from-[#5C0A1E] to-[#3A0512] text-gray-200 border-t-4 border-[#F5C518]">
     <div class="container mx-auto px-4 py-8 lg:py-12">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-right">
             {{-- ستون ۱: برند --}}
