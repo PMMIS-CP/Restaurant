@@ -1,6 +1,6 @@
 @props(['images' => []])
 <!-- پس‌زمینه اختصاصی کاخ موراکو -->
-<div class="relative w-full bg-gradient-to-br from-red-900 to-amber-900 overflow-hidden py-16">
+<div class="relative w-full bg-linear-to-br from-red-900 to-amber-900 overflow-hidden py-16">
     <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" viewBox="0 0 1000 1000" preserveAspectRatio="none">
         <g class="stars">
             <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill="#fbbf24" class="star" />
