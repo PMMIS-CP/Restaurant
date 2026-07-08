@@ -64,15 +64,23 @@ jobs:
         touch database/database.sqlite
         chmod 777 database/database.sqlite
 
-    # 6. ساخت فایل env با پیکربندی صحیح برای SQLite
+    # 6. ساخت فایل env با پیکربندی صحیح برای SQLite و نام برنامه
     - name: Create .env file
       id: create_env
       run: |
         cp .env.example .env
+        # تنظیم نام برنامه (با استفاده از متغیر موقت برای امنیت بیشتر)
+        if grep -q "^APP_NAME=" .env; then
+          sed -i 's/^APP_NAME=.*/APP_NAME="کاخ موراکو"/' .env
+        else
+          echo 'APP_NAME="کاخ موراکو"' >> .env
+        fi
+        
         # اصلاح مقادیر دیتابیس
         sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
         sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)/database/database.sqlite"'|' .env
-        # اطمینان از وجود APP_URL (اگر نبود اضافه شود)
+        
+        # اطمینان از وجود APP_URL
         if ! grep -q "^APP_URL=" .env; then echo "APP_URL=http://localhost:8080" >> .env; fi
 
     # 7. تولید کلید اپلیکیشن
