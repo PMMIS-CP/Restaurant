@@ -98,44 +98,55 @@ jobs:
     # 11. اجرای سرور لاراول در پس‌زمینه
     - name: Start Laravel server
       run: |
-        set -e
         pkill -f "php artisan serve" || true
-        nohup php artisan serve --host=0.0.0.0 --port=8080 > server.log 2>&1 &
+        # اجرای سرور با خروجی شفاف‌تر
+        nohup php artisan serve --host=0.0.0.0 --port=8080 --no-reload > server.log 2>&1 &
+        
+        echo "⏳ در انتظار بالا آمدن سرور..."
         sleep 5
-        cat server.log
+        
+        # بررسی دیباگ: آیا پروسه هنوز زنده است؟
+        if pgrep -f "php artisan serve" > /dev/null; then
+          echo "✅ سرور لاراول با موفقیت در پس‌زمینه اجرا شد."
+        else
+          echo "❌ خطا: سرور لاراول اجرا نشد! محتوای server.log:"
+          cat server.log
+          exit 1
+        fi
+        
+        # بررسی پورت
+        echo "DEBUG: وضعیت پورت 8080:"
+        netstat -tuln | grep 8080 || echo "⚠️ هشدار: هیچ پروسه‌ای روی 8080 گوش نمی‌دهد!"
 
     # 12. اتصال به Bore و دریافت پورت تصادفی
     - name: Expose with Bore
       id: bore_expose
       run: |
-        # اجرای bore در پس‌زمینه
         ./bore local 8080 --to bore.pub > bore.log 2>&1 &
         
         echo "⏳ در انتظار دریافت پورت از bore..."
         
         REMOTE_PORT=""
-        for i in {1..10}; do
-          sleep 3
+        for i in {1..15}; do
+          sleep 4
           
-          # دیباگ: نمایش محتوای لاگ در هر تکرار برای اطمینان از اینکه فایل خالی نیست
-          echo "DEBUG: iteration $i - content of bore.log:"
-          cat bore.log | head -n 5
+          # دیباگ: نمایش آخرین خط از لاگ
+          LAST_LINE=$(tail -1 bore.log)
+          echo "DEBUG (Iteration $i): Last line of bore.log: '$LAST_LINE'"
           
           # استخراج پورت
-          RAW_LINE=$(grep "remote_port=" bore.log | tail -n 1)
-          REMOTE_PORT=$(echo "$RAW_LINE" | awk -F'remote_port=' '{print $2}' | cut -d' ' -f1 | tr -d '\r')
+          REMOTE_PORT=$(echo "$LAST_LINE" | grep "listening at bore.pub:" | sed 's/.*bore.pub:\([0-9]*\).*/\1/')
           
-          # دیباگ: نمایش مقدار استخراج شده
-          echo "DEBUG: extracted port value is '$REMOTE_PORT'"
+          echo "DEBUG (Iteration $i): Extracted port: '$REMOTE_PORT'"
           
-          if [ -n "$REMOTE_PORT" ] && [ "$REMOTE_PORT" != "null" ]; then
+          if [ -n "$REMOTE_PORT" ] && [[ "$REMOTE_PORT" =~ ^[0-9]+$ ]]; then
             break
           fi
         done
 
         if [ -z "$REMOTE_PORT" ]; then
           echo "❌ خطا: پورت پیدا نشد!"
-          echo "--- FINAL LOG DUMP ---"
+          echo "--- ALL LOGS ---"
           cat bore.log
           exit 1
         fi
