@@ -90,8 +90,9 @@ jobs:
     # 10. نصب ابزار Bore
     - name: Install Bore
       run: |
-        curl -fsSL https://github.com/ekzhang/bore/releases/latest/download/bore-linux-amd64.zip -o bore.zip
-        unzip -o bore.zip
+        VERSION="0.6.0"
+        curl -L "https://github.com/ekzhang/bore/releases/download/v$VERSION/bore-v$VERSION-x86_64-unknown-linux-musl.tar.gz" -o bore.tar.gz
+        tar -xzf bore.tar.gz
         chmod +x bore
 
     # 11. اجرای سرور لاراول در پس‌زمینه
