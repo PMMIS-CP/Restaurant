@@ -104,19 +104,21 @@ jobs:
         sleep 5
         cat server.log
 
-    # 12. اتصال به Bore و دریافت پورت تصادفی (با تلاش مجدد)
+    # 12. اتصال به Bore و دریافت پورت تصادفی
     - name: Expose with Bore
       id: bore_expose
       run: |
-        set -e
-        ./bore local 8080 --to bore.pub 2>&1 | tee bore.log &
-        BORE_PID=$!
-        echo "BORE_PID=$BORE_PID" >> $GITHUB_ENV
-
-        # تلاش تا ۵ بار برای دریافت پورت
-        for i in {1..5}; do
+        # اجرای bore در پس‌زمینه و هدایت خروجی به فایل
+        ./bore local 8080 --to bore.pub > bore.log 2>&1 &
+        
+        echo "⏳ در انتظار دریافت پورت از bore..."
+        
+        # تلاش تا ۱۰ بار برای پیدا کردن پورت (افزایش زمان برای اطمینان)
+        REMOTE_PORT=""
+        for i in {1..10}; do
           sleep 3
-          REMOTE_PORT=$(grep -oP 'remote_port=\K[0-9]+' bore.log | head -1)
+          # استفاده از tr و cut برای استخراج دقیق عدد
+          REMOTE_PORT=$(grep "remote_port=" bore.log | tail -n 1 | sed 's/.*remote_port=\([0-9]*\).*/\1/')
           if [ -n "$REMOTE_PORT" ]; then
             break
           fi
@@ -124,6 +126,7 @@ jobs:
 
         if [ -z "$REMOTE_PORT" ]; then
           echo "❌ خطا: پورتی از bore دریافت نشد!"
+          echo "محتوای لاگ:"
           cat bore.log
           exit 1
         fi
