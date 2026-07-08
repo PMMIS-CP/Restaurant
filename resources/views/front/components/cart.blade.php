@@ -1,9 +1,9 @@
-<!-- بخش اول با پس‌زمینه کرم و کارت‌های شیشه‌ای مدرن -->
+{{-- <!-- بخش اول با پس‌زمینه کرم و کارت‌های شیشه‌ای مدرن --> --}}
 <div class="bg-[#fcf8f0] py-16 md:py-24">
     <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row gap-8 lg:gap-10">
             
-            <!-- کارت اول -->
+            {{-- <!-- کارت اول --> --}}
             <div class="w-full md:w-1/2 group/card">
                 <div 
                    rel="noopener noreferrer" 
@@ -24,7 +24,7 @@
                 </div>
             </div>
             
-            <!-- کارت دوم -->
+            {{-- <!-- کارت دوم --> --}}
             <div class="w-full md:w-1/2 group/card">
                 <div 
                    rel="noopener noreferrer" 

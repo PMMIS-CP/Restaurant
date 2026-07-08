@@ -1,5 +1,5 @@
 @props(['images' => []])
-<!-- پس‌زمینه اختصاصی کاخ موراکو -->
+{{-- <!-- پس‌زمینه اختصاصی کاخ موراکو --> --}}
 <div class="relative w-full bg-linear-to-br from-red-900 to-amber-900 overflow-hidden py-16">
     <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" viewBox="0 0 1000 1000" preserveAspectRatio="none">
         <g class="stars">

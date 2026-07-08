@@ -196,11 +196,11 @@
                                     تاریخ انتخاب‌شده: <span x-text="selectedDate ? selectedDate : '---'" style="color: #DC2626;"></span>
                                 </div>
                                 <div class="flex justify-between items-center mb-1 md:mb-2" x-data="{ isRTL: document.documentElement.dir === 'rtl' || getComputedStyle(document.documentElement).direction === 'rtl' }">
-                                    <!-- دکمه ماه قبل -->
+                                    {{-- <!-- دکمه ماه قبل --> --}}
                                     <button @click="changeMonth(-1)" type="button"
                                             class="relative overflow-hidden p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm font-bold ripple-effect rounded-full"
                                             style="color: #DC2626;">
-                                        <!-- فلش چپ برای LTR، فلش راست برای RTL -->
+                                        {{-- <!-- فلش چپ برای LTR، فلش راست برای RTL --> --}}
                                         <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
                                             <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -211,16 +211,16 @@
                                         </svg>
                                     </button>
 
-                                    <!-- عنوان ماه و سال -->
+                                    {{-- <!-- عنوان ماه و سال --> --}}
                                     <span class="font-bold text-[10px] sm:text-xs md:text-sm"
                                         x-text="currentMonthName + ' ' + currentYear"
                                         style="color: #B8860B;"></span>
 
-                                    <!-- دکمه ماه بعد -->
+                                    {{-- <!-- دکمه ماه بعد --> --}}
                                     <button @click="changeMonth(1)" type="button"
                                             class="relative overflow-hidden p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm font-bold ripple-effect rounded-full"
                                             style="color: #DC2626;">
-                                        <!-- فلش راست برای LTR، فلش چپ برای RTL -->
+                                        {{-- <!-- فلش راست برای LTR، فلش چپ برای RTL --> --}}
                                         <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
                                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
@@ -448,37 +448,37 @@
                     <div class="flex justify-between items-center mb-2" 
                         x-data="{ isRTL: document.documentElement.dir === 'rtl' || getComputedStyle(document.documentElement).direction === 'rtl' }">
                     
-                        <!-- دکمه ماه قبل -->
+                        {{-- <!-- دکمه ماه قبل --> --}}
                         <button @click="changeMonth(-1)" type="button" 
                                 class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
                                 style="color: #DC2626;">
-                            <!-- LTR: فلش به چپ -->
+                            {{-- <!-- LTR: فلش به چپ --> --}}
                             <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-3.5 h-3.5 inline-block pointer-events-none">
                             <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
                             </svg>
-                            <!-- RTL: فلش به راست -->
+                            {{-- <!-- RTL: فلش به راست --> --}}
                             <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-3.5 h-3.5 inline-block pointer-events-none">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
                         </button>
 
-                        <!-- عنوان ماه و سال -->
+                        {{-- <!-- عنوان ماه و سال --> --}}
                         <span class="font-bold text-[10px]" 
                                 x-text="currentMonthName + ' ' + currentYear" 
                                 style="color: #B8860B;"></span>
 
-                        <!-- دکمه ماه بعد -->
+                        {{-- <!-- دکمه ماه بعد --> --}}
                         <button @click="changeMonth(1)" type="button" 
                                 class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
                                 style="color: #DC2626;">
-                            <!-- LTR: فلش به راست -->
+                            {{-- <!-- LTR: فلش به راست --> --}}
                             <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-3.5 h-3.5 inline-block pointer-events-none">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
                             </svg>
-                            <!-- RTL: فلش به چپ -->
+                            {{-- <!-- RTL: فلش به چپ --> --}}
                             <svg x-show="isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-3.5 h-3.5 inline-block pointer-events-none">
                             <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
