@@ -1,4 +1,4 @@
-<a href="/spin" class="group block w-full bg-gradient-to-r from-[#2a1a0a] via-[#3d2b14] to-[#2a1a0a] border-2 border-[#7b1a1a] hover:border-[#d4a017] rounded-2xl p-4 sm:p-6 shadow-[0_4px_30px_rgba(0,0,0,0.4),inset_0_0_15px_rgba(123,26,26,0.3)] hover:shadow-[0_0_35px_rgba(139,0,0,0.3),0_0_50px_rgba(212,160,23,0.2)] transition-all duration-500 hover:scale-[1.01] relative overflow-hidden">
+<a href="/spin" class="group block w-full bg-linear-to-r from-[#2a1a0a] via-[#3d2b14] to-[#2a1a0a] border-2 border-[#7b1a1a] hover:border-[#d4a017] rounded-2xl p-4 sm:p-6 shadow-[0_4px_30px_rgba(0,0,0,0.4),inset_0_0_15px_rgba(123,26,26,0.3)] hover:shadow-[0_0_35px_rgba(139,0,0,0.3),0_0_50px_rgba(212,160,23,0.2)] transition-all duration-500 hover:scale-[1.01] relative overflow-hidden">
     
     <!-- حاشیه تزئینی زرشکی و زرد سلطنتی -->
     <div class="absolute inset-0 rounded-2xl border-2 border-[#d4a017]/50 pointer-events-none"></div>
@@ -20,10 +20,10 @@
     <div class="flex flex-col items-center gap-4 relative z-10 sm:hidden">
         
         <!-- بخش گردونه -->
-        <div class="relative w-36 h-36 flex-shrink-0 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#d4a017] via-[#8b0000] to-[#d4a017] p-1.5 shadow-[0_0_30px_rgba(139,0,0,0.5),0_0_50px_rgba(212,160,23,0.3)] animate-mini-border-glow">
+        <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-linear-to-br from-[#d4a017] via-[#8b0000] to-[#d4a017] p-1.5 shadow-[0_0_30px_rgba(139,0,0,0.5),0_0_50px_rgba(212,160,23,0.3)] animate-mini-border-glow">
                 <div class="w-full h-full rounded-full bg-[#2a1a0a] p-1">
-                    <div class="w-full h-full rounded-full bg-gradient-to-tr from-[#8b0000] via-[#3d2b14] to-[#8b0000] p-0.5 shadow-inner relative">
+                    <div class="w-full h-full rounded-full bg-linear-to-tr from-[#8b0000] via-[#3d2b14] to-[#8b0000] p-0.5 shadow-inner relative">
                         
                         <!-- گردونه چرخان -->
                         <div class="relative w-full h-full animate-promo-spin" style="transform-origin: center center;">
@@ -127,7 +127,7 @@
     <div class="hidden sm:flex sm:items-center sm:justify-center sm:gap-6 lg:gap-8 relative z-10">
         
         <!-- متن سمت راست -->
-        <div class="text-right space-y-1.5 flex-shrink-0">
+        <div class="text-right space-y-1.5 shrink-0">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping"></span>
                 کمپین شانس روزانه
@@ -141,10 +141,10 @@
         </div>
 
         <!-- بخش گردونه -->
-        <div class="relative w-36 h-36 lg:w-44 lg:h-44 flex-shrink-0 flex items-center justify-center">
-            <div class="absolute inset-0 rounded-full bg-gradient-to-br from-[#d4a017] via-[#8b0000] to-[#d4a017] p-1.5 shadow-[0_0_30px_rgba(139,0,0,0.5),0_0_50px_rgba(212,160,23,0.3)] animate-mini-border-glow">
+        <div class="relative w-36 h-36 lg:w-44 lg:h-44 shrink-0 flex items-center justify-center">
+            <div class="absolute inset-0 rounded-full bg-linear-to-br from-[#d4a017] via-[#8b0000] to-[#d4a017] p-1.5 shadow-[0_0_30px_rgba(139,0,0,0.5),0_0_50px_rgba(212,160,23,0.3)] animate-mini-border-glow">
                 <div class="w-full h-full rounded-full bg-[#2a1a0a] p-1">
-                    <div class="w-full h-full rounded-full bg-gradient-to-tr from-[#8b0000] via-[#3d2b14] to-[#8b0000] p-0.5 shadow-inner relative">
+                    <div class="w-full h-full rounded-full bg-linear-to-tr from-[#8b0000] via-[#3d2b14] to-[#8b0000] p-0.5 shadow-inner relative">
                         
                         <div class="relative w-full h-full animate-promo-spin" style="transform-origin: center center;">
                             <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl">
@@ -220,7 +220,7 @@
         </div>
 
         <!-- متن سمت چپ -->
-        <div class="text-left space-y-1.5 flex-shrink-0">
+        <div class="text-left space-y-1.5 shrink-0">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping"></span>
                 جوایز امروز
