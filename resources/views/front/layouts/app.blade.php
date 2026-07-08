@@ -155,12 +155,12 @@
     @stack('scripts')
 
     <script>
-        document.body.classList.add('loading'); // اضافه کردن در زمان شروع
+        document.body.classList.add('loading');
 
         window.addEventListener("load", function() {
             const loader = document.getElementById("loader");
             loader.style.opacity = "0";
-            document.body.classList.remove('loading'); // حذف محدودیت اسکرول
+            document.body.classList.remove('loading');
             
             setTimeout(() => {
                 loader.style.display = "none";
