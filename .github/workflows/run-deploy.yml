@@ -1,0 +1,197 @@
+name: Auto Deploy Laravel with Bore
+
+on:
+  workflow_dispatch:  # اجرای دستی
+
+jobs:
+  auto-deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 240
+
+    steps:
+    # 1. دریافت کد
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # 2. نصب PHP 8.4 و ابزارها
+    - name: Setup PHP
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: '8.4'   # مطابق composer.json
+        extensions: mbstring, pdo, pdo_mysql, pdo_sqlite, sqlite3, zip, fileinfo
+        tools: composer
+        coverage: none
+
+    - name: Cache Composer dependencies
+      uses: actions/cache@v3
+      with:
+        path: vendor/
+        key: composer-${{ hashFiles('composer.lock') }}
+        restore-keys: composer-
+
+    # 3. نصب وابستگی‌های Composer
+    - name: Install Composer dependencies
+      run: |
+        composer install --no-interaction --no-progress --prefer-dist --optimize-autoloader
+        composer dump-autoload -o
+
+    # 4. نصب Node.js و کش npm (در صورت وجود package.json)
+    - name: Setup Node.js
+      if: hashFiles('package.json') != ''
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    - name: Cache npm dependencies
+      if: hashFiles('package.json') != ''
+      uses: actions/cache@v3
+      with:
+        path: node_modules/
+        key: npm-${{ hashFiles('package-lock.json') }}
+        restore-keys: npm-
+
+    - name: Install NPM dependencies & build assets
+      if: hashFiles('package.json') != ''
+      run: |
+        npm ci --no-audit --no-fund   # در صورت نداشتن package-lock.json از npm install استفاده کنید
+        npm run build                 # کامپایل assets با Vite
+
+    # 5. ایجاد دیتابیس SQLite
+    - name: Setup database
+      run: |
+        mkdir -p database
+        touch database/database.sqlite
+        chmod 777 database/database.sqlite
+
+    # 6. ساخت فایل env با پیکربندی صحیح برای SQLite
+    - name: Create .env file
+      id: create_env
+      run: |
+        set -e
+        if [ -f .env.example ]; then
+          cp .env.example .env
+          # بازنویسی تنظیمات دیتابیس برای SQLite
+          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=database\/database.sqlite/' .env
+          # اطمینان از وجود متغیرهای جلسه و کش
+          grep -q "^SESSION_DRIVER=" .env || echo "SESSION_DRIVER=file" >> .env
+          grep -q "^CACHE_DRIVER=" .env || echo "CACHE_DRIVER=file" >> .env
+        else
+          # در صورت نبود .env.example، فایل را از ابتدا می‌سازیم
+          cat > .env <<EOF
+        APP_NAME=Laravel
+        APP_ENV=testing
+        APP_KEY=
+        APP_DEBUG=true
+        APP_URL=http://localhost:8080
+        DB_CONNECTION=sqlite
+        DB_DATABASE=database/database.sqlite
+        SESSION_DRIVER=file
+        CACHE_DRIVER=file
+        EOF
+        fi
+
+    # 7. تولید کلید اپلیکیشن
+    - name: Generate application key
+      run: php artisan key:generate --force
+
+    # 8. اجرای مایگریشن‌ها
+    - name: Run migrations
+      run: php artisan migrate --force --no-interaction
+
+    # 9. ایجاد استوریج لینک
+    - name: Create storage link
+      run: php artisan storage:link || true
+
+    # 10. نصب ابزار Bore
+    - name: Install Bore
+      run: |
+        curl -fsSL https://github.com/ekzhang/bore/releases/latest/download/bore-linux-amd64.zip -o bore.zip
+        unzip -o bore.zip
+        chmod +x bore
+
+    # 11. اجرای سرور لاراول در پس‌زمینه
+    - name: Start Laravel server
+      run: |
+        set -e
+        pkill -f "php artisan serve" || true
+        nohup php artisan serve --host=0.0.0.0 --port=8080 > server.log 2>&1 &
+        sleep 5
+        cat server.log
+
+    # 12. اتصال به Bore و دریافت پورت تصادفی (با تلاش مجدد)
+    - name: Expose with Bore
+      id: bore_expose
+      run: |
+        set -e
+        ./bore local 8080 --to bore.pub 2>&1 | tee bore.log &
+        BORE_PID=$!
+        echo "BORE_PID=$BORE_PID" >> $GITHUB_ENV
+
+        # تلاش تا ۵ بار برای دریافت پورت
+        for i in {1..5}; do
+          sleep 3
+          REMOTE_PORT=$(grep -oP 'remote_port=\K[0-9]+' bore.log | head -1)
+          if [ -n "$REMOTE_PORT" ]; then
+            break
+          fi
+        done
+
+        if [ -z "$REMOTE_PORT" ]; then
+          echo "❌ خطا: پورتی از bore دریافت نشد!"
+          cat bore.log
+          exit 1
+        fi
+
+        echo "REMOTE_PORT=$REMOTE_PORT" >> $GITHUB_ENV
+        echo "REMOTE_URL=http://bore.pub:$REMOTE_PORT" >> $GITHUB_ENV
+        echo "url=http://bore.pub:$REMOTE_PORT" >> $GITHUB_OUTPUT
+        echo "✅ پورت اختصاص‌یافته: $REMOTE_PORT"
+
+    # 13. بروزرسانی و پاکسازی کش
+    - name: Update .env and Clear Cache
+      run: |
+        sed -i "s|^APP_URL=.*|APP_URL=$REMOTE_URL|g" .env
+        php artisan config:clear
+        php artisan cache:clear
+        echo "✅ APP_URL بروزرسانی و کش پاکسازی شد."
+
+    # 14. ریستارت سرور
+    - name: Restart Laravel server
+      run: |
+        pkill -f "php artisan serve" || true
+        # اضافه کردن --no-reload برای پایداری بیشتر در اکشن
+        nohup php artisan serve --host=0.0.0.0 --port=8080 > server.log 2>&1 &
+        sleep 5
+
+    # 15. اجرای سیدرها (اختیاری)
+    - name: Run seeders (optional)
+      run: php artisan db:seed --force --no-interaction || true
+
+    # 16. نمایش اطلاعات نهایی
+    - name: Show final info
+      run: |
+        echo "=========================================="
+        echo "✅ سایت شما با موفقیت راه‌اندازی شد!"
+        echo "=========================================="
+        echo "🌐 آدرس دسترسی: $REMOTE_URL"
+        echo "🔧 پورت اختصاص‌یافته: $REMOTE_PORT"
+        echo "=========================================="
+        echo "📝 نکات:"
+        echo "  - این آدرس تا پایان اجرای اکشن فعال است"
+        echo "  - برای مشاهده لاگ‌ها به بخش Actions مراجعه کنید"
+        echo "  - لاگ‌های موجود: server.log و bore.log"
+        echo "=========================================="
+
+    # 17. نگهداشتن اکشن برای تست (تا ۲۰ دقیقه)
+    - name: Keep server alive for testing
+      run: |
+        echo "⏳ سرور برای ۲۰ دقیقه فعال خواهد ماند..."
+        echo "📱 می‌توانید در آدرس $REMOTE_URL تست کنید"
+        echo "🔄 برای توقف، این اکشن را کنسل کنید"
+        echo ""
+        echo "لاگ‌های سرور در حال اجرا:"
+        echo "------------------------"
+        tail -f server.log 2>/dev/null || sleep 14400
+      timeout-minutes: 240
