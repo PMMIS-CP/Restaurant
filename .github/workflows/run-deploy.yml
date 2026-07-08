@@ -80,6 +80,14 @@ jobs:
         sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
         sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)/database/database.sqlite"'|' .env
         
+        # تنظیمات دیباگ و بهینه‌سازی
+        sed -i 's/^APP_DEBUG=.*/APP_DEBUG=false/' .env
+        
+        # تنظیمات فشرده‌سازی و حذف کامنت
+        # بررسی وجود کلیدها و تغییر مقدار آن‌ها
+        sed -i 's/^REMOVE_HTML_COMMENTS=.*/REMOVE_HTML_COMMENTS=true/' .env
+        sed -i 's/^OPTIMIZE_HTML_MINIFY=.*/OPTIMIZE_HTML_MINIFY=true/' .env
+        
         # اطمینان از وجود APP_URL
         if ! grep -q "^APP_URL=" .env; then echo "APP_URL=http://localhost:8080" >> .env; fi
 
