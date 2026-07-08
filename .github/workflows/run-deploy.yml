@@ -23,7 +23,7 @@ jobs:
         coverage: none
 
     - name: Cache Composer dependencies
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: vendor/
         key: composer-${{ hashFiles('composer.lock') }}
@@ -40,12 +40,12 @@ jobs:
       if: hashFiles('package.json') != ''
       uses: actions/setup-node@v4
       with:
-        node-version: '18'
+        node-version: '22'
         cache: 'npm'
 
     - name: Cache npm dependencies
       if: hashFiles('package.json') != ''
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: node_modules/
         key: npm-${{ hashFiles('package-lock.json') }}
@@ -68,29 +68,12 @@ jobs:
     - name: Create .env file
       id: create_env
       run: |
-        set -e
-        if [ -f .env.example ]; then
-          cp .env.example .env
-          # بازنویسی تنظیمات دیتابیس برای SQLite
-          sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
-          sed -i 's/^DB_DATABASE=.*/DB_DATABASE=database\/database.sqlite/' .env
-          # اطمینان از وجود متغیرهای جلسه و کش
-          grep -q "^SESSION_DRIVER=" .env || echo "SESSION_DRIVER=file" >> .env
-          grep -q "^CACHE_DRIVER=" .env || echo "CACHE_DRIVER=file" >> .env
-        else
-          # در صورت نبود .env.example، فایل را از ابتدا می‌سازیم
-          cat > .env <<EOF
-        APP_NAME=Laravel
-        APP_ENV=testing
-        APP_KEY=
-        APP_DEBUG=true
-        APP_URL=http://localhost:8080
-        DB_CONNECTION=sqlite
-        DB_DATABASE=database/database.sqlite
-        SESSION_DRIVER=file
-        CACHE_DRIVER=file
-        EOF
-        fi
+        cp .env.example .env
+        # اصلاح مقادیر دیتابیس
+        sed -i 's/^DB_CONNECTION=.*/DB_CONNECTION=sqlite/' .env
+        sed -i 's|^DB_DATABASE=.*|DB_DATABASE='"$(pwd)/database/database.sqlite"'|' .env
+        # اطمینان از وجود APP_URL (اگر نبود اضافه شود)
+        if ! grep -q "^APP_URL=" .env; then echo "APP_URL=http://localhost:8080" >> .env; fi
 
     # 7. تولید کلید اپلیکیشن
     - name: Generate application key
@@ -161,8 +144,7 @@ jobs:
     - name: Restart Laravel server
       run: |
         pkill -f "php artisan serve" || true
-        # اضافه کردن --no-reload برای پایداری بیشتر در اکشن
-        nohup php artisan serve --host=0.0.0.0 --port=8080 > server.log 2>&1 &
+        nohup php artisan serve --host=0.0.0.0 --port=8080 --no-reload > server.log 2>&1 &
         sleep 5
 
     # 15. اجرای سیدرها (اختیاری)
@@ -187,11 +169,7 @@ jobs:
     # 17. نگهداشتن اکشن برای تست (تا ۲۰ دقیقه)
     - name: Keep server alive for testing
       run: |
-        echo "⏳ سرور برای ۲۰ دقیقه فعال خواهد ماند..."
-        echo "📱 می‌توانید در آدرس $REMOTE_URL تست کنید"
-        echo "🔄 برای توقف، این اکشن را کنسل کنید"
-        echo ""
-        echo "لاگ‌های سرور در حال اجرا:"
-        echo "------------------------"
-        tail -f server.log 2>/dev/null || sleep 14400
-      timeout-minutes: 240
+        echo "⏳ سرور برای تست فعال است. آدرس دسترسی: $REMOTE_URL"
+        echo "🔄 برای توقف تست، اکشن را دستی کنسل کنید."
+        # استفاده از sleep برای نگه داشتن جاب بدون درگیری با tail
+        sleep 14400
