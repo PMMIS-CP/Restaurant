@@ -122,5 +122,34 @@ return [
         'driver' => env('APP_MAINTENANCE_DRIVER', 'file'),
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
+    /*
+    |--------------------------------------------------------------------------
+    | Cache TTL (Time To Live) in seconds
+    |--------------------------------------------------------------------------
+    */
+    'cache_ttl' => env('APP_CACHE_TTL', 300),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Admin Route Prefixes
+    |--------------------------------------------------------------------------
+    */
+    'admin_prefixes' => ['admin', 'filament', 'nova', 'panel'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | HTML Optimization Settings
+    |--------------------------------------------------------------------------
+    */
+    'minify_html' => env('OPTIMIZE_HTML_MINIFY', true),
+    'remove_html_comments' => env('REMOVE_HTML_COMMENTS', true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Security Headers Settings
+    |--------------------------------------------------------------------------
+    */
+    'show_powered_by' => env('SHOW_POWERED_BY', false),
+    'enable_csp' => env('ENABLE_CSP', false),
+    'enable_hsts' => env('ENABLE_HSTS', false),
 ];
