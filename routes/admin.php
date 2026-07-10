@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\Auth\AdminAuthenticatedSessionController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\Auth\AdminAuthenticatedSessionController;
+use App\Http\Controllers\Admin\Dashboard\DashboardController;
 
 Route::name('admin.')->group(function () {
 
@@ -14,10 +15,9 @@ Route::name('admin.')->group(function () {
 
     // Routes for authenticated admins
     Route::middleware('admin.auth')->group(function () {
-        // Dashboard - will be created later
-        Route::get('/dashboard', function () {
-            return 'Admin Dashboard - Coming Soon';
-        })->name('dashboard');
+        // Dashboard
+        Route::get('/dashboard', [DashboardController::class, 'index'])
+            ->name('dashboard');
 
         Route::post('/logout', [AdminAuthenticatedSessionController::class, 'destroy'])
             ->name('logout');
