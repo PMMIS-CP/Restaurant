@@ -40,7 +40,7 @@
                                class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                 رزروها
                             </a>
-                            <a href="#" 
+                            <a href="{{ route('admin.menu.index') }}" 
                                class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                 منو
                             </a>
