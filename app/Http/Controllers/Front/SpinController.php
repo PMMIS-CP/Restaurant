@@ -61,8 +61,8 @@ class SpinController extends Controller
                 'textX' => $textX,
                 'textY' => $textY,
                 'textRotation' => $textRotation,
-                'lightX' => $lightX,  // اضافه شود
-                'lightY' => $lightY,  // اضافه شود
+                'lightX' => $lightX,
+                'lightY' => $lightY,
             ];
         }
 
