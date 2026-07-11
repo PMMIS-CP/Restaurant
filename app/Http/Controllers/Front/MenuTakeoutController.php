@@ -5,14 +5,13 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class MenuController extends Controller
+class MenuTakeoutController extends Controller
 {
     public function index()
     {
-        return view('front.pages.menu', [
+        return view('front.pages.takeout', [
             'hideHeader' => true,
             'hideFooter' => true
         ]);
-        
     }
 }

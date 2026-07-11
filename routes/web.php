@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Front\MenuController;
+use App\Http\Controllers\Front\MenuTakeoutController;
 use App\Http\Controllers\Front\ReserveController;
 use App\Http\Controllers\Front\SpinController;
 
@@ -24,7 +25,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
-Route::get('/menu/takeout', [MenuController::class, 'takeout'])->name('menu.takeout');
+Route::get('/menu/takeout', [MenuTakeoutController::class, 'index'])->name('menu.takeout');
 Route::get('/spin', [SpinController::class, 'index'])->name('spin');
 Route::post('/spin', [SpinController::class, 'spin'])->name('spin.post');
 
