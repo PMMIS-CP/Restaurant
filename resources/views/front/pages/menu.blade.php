@@ -76,21 +76,21 @@
         </a>
     </div>
 
-<div id="category-page" class="max-w-5xl mx-auto px-4 py-12 relative z-30">
-    <h2 class="text-xl md:text-2xl font-bold text-center text-[#ffd700] mb-8 drop-shadow-[0_2px_10px_rgba(255,215,0,0.15)]">
-        لطفاً یک دسته‌بندی را انتخاب کنید
-    </h2>
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        @foreach($categories as $cat)
-            <button data-category-select="{{ $cat }}" class="category-select-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900/80 rounded-2xl p-6 text-center transition-all duration-300 hover:border-[#dfb15b]/40 hover:shadow-[0_10px_25px_rgba(220,20,60,0.15)] cursor-pointer flex flex-col items-center gap-4">
-                <img src="{{ $categoryImages[$cat] ?? asset('/assets/images/menu/مخصوص.webp') }}" alt="{{ $cat }}" class="w-24 h-24 rounded-full object-cover border-2 border-neutral-700 group-hover:border-[#ffd700] transition-colors duration-300">
-                <span class="block text-base font-bold text-gray-200 group-hover:text-[#ffd700] transition-colors duration-300">
-                    {{ $cat }}
-                </span>
-            </button>
-        @endforeach
+    <div id="category-page" class="max-w-5xl mx-auto px-4 py-12 relative z-30">
+        <h2 class="text-xl md:text-2xl font-bold text-center text-[#ffd700] mb-8 drop-shadow-[0_2px_10px_rgba(255,215,0,0.15)]">
+            لطفاً یک دسته‌بندی را انتخاب کنید
+        </h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            @foreach($categories as $cat)
+                <button data-category-select="{{ $cat }}" class="category-select-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900/80 rounded-2xl p-6 text-center transition-all duration-300 hover:border-[#dfb15b]/40 hover:shadow-[0_10px_25px_rgba(220,20,60,0.15)] cursor-pointer flex flex-col items-center gap-4">
+                    <img src="{{ $categoryImages[$cat] ?? asset('/assets/images/menu/مخصوص.webp') }}" alt="{{ $cat }}" class="w-24 h-24 rounded-full object-cover border-2 border-neutral-700 group-hover:border-[#ffd700] transition-colors duration-300">
+                    <span class="block text-base font-bold text-gray-200 group-hover:text-[#ffd700] transition-colors duration-300">
+                        {{ $cat }}
+                    </span>
+                </button>
+            @endforeach
+        </div>
     </div>
-</div>
 
     <div id="menu-page" class="hidden">
         
