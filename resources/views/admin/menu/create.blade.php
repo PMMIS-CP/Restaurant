@@ -22,41 +22,90 @@
         <form action="{{ route('admin.menu.store') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6">
             @csrf
 
-            <!-- Name -->
-            <div>
-                <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
-                    نام غذا *
-                </label>
-                <input type="text" 
-                       name="name" 
-                       id="name" 
-                       value="{{ old('name') }}"
-                       class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name') border-red-500 @enderror"
-                       required>
-                @error('name')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+            <!-- Names Section -->
+            <div class="bg-gray-50 p-4 rounded-lg space-y-4">
+                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">نام غذا (حداقل یک مورد الزامی است)</h3>
+                
+                <!-- Persian Name -->
+                <div>
+                    <label for="name_fa" class="block text-sm font-medium text-gray-700 mb-2">
+                        نام فارسی <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" 
+                           name="name_fa" 
+                           id="name_fa" 
+                           value="{{ old('name_fa') }}"
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name_fa') border-red-500 @enderror"
+                           placeholder="مثال: استیک با سس قارچ">
+                    @error('name_fa')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- English Name -->
+                <div>
+                    <label for="name_en" class="block text-sm font-medium text-gray-700 mb-2">
+                        نام انگلیسی
+                    </label>
+                    <input type="text" 
+                           name="name_en" 
+                           id="name_en" 
+                           value="{{ old('name_en') }}"
+                           dir="ltr"
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name_en') border-red-500 @enderror"
+                           placeholder="Example: Steak with Mushroom Sauce">
+                    @error('name_en')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Arabic Name -->
+                <div>
+                    <label for="name_ar" class="block text-sm font-medium text-gray-700 mb-2">
+                        نام عربی
+                    </label>
+                    <input type="text" 
+                           name="name_ar" 
+                           id="name_ar" 
+                           value="{{ old('name_ar') }}"
+                           dir="rtl"
+                           class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name_ar') border-red-500 @enderror"
+                           placeholder="مثال: شريحة لحم مع صلصة الفطر">
+                    @error('name_ar')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                @error('at_least_one_name')
+                    <p class="text-sm text-red-600 bg-red-50 p-2 rounded">{{ $message }}</p>
                 @enderror
             </div>
 
             <!-- Category -->
             <div>
-                <label for="category" class="block text-sm font-medium text-gray-700 mb-2">
+                <label for="menu_category_id" class="block text-sm font-medium text-gray-700 mb-2">
                     دسته‌بندی *
                 </label>
-                <select name="category" 
-                        id="category" 
-                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('category') border-red-500 @enderror"
+                <select name="menu_category_id" 
+                        id="menu_category_id" 
+                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('menu_category_id') border-red-500 @enderror"
                         required>
                     <option value="">انتخاب دسته‌بندی</option>
-                    <option value="پیش غذا" {{ old('category') == 'پیش غذا' ? 'selected' : '' }}>پیش غذا</option>
-                    <option value="غذای اصلی" {{ old('category') == 'غذای اصلی' ? 'selected' : '' }}>غذای اصلی</option>
-                    <option value="دسر" {{ old('category') == 'دسر' ? 'selected' : '' }}>دسر</option>
-                    <option value="نوشیدنی" {{ old('category') == 'نوشیدنی' ? 'selected' : '' }}>نوشیدنی</option>
-                    <option value="مخلفات" {{ old('category') == 'مخلفات' ? 'selected' : '' }}>مخلفات</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('menu_category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
                 </select>
-                @error('category')
+                @error('menu_category_id')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
+                @if($categories->isEmpty())
+                    <p class="mt-2 text-sm text-yellow-600">
+                        هیچ دسته‌بندی‌ای وجود ندارد. 
+                        <a href="{{ route('admin.menu-categories.create') }}" class="underline text-rose-500">یک دسته جدید بسازید</a>.
+                    </p>
+                @endif
             </div>
 
             <!-- Price -->
@@ -68,28 +117,67 @@
                        name="price" 
                        id="price" 
                        value="{{ old('price') }}"
-                       step="0.01"
+                       step="1"
                        min="0"
                        class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('price') border-red-500 @enderror"
+                       placeholder="مثال: 1800000"
                        required>
                 @error('price')
                     <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                 @enderror
+                <p class="mt-1 text-xs text-gray-500" id="price-preview"></p>
             </div>
 
-            <!-- Description -->
-            <div>
-                <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
-                    توضیحات
-                </label>
-                <textarea name="description" 
-                          id="description" 
-                          rows="4"
-                          class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('description') border-red-500 @enderror"
-                          placeholder="توضیحات غذا...">{{ old('description') }}</textarea>
-                @error('description')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
+            <!-- Descriptions Section -->
+            <div class="bg-gray-50 p-4 rounded-lg space-y-4">
+                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">توضیحات (اختیاری)</h3>
+                
+                <!-- Persian Description -->
+                <div>
+                    <label for="description_fa" class="block text-sm font-medium text-gray-700 mb-2">
+                        توضیحات فارسی
+                    </label>
+                    <textarea name="description_fa" 
+                              id="description_fa" 
+                              rows="3"
+                              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('description_fa') border-red-500 @enderror"
+                              placeholder="توضیحات غذا به فارسی...">{{ old('description_fa') }}</textarea>
+                    @error('description_fa')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- English Description -->
+                <div>
+                    <label for="description_en" class="block text-sm font-medium text-gray-700 mb-2">
+                        توضیحات انگلیسی
+                    </label>
+                    <textarea name="description_en" 
+                              id="description_en" 
+                              rows="3"
+                              dir="ltr"
+                              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('description_en') border-red-500 @enderror"
+                              placeholder="Food description in English...">{{ old('description_en') }}</textarea>
+                    @error('description_en')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <!-- Arabic Description -->
+                <div>
+                    <label for="description_ar" class="block text-sm font-medium text-gray-700 mb-2">
+                        توضیحات عربی
+                    </label>
+                    <textarea name="description_ar" 
+                              id="description_ar" 
+                              rows="3"
+                              dir="rtl"
+                              class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 @error('description_ar') border-red-500 @enderror"
+                              placeholder="وصف الطعام بالعربية...">{{ old('description_ar') }}</textarea>
+                    @error('description_ar')
+                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
 
             <!-- Image -->
@@ -167,6 +255,7 @@
 
 @push('scripts')
 <script>
+// پیش‌نمایش تصویر
 document.getElementById('image').addEventListener('change', function(e) {
     const preview = document.getElementById('preview');
     const previewDiv = document.getElementById('image-preview');
@@ -178,6 +267,40 @@ document.getElementById('image').addEventListener('change', function(e) {
             previewDiv.classList.remove('hidden');
         }
         reader.readAsDataURL(e.target.files[0]);
+    }
+});
+
+// پیش‌نمایش قیمت به صورت خوانا
+document.getElementById('price').addEventListener('input', function(e) {
+    const price = parseInt(this.value);
+    const preview = document.getElementById('price-preview');
+    
+    if (price && !isNaN(price)) {
+        const formatted = new Intl.NumberFormat('fa-IR').format(price);
+        if (price >= 1000000) {
+            const millions = price / 1000000;
+            preview.textContent = `معادل: ${formatted} تومان (${millions.toFixed(1)} میلیون تومان)`;
+        } else if (price >= 1000) {
+            const thousands = price / 1000;
+            preview.textContent = `معادل: ${formatted} تومان (${thousands.toFixed(0)} هزار تومان)`;
+        } else {
+            preview.textContent = `معادل: ${formatted} تومان`;
+        }
+    } else {
+        preview.textContent = '';
+    }
+});
+
+// اعتبارسنجی سمت کلاینت برای حداقل یک نام
+document.querySelector('form').addEventListener('submit', function(e) {
+    const nameFa = document.getElementById('name_fa').value.trim();
+    const nameEn = document.getElementById('name_en').value.trim();
+    const nameAr = document.getElementById('name_ar').value.trim();
+    
+    if (!nameFa && !nameEn && !nameAr) {
+        e.preventDefault();
+        alert('حداقل یکی از نام‌های غذا (فارسی، انگلیسی یا عربی) الزامی است.');
+        return false;
     }
 });
 </script>

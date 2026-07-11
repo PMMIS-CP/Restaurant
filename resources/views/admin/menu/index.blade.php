@@ -5,11 +5,15 @@
 @section('content')
 <div class="bg-white rounded-lg shadow-lg">
     <!-- Header -->
-    <div class="p-6 border-b border-gray-200">
-        <div class="flex justify-between items-center">
-            <h2 class="text-2xl font-bold text-gray-800">مدیریت منو</h2>
+    <div class="flex justify-between items-center">
+        <h2 class="text-2xl font-bold text-gray-800">مدیریت منو</h2>
+        <div class="flex gap-2">
+            <a href="{{ route('admin.menu-categories.index') }}" 
+            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+                مدیریت دسته‌بندی‌ها
+            </a>
             <a href="{{ route('admin.menu.create') }}" 
-               class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg transition-colors">
+            class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg transition-colors">
                 + افزودن غذای جدید
             </a>
         </div>
@@ -22,7 +26,8 @@
                 <tr>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">#</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">تصویر</th>
-                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">نام</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">نام (فارسی)</th>
+                    <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">نام (انگلیسی)</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">دسته‌بندی</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">قیمت</th>
                     <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">وضعیت</th>
@@ -33,12 +38,12 @@
                 @forelse($menuItems as $item)
                 <tr class="hover:bg-gray-50">
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {{ $loop->iteration }}
+                        {{ $loop->iteration + ($menuItems->currentPage() - 1) * $menuItems->perPage() }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         @if($item->image)
                             <img src="{{ asset('storage/' . $item->image) }}" 
-                                 alt="{{ $item->name }}" 
+                                 alt="{{ $item->getNameInLocale('fa') }}" 
                                  class="w-12 h-12 rounded-lg object-cover">
                         @else
                             <div class="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
@@ -50,11 +55,14 @@
                         @endif
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {{ $item->name }}
+                        {{ $item->getNameInLocale('fa') }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500" dir="ltr">
+                        {{ $item->getNameInLocale('en') }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <span class="px-2 py-1 bg-gray-100 rounded-full text-xs">
-                            {{ $item->category }}
+                            {{ $item->category->name ?? 'بدون دسته' }}
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
@@ -94,7 +102,7 @@
                 </tr>
                 @empty
                 <tr>
-                    <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                    <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                         <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                   d="M12 6v6m0 0v6m0-6h6m-6 0H6" />

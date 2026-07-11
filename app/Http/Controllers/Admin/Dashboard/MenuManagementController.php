@@ -4,78 +4,112 @@ namespace App\Http\Controllers\Admin\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Menu;
+use App\Models\MenuCategory;
 use App\Http\Requests\Admin\StoreMenuItemRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class MenuManagementController extends Controller
 {
-    /**
-     * Display a listing of menu items.
-     */
     public function index()
     {
-        $menuItems = Menu::orderBy('sort_order')
+        $menuItems = Menu::with('category')  // eager load category
+            ->orderBy('sort_order')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
         return view('admin.menu.index', compact('menuItems'));
     }
 
-    /**
-     * Show the form for creating a new menu item.
-     */
     public function create()
     {
-        return view('admin.menu.create');
+        $categories = MenuCategory::all(); // دریافت تمام دسته‌بندی‌ها
+
+        $defaultName = ['fa' => '', 'en' => '', 'ar' => ''];
+        $defaultDesc = ['fa' => '', 'en' => '', 'ar' => ''];
+
+        return view('admin.menu.create', [
+            'categories'  => $categories,
+            'name'        => $defaultName,
+            'description' => $defaultDesc,
+        ]);
     }
 
-    /**
-     * Store a newly created menu item.
-     */
     public function store(StoreMenuItemRequest $request)
     {
-        $data = $request->validated();
+        $validated = $request->validated();
+        unset($validated['at_least_one_name']);
 
-        // Handle image upload
+        // ادغام فیلدهای زبان
+        $validated['name'] = [
+            'fa' => $validated['name_fa'] ?? '',
+            'en' => $validated['name_en'] ?? '',
+            'ar' => $validated['name_ar'] ?? '',
+        ];
+        $validated['description'] = [
+            'fa' => $validated['description_fa'] ?? '',
+            'en' => $validated['description_en'] ?? '',
+            'ar' => $validated['description_ar'] ?? '',
+        ];
+
+        unset(
+            $validated['name_fa'], $validated['name_en'], $validated['name_ar'],
+            $validated['description_fa'], $validated['description_en'], $validated['description_ar']
+        );
+
+        // مدیریت تصویر
         if ($request->hasFile('image')) {
-            $data['image'] = $request->file('image')
+            $validated['image'] = $request->file('image')
                 ->store('menu-images', 'public');
         }
 
-        Menu::create($data);
+        Menu::create($validated);
 
         return redirect()
             ->route('admin.menu.index')
             ->with('success', 'آیتم منو با موفقیت ایجاد شد');
     }
 
-    /**
-     * Show the form for editing a menu item.
-     */
     public function edit(Menu $menu)
     {
-        return view('admin.menu.edit', compact('menu'));
+        $categories = MenuCategory::all();
+
+        $name = is_array($menu->name) ? $menu->name : ['fa' => '', 'en' => '', 'ar' => ''];
+        $description = is_array($menu->description) ? $menu->description : ['fa' => '', 'en' => '', 'ar' => ''];
+
+        return view('admin.menu.edit', compact('menu', 'categories', 'name', 'description'));
     }
 
-    /**
-     * Update the specified menu item.
-     */
     public function update(StoreMenuItemRequest $request, Menu $menu)
     {
-        $data = $request->validated();
+        $validated = $request->validated();
+        unset($validated['at_least_one_name']);
 
-        // Handle image upload
+        $validated['name'] = [
+            'fa' => $validated['name_fa'] ?? '',
+            'en' => $validated['name_en'] ?? '',
+            'ar' => $validated['name_ar'] ?? '',
+        ];
+        $validated['description'] = [
+            'fa' => $validated['description_fa'] ?? '',
+            'en' => $validated['description_en'] ?? '',
+            'ar' => $validated['description_ar'] ?? '',
+        ];
+
+        unset(
+            $validated['name_fa'], $validated['name_en'], $validated['name_ar'],
+            $validated['description_fa'], $validated['description_en'], $validated['description_ar']
+        );
+
         if ($request->hasFile('image')) {
-            // Delete old image
             if ($menu->image) {
                 Storage::disk('public')->delete($menu->image);
             }
-            $data['image'] = $request->file('image')
+            $validated['image'] = $request->file('image')
                 ->store('menu-images', 'public');
         }
 
-        $menu->update($data);
+        $menu->update($validated);
 
         return redirect()
             ->route('admin.menu.index')
@@ -83,11 +117,10 @@ class MenuManagementController extends Controller
     }
 
     /**
-     * Remove the specified menu item.
+     * حذف آیتم
      */
     public function destroy(Menu $menu)
     {
-        // Delete image
         if ($menu->image) {
             Storage::disk('public')->delete($menu->image);
         }
@@ -100,7 +133,7 @@ class MenuManagementController extends Controller
     }
 
     /**
-     * Toggle active status.
+     * تغییر وضعیت فعال/غیرفعال
      */
     public function toggleActive(Menu $menu)
     {
@@ -109,7 +142,7 @@ class MenuManagementController extends Controller
         ]);
 
         return response()->json([
-            'success' => true,
+            'success'   => true,
             'is_active' => $menu->is_active,
         ]);
     }
