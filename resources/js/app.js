@@ -22,6 +22,9 @@ import persianDate from 'persian-date';
 
 import { Image } from 'cross-image';
 
+import Cropper from 'cropperjs';
+import 'cropperjs/dist/cropper.css';
+
 gsap.registerPlugin(ScrollTrigger);
 window.ScrollTrigger = ScrollTrigger;
 window.persianDate = persianDate;
@@ -41,6 +44,8 @@ window.dayjs = dayjs;
 window.flatpickr = flatpickr;
 
 window.CrossImage = { Image };
+
+window.Cropper = Cropper;
 
 flatpickr.localize(flatpickr.l10ns.fa);
 
