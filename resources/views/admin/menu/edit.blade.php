@@ -27,7 +27,7 @@
 
             <!-- Names Section -->
             <div class="bg-gray-50 p-4 rounded-lg space-y-4">
-                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">نام غذا (حداقل یک مورد الزامی است)</h3>
+                <h3 class="text-lg font-semibold text-gray-800 border-b pb-2">نام‌های غذا (هر سه زبان الزامی است)</h3>
                 
                 <!-- Persian Name -->
                 <div>
@@ -39,7 +39,8 @@
                            id="name_fa" 
                            value="{{ old('name_fa', $name['fa'] ?? '') }}"
                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name_fa') border-red-500 @enderror"
-                           placeholder="مثال: استیک با سس قارچ">
+                           placeholder="مثال: استیک با سس قارچ"
+                           required>
                     @error('name_fa')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -48,7 +49,7 @@
                 <!-- English Name -->
                 <div>
                     <label for="name_en" class="block text-sm font-medium text-gray-700 mb-2">
-                        نام انگلیسی
+                        نام انگلیسی <span class="text-red-500">*</span>
                     </label>
                     <input type="text" 
                            name="name_en" 
@@ -56,7 +57,8 @@
                            value="{{ old('name_en', $name['en'] ?? '') }}"
                            dir="ltr"
                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name_en') border-red-500 @enderror"
-                           placeholder="Example: Steak with Mushroom Sauce">
+                           placeholder="Example: Steak with Mushroom Sauce"
+                           required>
                     @error('name_en')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
@@ -65,7 +67,7 @@
                 <!-- Arabic Name -->
                 <div>
                     <label for="name_ar" class="block text-sm font-medium text-gray-700 mb-2">
-                        نام عربی
+                        نام عربی <span class="text-red-500">*</span>
                     </label>
                     <input type="text" 
                            name="name_ar" 
@@ -73,15 +75,12 @@
                            value="{{ old('name_ar', $name['ar'] ?? '') }}"
                            dir="rtl"
                            class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500 transition-colors @error('name_ar') border-red-500 @enderror"
-                           placeholder="مثال: شريحة لحم مع صلصة الفطر">
+                           placeholder="مثال: شريحة لحم مع صلصة الفطر"
+                           required>
                     @error('name_ar')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                     @enderror
                 </div>
-
-                @error('at_least_one_name')
-                    <p class="text-sm text-red-600 bg-red-50 p-2 rounded">{{ $message }}</p>
-                @enderror
             </div>
 
             <!-- Category -->
@@ -97,7 +96,7 @@
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" 
                             {{ (old('menu_category_id', $menu->menu_category_id) == $category->id) ? 'selected' : '' }}>
-                            {{ $category->name }}
+                            {{ $category->name_fa }}
                         </option>
                     @endforeach
                 </select>
@@ -251,19 +250,6 @@
                 @enderror
             </div>
 
-            <!-- Is Active -->
-            <div class="flex items-center">
-                <input type="checkbox" 
-                       name="is_active" 
-                       id="is_active" 
-                       value="1"
-                       {{ old('is_active', $menu->is_active) ? 'checked' : '' }}
-                       class="w-4 h-4 text-rose-600 border-gray-300 rounded focus:ring-rose-500">
-                <label for="is_active" class="mr-2 text-sm text-gray-700">
-                    فعال باشد
-                </label>
-            </div>
-
             <!-- Submit -->
             <div class="flex justify-end space-x-3 rtl:space-x-reverse">
                 <a href="{{ route('admin.menu.index') }}" 
@@ -333,15 +319,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// اعتبارسنجی سمت کلاینت برای حداقل یک نام
+// اعتبارسنجی سمت کلاینت: هر سه نام الزامی
 document.querySelector('form').addEventListener('submit', function(e) {
     const nameFa = document.getElementById('name_fa').value.trim();
     const nameEn = document.getElementById('name_en').value.trim();
     const nameAr = document.getElementById('name_ar').value.trim();
     
-    if (!nameFa && !nameEn && !nameAr) {
+    if (!nameFa || !nameEn || !nameAr) {
         e.preventDefault();
-        alert('حداقل یکی از نام‌های غذا (فارسی، انگلیسی یا عربی) الزامی است.');
+        alert('هر سه نام (فارسی، انگلیسی و عربی) الزامی هستند.');
         return false;
     }
 });

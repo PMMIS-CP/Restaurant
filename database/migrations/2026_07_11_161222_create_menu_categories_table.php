@@ -1,5 +1,4 @@
 <?php
-// database/migrations/2026_07_11_161222_create_menu_categories_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
