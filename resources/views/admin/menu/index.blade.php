@@ -1,3 +1,4 @@
+{{-- resources/views/admin/menu/index.blade.php --}}
 @extends('admin.layouts.app')
 
 @section('title', 'مدیریت منو')
@@ -9,11 +10,11 @@
         <h2 class="text-2xl font-bold text-gray-800">مدیریت منو</h2>
         <div class="flex gap-2">
             <a href="{{ route('admin.menu-categories.index') }}" 
-            class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
+               class="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded-lg transition-colors">
                 مدیریت دسته‌بندی‌ها
             </a>
             <a href="{{ route('admin.menu.create') }}" 
-            class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg transition-colors">
+               class="bg-rose-500 hover:bg-rose-600 text-white px-4 py-2 rounded-lg transition-colors">
                 + افزودن غذای جدید
             </a>
         </div>
@@ -41,10 +42,22 @@
                         {{ $loop->iteration + ($menuItems->currentPage() - 1) * $menuItems->perPage() }}
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
-                        @if($item->image)
-                            <img src="{{ asset('storage/' . $item->image) }}" 
-                                 alt="{{ $item->getNameInLocale('fa') }}" 
-                                 class="w-12 h-12 rounded-lg object-cover">
+                        @php
+                            $images = $item->images ?? [];
+                            $firstImage = $images[0] ?? null;
+                            $imageCount = count($images);
+                        @endphp
+                        @if($firstImage)
+                            <div class="relative">
+                                <img src="{{ Storage::disk('public')->url($firstImage) }}" 
+                                     alt="{{ $item->getNameInLocale('fa') }}" 
+                                     class="w-12 h-12 rounded-lg object-cover">
+                                @if($imageCount > 1)
+                                    <span class="absolute -bottom-1 -right-1 bg-rose-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                                        {{ $imageCount }}
+                                    </span>
+                                @endif
+                            </div>
                         @else
                             <div class="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center">
                                 <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,9 +83,7 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" 
-                                   class="sr-only peer toggle-active" 
-                                   data-id="{{ $item->id }}"
+                            <input type="checkbox" class="sr-only peer toggle-active" data-id="{{ $item->id }}"
                                    {{ $item->is_active ? 'checked' : '' }}>
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-rose-300 rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:inset-s-0.5 after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-rose-500">
                             </div>
@@ -83,17 +94,14 @@
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm">
                         <div class="flex space-x-3 rtl:space-x-reverse">
-                            <a href="{{ route('admin.menu.edit', $item) }}" 
-                               class="text-blue-600 hover:text-blue-900">
+                            <a href="{{ route('admin.menu.edit', $item) }}" class="text-blue-600 hover:text-blue-900">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
                                           d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                                 </svg>
                             </a>
-                            <form action="{{ route('admin.menu.destroy', $item) }}" 
-                                  method="POST" 
-                                  onsubmit="return confirm('آیا از حذف این آیتم مطمئن هستید؟')"
-                                  class="inline">
+                            <form action="{{ route('admin.menu.destroy', $item) }}" method="POST" 
+                                  onsubmit="return confirm('آیا از حذف این آیتم مطمئن هستید؟')" class="inline">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="text-red-600 hover:text-red-900">
@@ -110,8 +118,7 @@
                 <tr>
                     <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                         <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                  d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                         </svg>
                         <p class="text-lg">هیچ آیتمی در منو وجود ندارد</p>
                         <a href="{{ route('admin.menu.create') }}" class="text-rose-500 hover:text-rose-600 mt-2 inline-block">
@@ -136,12 +143,10 @@
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const toggleSwitches = document.querySelectorAll('.toggle-active');
-    
     toggleSwitches.forEach(toggle => {
         toggle.addEventListener('change', function() {
             const id = this.dataset.id;
             const label = this.parentElement.querySelector('.toggle-label');
-            
             fetch(`/admin/menu/${id}/toggle-active`, {
                 method: 'PATCH',
                 headers: {

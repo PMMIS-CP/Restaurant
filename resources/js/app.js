@@ -19,6 +19,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { gsap } from "gsap";
 import { Flip } from "gsap/Flip";
 import persianDate from 'persian-date';
+
+import { Image } from 'cross-image';
+
 gsap.registerPlugin(ScrollTrigger);
 window.ScrollTrigger = ScrollTrigger;
 window.persianDate = persianDate;
@@ -36,6 +39,9 @@ window.Splide = Splide;
 window.IMask = IMask;
 window.dayjs = dayjs;
 window.flatpickr = flatpickr;
+
+window.CrossImage = { Image };
+
 flatpickr.localize(flatpickr.l10ns.fa);
 
 Alpine.start();

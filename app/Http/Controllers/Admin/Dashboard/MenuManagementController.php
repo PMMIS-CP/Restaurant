@@ -13,7 +13,7 @@ class MenuManagementController extends Controller
 {
     public function index()
     {
-        $menuItems = Menu::with('category')  // eager load category
+        $menuItems = Menu::with('category')
             ->orderBy('sort_order')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
@@ -23,7 +23,7 @@ class MenuManagementController extends Controller
 
     public function create()
     {
-        $categories = MenuCategory::all(); // دریافت تمام دسته‌بندی‌ها
+        $categories = MenuCategory::all();
 
         $defaultName = ['fa' => '', 'en' => '', 'ar' => ''];
         $defaultDesc = ['fa' => '', 'en' => '', 'ar' => ''];
@@ -57,11 +57,14 @@ class MenuManagementController extends Controller
             $validated['description_fa'], $validated['description_en'], $validated['description_ar']
         );
 
-        // مدیریت تصویر
-        if ($request->hasFile('image')) {
-            $validated['image'] = $request->file('image')
-                ->store('menu-images', 'public');
+        // مدیریت آپلود چند تصویر
+        $imagePaths = [];
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                $imagePaths[] = $file->store('menu-images', 'public');
+            }
         }
+        $validated['images'] = $imagePaths;  // به صورت آرایه ذخیره می‌شود و Model آن را JSON می‌کند
 
         Menu::create($validated);
 
@@ -101,12 +104,19 @@ class MenuManagementController extends Controller
             $validated['description_fa'], $validated['description_en'], $validated['description_ar']
         );
 
-        if ($request->hasFile('image')) {
-            if ($menu->image) {
-                Storage::disk('public')->delete($menu->image);
+        // اگر تصاویر جدید ارسال شده باشند، تصاویر قبلی را پاک کرده و تصاویر جدید را ذخیره می‌کنیم
+        if ($request->hasFile('images')) {
+            // حذف تصاویر قبلی از استوریج
+            $menu->deleteImagesFromStorage();
+
+            $imagePaths = [];
+            foreach ($request->file('images') as $file) {
+                $imagePaths[] = $file->store('menu-images', 'public');
             }
-            $validated['image'] = $request->file('image')
-                ->store('menu-images', 'public');
+            $validated['images'] = $imagePaths;
+        } else {
+            // در غیر این صورت، تصاویر قبلی نگه داشته می‌شوند (حذف کلید برای جلوگیری از بازنویسی)
+            unset($validated['images']);
         }
 
         $menu->update($validated);
@@ -121,9 +131,8 @@ class MenuManagementController extends Controller
      */
     public function destroy(Menu $menu)
     {
-        if ($menu->image) {
-            Storage::disk('public')->delete($menu->image);
-        }
+        // حذف تمام تصاویر از دیسک
+        $menu->deleteImagesFromStorage();
 
         $menu->delete();
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Menu extends Model
 {
@@ -10,8 +11,8 @@ class Menu extends Model
         'name',
         'description',
         'price',
-        'menu_category_id',   // جایگزین category
-        'image',
+        'menu_category_id',
+        'images',
         'is_active',
         'sort_order',
     ];
@@ -22,6 +23,7 @@ class Menu extends Model
         'price'       => 'decimal:2',
         'is_active'   => 'boolean',
         'sort_order'  => 'integer',
+        'images'      => 'array',
     ];
 
     /**
@@ -56,5 +58,27 @@ class Menu extends Model
         }
         $locale = $locale ?? app()->getLocale();
         return $descriptions[$locale] ?? reset($descriptions) ?? '';
+    }
+
+    /**
+     * دریافت URL کامل تصاویر (کمکی)
+     */
+    public function getImagesUrls(): array
+    {
+        return collect($this->images)->map(function ($path) {
+            return Storage::disk('public')->url($path);
+        })->toArray();
+    }
+
+    /**
+     * حذف تمام تصاویر از حافظه
+     */
+    public function deleteImagesFromStorage(): void
+    {
+        if (!empty($this->images)) {
+            foreach ($this->images as $imagePath) {
+                Storage::disk('public')->delete($imagePath);
+            }
+        }
     }
 }

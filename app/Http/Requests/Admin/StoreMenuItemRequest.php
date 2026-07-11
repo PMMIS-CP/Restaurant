@@ -22,11 +22,13 @@ class StoreMenuItemRequest extends FormRequest
             'description_en' => ['nullable', 'string', 'max:1000'],
             'description_ar' => ['nullable', 'string', 'max:1000'],
 
-            'price'           => ['required', 'numeric', 'min:0'],
+            'price'            => ['required', 'numeric', 'min:0'],
             'menu_category_id' => ['required', 'integer', 'exists:menu_categories,id'],
-            'image'           => ['nullable', 'image', 'mimes:jpeg,png,jpg,webp', 'max:2048'],
-            'is_active'       => ['boolean'],
-            'sort_order'      => ['nullable', 'integer', 'min:0'],
+            // آرایه‌ی تصاویر با حداکثر ۶ فایل
+            'images'           => ['nullable', 'array', 'max:6'],
+            'images.*'         => ['image', 'mimes:jpeg,png,jpg,webp,gif,bmp,tiff,heic,heif,raw', 'max:20480'],
+            'is_active'        => ['boolean'],
+            'sort_order'       => ['nullable', 'integer', 'min:0'],
         ];
     }
 
@@ -40,9 +42,10 @@ class StoreMenuItemRequest extends FormRequest
             'price.min' => 'قیمت نمی‌تواند منفی باشد.',
             'menu_category_id.required' => 'انتخاب دسته‌بندی الزامی است.',
             'menu_category_id.exists'   => 'دسته‌بندی انتخاب‌شده معتبر نیست.',
-            'image.image' => 'فایل باید تصویر باشد.',
-            'image.mimes' => 'فرمت‌های مجاز: jpeg, png, jpg, webp',
-            'image.max' => 'حداکثر حجم تصویر ۲ مگابایت است.',
+            'images.max' => 'حداکثر ۶ تصویر مجاز است.',
+            'images.*.image' => 'فایل باید تصویر باشد.',
+            'images.*.mimes' => 'فرمت‌های مجاز: jpeg,png,jpg,webp,gif,bmp,tiff,heic,heif,raw',
+            'images.*.max' => 'حداکثر حجم هر تصویر ۲۰ مگابایت است.',
         ];
     }
 }
