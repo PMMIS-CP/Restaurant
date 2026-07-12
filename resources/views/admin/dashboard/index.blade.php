@@ -58,7 +58,7 @@
                 </svg>
             </div>
             <div class="mr-4">
-                <h3 class="text-gray-500 text-sm">آیتم‌های منو</h3>
+                <h3 class="text-gray-500 text-sm">آیتم‌های منو سالن</h3>
                 <p class="text-2xl font-bold text-gray-800">{{ $stats['total_menu_items'] }}</p>
             </div>
         </div>

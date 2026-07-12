@@ -42,7 +42,11 @@
                             </a>
                             <a href="{{ route('admin.menu.index') }}" 
                                class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                                منو
+                                منو سالن
+                            </a>
+                            <a href="{{ route('admin.takeout.index') }}" 
+                               class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                                منو بیرون‌بر
                             </a>
                             <a href="#" 
                                class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
