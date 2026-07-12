@@ -10,12 +10,10 @@ return new class extends Migration
     {
         Schema::create('menu_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('name_fa');
-            $table->string('name_en');
-            $table->string('name_ar');
-            $table->unique('name_fa');
-            $table->unique('name_en');
-            $table->unique('name_ar');
+            $table->string('name_fa')->unique();
+            $table->string('name_en')->unique();
+            $table->string('name_ar')->unique();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

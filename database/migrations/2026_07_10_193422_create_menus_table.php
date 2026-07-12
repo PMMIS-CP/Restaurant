@@ -13,8 +13,10 @@ return new class extends Migration
             $table->json('name');
             $table->json('description')->nullable();
             $table->decimal('price', 10, 2);
-            $table->string('category');
-            $table->string('image')->nullable();
+            $table->foreignId('menu_category_id')
+                ->constrained('menu_categories')
+                ->cascadeOnDelete();
+            $table->json('images')->nullable(); // جایگزین image تکی + تبدیل به آرایه
             $table->boolean('is_active')->default(true);
             $table->integer('sort_order')->default(0);
             $table->timestamps();
