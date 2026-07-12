@@ -6,6 +6,14 @@
 <form action="{{ route('reserve.store') }}" method="POST" id="reserve-form" 
       onsubmit="event.preventDefault(); window.handleSubmit(event); return false;">
     @csrf
+    
+    {{-- فیلدهای مخفی یکتا - فقط یک نسخه از هر کدام --}}
+    <input type="hidden" name="reservation_date" id="reservation_date_input" value="">
+    <input type="hidden" name="entry_time" id="entry_time_input" value="">
+    <input type="hidden" name="exit_time" id="exit_time_input" value="">
+    <input type="hidden" name="guest_count" id="guest_count_input" value="">
+    <input type="hidden" name="event_type" id="event_type_input" value="">
+
 <div class="hidden lg:block relative min-h-screen w-full bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
     <div class="absolute inset-0 bg-amber-50/80 backdrop-blur-[2px]"
          style="mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 60%, transparent 100%);
@@ -134,7 +142,6 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute z-10">
                                     <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                 </svg>
-                                <input type="hidden" name="guest_count" value="">
                                 <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right cursor-pointer flex items-center justify-between text-[10px] sm:text-xs md:text-sm text-gray-400 z-20">
                                     <span class="selected-text">تعداد را وارد کنید</span>
                                     <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
@@ -158,22 +165,21 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute z-10">
                                     <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                 </svg>
-                                <input type="hidden" name="event_type" value="">
                                 <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right cursor-pointer flex items-center justify-between text-[10px] sm:text-xs md:text-sm text-gray-400 z-20">
                                     <span class="selected-text">نوع مراسم را انتخاب کنید</span>
                                     <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
-                                    <li data-value="wedding" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">ولیمه، افطار و نذری</li>
-                                    <li data-value="birthday" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">روزهای خاص (روز مادر، روز پدر، دختر و …)</li>
-                                    <li data-value="corporate" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">خواستگاری و پاگشا</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شب یلدا</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سازمانی (جلسات، ایونت‌ها، جشن پایان سال و …)</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تعیین جنسیت</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">ترحیم (هفتم، چهلم، سالگرد)</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مراسم عقد و بله برون</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
-                                    <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شخصی</li>
+                                    <li data-value="walimeh" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">ولیمه، افطار و نذری</li>
+                                    <li data-value="special-days" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">روزهای خاص (روز مادر، روز پدر، دختر و …)</li>
+                                    <li data-value="khastgari" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">خواستگاری و پاگشا</li>
+                                    <li data-value="yalda" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شب یلدا</li>
+                                    <li data-value="corporate" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سازمانی (جلسات، ایونت‌ها، جشن پایان سال و …)</li>
+                                    <li data-value="gender-reveal" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تعیین جنسیت</li>
+                                    <li data-value="funeral" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">ترحیم (هفتم، چهلم، سالگرد)</li>
+                                    <li data-value="aghd" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مراسم عقد و بله برون</li>
+                                    <li data-value="birthday" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
+                                    <li data-value="personal" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شخصی</li>
                                 </ul>
                             </div>
                         </div>
@@ -392,22 +398,21 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                             <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="hidden" name="event_type" value="">
                         <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right flex items-center justify-between text-sm text-gray-500 z-20">
                             <span class="selected-text">نوع مراسم چیست؟</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <ul class="dropdown-menu hidden absolute top-[110%] right-0 w-full bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-xl shadow-lg overflow-hidden transition-all duration-300 z-50 text-right text-sm max-h-52 overflow-y-auto">
-                            <li data-value="wedding" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">ولیمه، افطار و نذری</li>
-                            <li data-value="birthday" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">روزهای خاص (روز مادر، روز پدر، دختر و …)</li>
-                            <li data-value="corporate" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">خواستگاری و پاگشا</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شب یلدا</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سازمانی (جلسات، ایونت‌ها، جشن پایان سال و …)</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تعیین جنسیت</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">ترحیم (هفتم، چهلم، سالگرد)</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مراسم عقد و بله برون</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
-                            <li data-value="engagement" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شخصی</li>
+                            <li data-value="walimeh" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">ولیمه، افطار و نذری</li>
+                            <li data-value="special-days" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">روزهای خاص (روز مادر، روز پدر، دختر و …)</li>
+                            <li data-value="khastgari" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">خواستگاری و پاگشا</li>
+                            <li data-value="yalda" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شب یلدا</li>
+                            <li data-value="corporate" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سازمانی (جلسات، ایونت‌ها، جشن پایان سال و …)</li>
+                            <li data-value="gender-reveal" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تعیین جنسیت</li>
+                            <li data-value="funeral" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">ترحیم (هفتم، چهلم، سالگرد)</li>
+                            <li data-value="aghd" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مراسم عقد و بله برون</li>
+                            <li data-value="birthday" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
+                            <li data-value="personal" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شخصی</li>
                         </ul>
                     </div>
                 </div>
@@ -419,7 +424,6 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                             <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="hidden" name="guest_count" value="">
                         <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right flex items-center justify-between text-sm text-gray-500 z-20">
                             <span class="selected-text">تعداد را وارد کنید</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
@@ -440,11 +444,6 @@
                 x-on:date-confirmed.window="confirmedDate = $event.detail.date"
                 x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
                 x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
-                
-                {{-- فیلدهای مخفی برای ارسال به بک‌اند --}}
-                <input type="hidden" name="reservation_date" x-model="confirmedDate">
-                <input type="hidden" name="entry_time" x-model="confirmedEntryTime">
-                <input type="hidden" name="exit_time" x-model="confirmedExitTime">
                 
                 <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">تاریخ ثبت شده:</label>
                 <div class="relative w-full h-13.75 cursor-pointer" x-on:click="triggerAnimation($el)">
@@ -637,12 +636,24 @@ input:-webkit-autofill:focus {
         isAnimating: false,
 
         init() {
-            // همگام‌سازی دوطرفه با Store
-            this.$watch('confirmedDate', val => Alpine.store('reserveForm').reservation_date = val);
-            this.$watch('confirmedEntryTime', val => Alpine.store('reserveForm').entry_time = val);
-            this.$watch('confirmedExitTime', val => Alpine.store('reserveForm').exit_time = val);
+            // همگام‌سازی با input‌های اصلی
+            this.$watch('confirmedDate', val => {
+                Alpine.store('reserveForm').reservation_date = val;
+                const input = document.getElementById('reservation_date_input');
+                if (input) input.value = val;
+            });
+            this.$watch('confirmedEntryTime', val => {
+                Alpine.store('reserveForm').entry_time = val;
+                const input = document.getElementById('entry_time_input');
+                if (input) input.value = val;
+            });
+            this.$watch('confirmedExitTime', val => {
+                Alpine.store('reserveForm').exit_time = val;
+                const input = document.getElementById('exit_time_input');
+                if (input) input.value = val;
+            });
         },
-
+        
         triggerAnimation(el) {
             if (this.isAnimating) return;
             this.isAnimating = true;
@@ -734,17 +745,14 @@ document.addEventListener('alpine:init', () => {
 </script>
 <script>
 document.addEventListener('alpine:init', () => {
-    // راه‌اندازی dropdownها بعد از آماده‌شدن Alpine
     document.querySelectorAll('.custom-dropdown-container').forEach(container => {
         const trigger = container.querySelector('.dropdown-trigger');
         const menu = container.querySelector('.dropdown-menu');
         const arrow = trigger.querySelector('svg');
-        const hiddenInput = container.querySelector('input[type="hidden"]');
         const selectedText = container.querySelector('.selected-text');
         const items = container.querySelectorAll('li');
 
-        // اگر هر یک از المان‌ها null بودند، از این container رد شو
-        if (!trigger || !menu || !arrow || !hiddenInput || !selectedText) {
+        if (!trigger || !menu || !arrow || !selectedText) {
             console.warn('Dropdown container incomplete:', container);
             return;
         }
@@ -770,29 +778,25 @@ document.addEventListener('alpine:init', () => {
                 e.stopPropagation();
                 
                 const value = item.getAttribute('data-value');
-                const fieldName = hiddenInput.getAttribute('name');
+                const containerType = container.getAttribute('data-type'); // 'guest' یا 'event'
+                const fieldName = containerType === 'guest' ? 'guest_count' : 'event_type';
                 
-                // به‌روزرسانی hidden input
-                hiddenInput.value = value;
+                // به‌روزرسانی input اصلی
+                const mainInput = document.getElementById(fieldName + '_input');
+                if (mainInput) mainInput.value = value;
                 
-                // به‌روزرسانی متن نمایشی
-                selectedText.textContent = item.textContent;
-                
-                // به‌روزرسانی Alpine Store (با بررسی وجود store)
+                // به‌روزرسانی Alpine Store
                 try {
                     const store = Alpine.store('reserveForm');
-                    if (store && fieldName) {
-                        store[fieldName] = value;
-                    }
+                    if (store) store[fieldName] = value;
                 } catch (error) {
-                    console.warn('Alpine store not accessible yet:', error);
+                    console.warn('Store not accessible:', error);
                 }
                 
-                // تغییر استایل trigger
+                // به‌روزرسانی UI
+                selectedText.textContent = item.textContent;
                 trigger.classList.remove('text-gray-400', 'text-gray-500');
                 trigger.classList.add('text-gray-800', 'font-bold');
-                
-                // بستن dropdown
                 menu.classList.add('hidden');
                 arrow.classList.remove('rotate-180');
             });
@@ -1104,90 +1108,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
-</script>
-<script>
-// صبر می‌کنیم تا Swal حتماً لود شود
-function waitForSwal(callback) {
-    if (typeof window.Swal !== 'undefined') {
-        callback();
-    } else {
-        console.log('Waiting for Swal to load...');
-        setTimeout(() => waitForSwal(callback), 100);
-    }
-}
-
-window.handleSubmit = function(event) {
-    // جلوگیری فوری از submit
-    event.preventDefault();
-    event.stopPropagation();
-    
-    console.log('handleSubmit called!');
-    
-    const form = event.target;
-    const formData = new FormData(form);
-    
-    console.log('Form data:');
-    for (let pair of formData.entries()) {
-        console.log(pair[0] + ': ' + pair[1]);
-    }
-    
-    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content 
-                      || document.querySelector('input[name="_token"]')?.value;
-    
-    console.log('CSRF Token:', csrfToken);
-    console.log('Starting fetch...');
-    
-    fetch(form.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': csrfToken
-        }
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        return response.json();
-    })
-    .then(data => {
-        console.log('Response data:', data);
-        
-        // صبر می‌کنیم تا Swal لود شود، سپس نمایش می‌دهیم
-        waitForSwal(() => {
-            if (data.success) {
-                console.log('Showing success alert...');
-                window.Swal.fire({
-                    icon: 'success',
-                    title: 'درخواست رزرو ارسال شد!',
-                    text: data.message || 'کارشناسان ما به زودی با شما تماس خواهند گرفت.',
-                    confirmButtonText: 'متوجه شدم',
-                    confirmButtonColor: '#B8860B',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false
-                }).then((result) => {
-                    console.log('Alert result:', result);
-                    if (result.isConfirmed) {
-                        console.log('Reloading page...');
-                        window.location.reload();
-                    }
-                });
-            } else {
-                window.Swal.fire('خطا!', data.message || 'مشکلی پیش آمد.', 'error');
-            }
-        });
-    })
-    .catch((error) => {
-        console.error('Fetch error:', error);
-        
-        waitForSwal(() => {
-            window.Swal.fire('خطا!', 'ارتباط با سرور برقرار نشد.', 'error');
-        });
-    });
-    
-    console.log('preventDefault executed');
-    return false;
-};
 </script>
 </form>
 @endsection
