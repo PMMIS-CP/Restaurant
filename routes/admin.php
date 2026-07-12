@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\Dashboard\MenuManagementController;
 use App\Http\Controllers\Admin\Dashboard\MenuCategoryController;
 use App\Http\Controllers\Admin\Dashboard\MenuTakeoutCategoryController;
 use App\Http\Controllers\Admin\Dashboard\MenuTakeoutManagementController;
+use App\Http\Controllers\Admin\Dashboard\ReserveManagementController;
 
 Route::name('admin.')->group(function () {
 
@@ -65,6 +66,13 @@ Route::name('admin.')->group(function () {
             Route::get('/{takeoutCategory}/edit', [MenuTakeoutCategoryController::class, 'edit'])->name('edit');
             Route::put('/{takeoutCategory}', [MenuTakeoutCategoryController::class, 'update'])->name('update');
             Route::delete('/{takeoutCategory}', [MenuTakeoutCategoryController::class, 'destroy'])->name('destroy');
+        });
+        
+        // Reserve Management
+        Route::prefix('reserves')->name('reserves.')->group(function () {
+            Route::get('/', [ReserveManagementController::class, 'index'])->name('index');
+            Route::get('/{reserve}', [ReserveManagementController::class, 'show'])->name('show');
+            Route::delete('/{reserve}', [ReserveManagementController::class, 'destroy'])->name('destroy');
         });
 
         Route::post('/logout', [AdminAuthenticatedSessionController::class, 'destroy'])

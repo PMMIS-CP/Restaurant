@@ -24,6 +24,8 @@ import { Image } from 'cross-image';
 
 import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
+import Swal from 'sweetalert2';
+window.Swal = Swal;
 
 gsap.registerPlugin(ScrollTrigger);
 window.ScrollTrigger = ScrollTrigger;

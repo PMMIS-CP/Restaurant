@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
 Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
+Route::post('/reserve', [ReserveController::class, 'store'])->name('reserve.store');
 Route::get('/menu/takeout', [MenuTakeoutController::class, 'index'])->name('menu.takeout');
 Route::get('/spin', [SpinController::class, 'index'])->name('spin');
 Route::post('/spin', [SpinController::class, 'spin'])->name('spin.post');

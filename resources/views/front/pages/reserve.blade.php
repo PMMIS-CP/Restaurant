@@ -3,6 +3,9 @@
 @section('content')
 @include('front.components.reserveheader')
 {{-- نسخه دسکتاپ --}}
+<form action="{{ route('reserve.store') }}" method="POST" id="reserve-form" 
+      onsubmit="event.preventDefault(); window.handleSubmit(event); return false;">
+    @csrf
 <div class="hidden lg:block relative min-h-screen w-full bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
     <div class="absolute inset-0 bg-amber-50/80 backdrop-blur-[2px]"
          style="mask-image: radial-gradient(ellipse 70% 70% at 50% 50%, black 60%, transparent 100%);
@@ -42,10 +45,11 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="email" id="email" placeholder="مثال: example@email.com" 
+                                    <input name="email" type="email" id="email" placeholder="مثال: example@email.com" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
-                                           style="color: #1a1a1a;">
+                                           style="color: #1a1a1a;"
+                                           x-model="$store.reserveForm.email">
                                 </div>
                             </div>
 
@@ -60,10 +64,11 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="tel" id="phone" placeholder="مثال: 09123456789" 
+                                    <input name="phone" type="tel" id="phone" placeholder="مثال: 09123456789" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
-                                           style="color: #1a1a1a;">
+                                           style="color: #1a1a1a;"
+                                           x-model="$store.reserveForm.phone">
                                 </div>
                             </div>
 
@@ -78,10 +83,11 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="text" id="name" placeholder="مثال: علی رضایی" 
+                                    <input name="name" type="text" id="name" placeholder="مثال: علی رضایی" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
-                                           style="color: #1a1a1a;">
+                                           style="color: #1a1a1a;"
+                                           x-model="$store.reserveForm.name">
                                 </div>
                             </div>
                         </div>
@@ -90,25 +96,30 @@
                     {{-- بخش دوم --}}
                     <div class="flex flex-row gap-1 md:gap-3 w-full mt-1 md:mt-2">
                         <div class="flex flex-col flex-1 min-w-0" 
-                             x-data="confirmationComponent"
-                             x-on:date-confirmed.window="confirmedDate = $event.detail.date"
-                             x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
-                             x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
+                            x-data="confirmationComponent"
+                            x-on:date-confirmed.window="confirmedDate = $event.detail.date"
+                            x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
+                            x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
+
+                            {{-- فیلدهای مخفی برای ارسال به بک‌اند --}}
+                            <input type="hidden" name="reservation_date" x-model="confirmedDate">
+                            <input type="hidden" name="entry_time" x-model="confirmedEntryTime">
+                            <input type="hidden" name="exit_time" x-model="confirmedExitTime">
 
                             <label class="absolute text-right font-bold" 
-                                   style="left: 48.65%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
+                                style="left: 48.65%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
                                 تاریخ و ساعت ثبت شده:
                             </label>
 
                             <div class="absolute cursor-pointer" 
-                                 style="left: 48.65%; top: 21.18%; width: 16.58%; height: 57px;"
-                                 x-on:click="triggerAnimation($el)">
+                                style="left: 48.65%; top: 21.18%; width: 16.58%; height: 57px;"
+                                x-on:click="triggerAnimation($el)">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full absolute overflow-visible">
                                     <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12" fill="transparent"/>
                                     <rect class="light-rect" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12" fill="none" stroke="#ff0061" stroke-width="6" stroke-dasharray="100 629.22" style="opacity: 0;"/>
                                 </svg>
                                 <div class="absolute inset-0 flex items-center justify-center text-[10px] sm:text-[12px] md:text-[14px] font-medium pointer-events-none px-2"
-                                     x-text="displayText" style="color: #1a1a1a;">
+                                    x-text="displayText" style="color: #1a1a1a;">
                                 </div>
                             </div>
                         </div>
@@ -175,7 +186,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 945.89 309.84" class="w-full h-full pointer-events-none absolute">
                                     <rect class="light-rect-textarea fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="0" y="0" width="945.89" height="309.84" rx="15" ry="15"/>
                                 </svg>
-                                <textarea @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
+                                <textarea name="description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -186,7 +197,6 @@
                         <div class="absolute overflow-hidden" 
                              style="left: 16.89%; top: 7.32%; width: 28.22%; height: 73.66%; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.15);" 
                              x-data="datePicker()">
-                            <input type="hidden" name="reservation_date" x-model="finalDate">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520.18 520.18" class="w-full h-full pointer-events-none absolute z-10">
                                 <rect class="fill-white/40 stroke-[#B8860B] stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(184,134,11,0.15)] transition-all duration-300 ease hover:stroke-[#DC2626] hover:drop-shadow-[0_4px_12px_rgba(220,38,38,0.2)]" x="0" y="0" width="520.18" height="520.18" rx="15" ry="15"/>
                                 <rect class="light-rect-calendar" x="0" y="0" width="520.18" height="520.18" rx="15" ry="15" fill="none" stroke="#ff0061" stroke-width="12" stroke-dasharray="100 629.22" style="opacity: 0;"/>
@@ -287,7 +297,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button @click="confirmTime" class="mt-4 px-4 py-1.5 text-white rounded-lg shadow transition-all duration-200 text-sm sm:text-base hover:scale-105" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تایید</button>
+                                    <button type="button" @click="confirmTime" class="mt-4 px-4 py-1.5 text-white rounded-lg shadow transition-all duration-200 text-sm sm:text-base hover:scale-105" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تایید</button>
                                 </div>
                             </div>
                         </div>
@@ -295,11 +305,21 @@
 
                     {{-- بخش پنجم (دکمه ثبت) --}}
                     <div class="flex flex-col w-full mt-1 md:mt-2">
-                        <div class="absolute" style="left: 31.36%; top: 88.81%; width: 38.76%; height: 11.12%;">
+                        <div class="absolute"
+                             style="left: 31.36%; top: 88.81%; width: 38.76%; height: 11.12%;"
+                             x-data="{ 
+                                        get isValid() { 
+                                            const f = $store.reserveForm;
+                                            return f.name && f.phone && f.event_type && f.guest_count && f.reservation_date && f.entry_time && f.exit_time;
+                                        }
+                                    }">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 714.41 78.52" class="w-full h-full pointer-events-none absolute">
                                 <rect class="fill-red-600/90 stroke-[#B8860B] stroke-3 [stroke-miterlimit:10] filter drop-shadow-[0_4px_15px_rgba(220,38,38,0.3)] transition-all duration-300 ease-in-out hover:fill-[#B8860B]/90 hover:stroke-[#DC2626]" x="0" y="0" width="714.41" height="78.52" rx="20" ry="20"/>
                             </svg>
-                            <button type="submit" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none cursor-pointer font-bold transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] text-[10px] sm:text-sm md:text-base lg:text-lg" style="color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                            <button type="submit" :disabled="!isValid" 
+                                    :class="!isValid ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]'"
+                                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none font-bold transition-all duration-300 text-[10px] sm:text-sm md:text-base lg:text-lg"
+                                    style="color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
                                 ارسال درخواست رزرو
                             </button>
                         </div>
@@ -336,7 +356,7 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="text" id="mobile_name" placeholder="مثال: علی رضایی" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;">
+                        <input name="name" type="text" id="mobile_name" placeholder="مثال: علی رضایی" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name">
                     </div>
                 </div>
 
@@ -347,7 +367,7 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="tel" id="mobile_phone" placeholder="مثال: 09123456789" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;">
+                        <input name="phone" type="tel" id="mobile_phone" placeholder="مثال: 09123456789" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone">
                     </div>
                 </div>
             </div>
@@ -359,7 +379,7 @@
                     <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                         <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                     </svg>
-                    <input type="email" id="mobile_email" placeholder="مثال: example@email.com" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;">
+                    <input name="email" type="email" id="mobile_email" placeholder="مثال: example@email.com" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.email">
                 </div>
             </div>
 
@@ -372,7 +392,7 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                             <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="hidden" name="mobile_event_type" value="">
+                        <input type="hidden" name="event_type" value="">
                         <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right flex items-center justify-between text-sm text-gray-500 z-20">
                             <span class="selected-text">نوع مراسم چیست؟</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
@@ -399,7 +419,7 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                             <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="hidden" name="mobile_guest_count" value="">
+                        <input type="hidden" name="guest_count" value="">
                         <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right flex items-center justify-between text-sm text-gray-500 z-20">
                             <span class="selected-text">تعداد را وارد کنید</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
@@ -420,6 +440,12 @@
                 x-on:date-confirmed.window="confirmedDate = $event.detail.date"
                 x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
                 x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
+                
+                {{-- فیلدهای مخفی برای ارسال به بک‌اند --}}
+                <input type="hidden" name="reservation_date" x-model="confirmedDate">
+                <input type="hidden" name="entry_time" x-model="confirmedEntryTime">
+                <input type="hidden" name="exit_time" x-model="confirmedExitTime">
+                
                 <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">تاریخ ثبت شده:</label>
                 <div class="relative w-full h-13.75 cursor-pointer" x-on:click="triggerAnimation($el)">
                     <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="w-full h-full absolute overflow-visible z-10">
@@ -436,7 +462,6 @@
             
             {{-- تقویم (۳ ستون) --}}
             <div class="col-span-3 relative rounded-2xl p-2 bg-white/40 backdrop-blur-md border border-red-600/20 shadow-sm" x-data="datePicker()">
-                <input type="hidden" name="mobile_reservation_date" x-model="finalDate">
                 <svg viewBox="0 0 520.18 520.18" preserveAspectRatio="none" class="w-full h-full pointer-events-none absolute inset-0 z-0">
                     <rect class="light-rect-calendar" x="2" y="2" width="516" height="516" rx="15" ry="15" fill="none" stroke="#ff0061" stroke-width="12" stroke-dasharray="100 629.22" style="opacity: 0;"/>
                 </svg>
@@ -534,7 +559,7 @@
                                 </div>
                             </div>
                         </div>
-                        <button @click="confirmTime" class="mt-2 w-full py-1 text-white rounded-lg shadow text-[10px] font-bold" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تایید</button>
+                        <button type="button" @click="confirmTime" class="mt-2 w-full py-1 text-white rounded-lg shadow text-[10px] font-bold" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تایید</button>
                     </div>
                 </div>
             </div>
@@ -545,15 +570,24 @@
             <svg viewBox="0 0 945.89 309.84" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                 <rect class="light-rect-textarea fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="2" y="2" width="941.89" height="305.84" rx="15" ry="15"/>
             </svg>
-            <textarea @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
+            <textarea name="description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
         </div>
 
         {{-- ۶. دکمه ثبت نهایی --}}
-        <div class="relative w-full h-14 mt-2">
+        <div class="relative w-full h-14 mt-2"
+            x-data="{ 
+                        get isValid() { 
+                            const f = $store.reserveForm;
+                            return f.name && f.phone && f.event_type && f.guest_count && f.reservation_date && f.entry_time && f.exit_time;
+                        }
+                    }">
             <svg viewBox="0 0 714.41 78.52" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                 <rect class="fill-red-600/90 stroke-[#B8860B] stroke-3 [stroke-miterlimit:10] filter drop-shadow-[0_4px_15px_rgba(220,38,38,0.3)] transition-all duration-300 rx-4" x="2" y="2" width="710.41" height="74.52" rx="20" ry="20"/>
             </svg>
-            <button type="submit" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none cursor-pointer font-bold transition-all duration-300 text-white text-base z-20" style="text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+            <button type="submit" :disabled="!isValid" 
+                    :class="!isValid ? 'opacity-50 cursor-not-allowed' : ''"
+                    class="absolute inset-0 w-full h-full bg-transparent border-none outline-none font-bold transition-all duration-300 text-white text-base z-20"
+                    style="text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
                 ارسال درخواست رزرو
             </button>
         </div>
@@ -601,6 +635,13 @@ input:-webkit-autofill:focus {
         confirmedEntryTime: '',
         confirmedExitTime: '',
         isAnimating: false,
+
+        init() {
+            // همگام‌سازی دوطرفه با Store
+            this.$watch('confirmedDate', val => Alpine.store('reserveForm').reservation_date = val);
+            this.$watch('confirmedEntryTime', val => Alpine.store('reserveForm').entry_time = val);
+            this.$watch('confirmedExitTime', val => Alpine.store('reserveForm').exit_time = val);
+        },
 
         triggerAnimation(el) {
             if (this.isAnimating) return;
@@ -677,41 +718,96 @@ input:-webkit-autofill:focus {
     }));
  });
 </script>
-
 <script>
- document.querySelectorAll('.custom-dropdown-container').forEach(container => {
-    const trigger = container.querySelector('.dropdown-trigger');
-    const menu = container.querySelector('.dropdown-menu');
-    const arrow = trigger.querySelector('svg');
-    const hiddenInput = container.querySelector('input[type="hidden"]');
-    const selectedText = container.querySelector('.selected-text');
-    const items = container.querySelectorAll('li');
-
-    trigger.addEventListener('click', (e) => {
-        e.stopPropagation();
-        document.querySelectorAll('.dropdown-menu').forEach(m => { if(m !== menu) m.classList.add('hidden'); });
-        document.querySelectorAll('.dropdown-trigger svg').forEach(svg => { if(svg !== arrow) svg.classList.remove('rotate-180'); });
-        menu.classList.toggle('hidden');
-        arrow.classList.toggle('rotate-180');
+document.addEventListener('alpine:init', () => {
+    Alpine.store('reserveForm', {
+        name: '',
+        phone: '',
+        email: '',
+        event_type: '',
+        guest_count: '',
+        reservation_date: '',
+        entry_time: '',
+        exit_time: ''
     });
+});
+</script>
+<script>
+document.addEventListener('alpine:init', () => {
+    // راه‌اندازی dropdownها بعد از آماده‌شدن Alpine
+    document.querySelectorAll('.custom-dropdown-container').forEach(container => {
+        const trigger = container.querySelector('.dropdown-trigger');
+        const menu = container.querySelector('.dropdown-menu');
+        const arrow = trigger.querySelector('svg');
+        const hiddenInput = container.querySelector('input[type="hidden"]');
+        const selectedText = container.querySelector('.selected-text');
+        const items = container.querySelectorAll('li');
 
-    items.forEach(item => {
-        item.addEventListener('click', (e) => {
+        // اگر هر یک از المان‌ها null بودند، از این container رد شو
+        if (!trigger || !menu || !arrow || !hiddenInput || !selectedText) {
+            console.warn('Dropdown container incomplete:', container);
+            return;
+        }
+
+        trigger.addEventListener('click', (e) => {
             e.stopPropagation();
-            hiddenInput.value = item.getAttribute('data-value');
-            selectedText.textContent = item.textContent;
-            trigger.classList.remove('text-gray-400', 'text-gray-500');
-            trigger.classList.add('text-gray-800', 'font-bold');
-            menu.classList.add('hidden');
-            arrow.classList.remove('rotate-180');
+            
+            // بستن سایر dropdownها
+            document.querySelectorAll('.dropdown-menu').forEach(m => {
+                if (m !== menu) m.classList.add('hidden');
+            });
+            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => {
+                if (svg !== arrow) svg.classList.remove('rotate-180');
+            });
+            
+            // toggle dropdown جاری
+            menu.classList.toggle('hidden');
+            arrow.classList.toggle('rotate-180');
+        });
+
+        items.forEach(item => {
+            item.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                const value = item.getAttribute('data-value');
+                const fieldName = hiddenInput.getAttribute('name');
+                
+                // به‌روزرسانی hidden input
+                hiddenInput.value = value;
+                
+                // به‌روزرسانی متن نمایشی
+                selectedText.textContent = item.textContent;
+                
+                // به‌روزرسانی Alpine Store (با بررسی وجود store)
+                try {
+                    const store = Alpine.store('reserveForm');
+                    if (store && fieldName) {
+                        store[fieldName] = value;
+                    }
+                } catch (error) {
+                    console.warn('Alpine store not accessible yet:', error);
+                }
+                
+                // تغییر استایل trigger
+                trigger.classList.remove('text-gray-400', 'text-gray-500');
+                trigger.classList.add('text-gray-800', 'font-bold');
+                
+                // بستن dropdown
+                menu.classList.add('hidden');
+                arrow.classList.remove('rotate-180');
+            });
         });
     });
- });
 
- document.addEventListener('click', () => {
-    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
-    document.querySelectorAll('.dropdown-trigger svg').forEach(svg => svg.classList.remove('rotate-180'));
- });
+    // بستن همه dropdownها با کلیک خارج
+    document.addEventListener('click', (e) => {
+        // اگر کلیک روی dropdown نبود، همه را ببند
+        if (!e.target.closest('.custom-dropdown-container')) {
+            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
+            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => svg.classList.remove('rotate-180'));
+        }
+    });
+});
 </script>
 
 <script>
@@ -1009,4 +1105,89 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 </script>
+<script>
+// صبر می‌کنیم تا Swal حتماً لود شود
+function waitForSwal(callback) {
+    if (typeof window.Swal !== 'undefined') {
+        callback();
+    } else {
+        console.log('Waiting for Swal to load...');
+        setTimeout(() => waitForSwal(callback), 100);
+    }
+}
+
+window.handleSubmit = function(event) {
+    // جلوگیری فوری از submit
+    event.preventDefault();
+    event.stopPropagation();
+    
+    console.log('handleSubmit called!');
+    
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    console.log('Form data:');
+    for (let pair of formData.entries()) {
+        console.log(pair[0] + ': ' + pair[1]);
+    }
+    
+    const csrfToken = document.querySelector('meta[name="csrf-token"]')?.content 
+                      || document.querySelector('input[name="_token"]')?.value;
+    
+    console.log('CSRF Token:', csrfToken);
+    console.log('Starting fetch...');
+    
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': csrfToken
+        }
+    })
+    .then(response => {
+        console.log('Response status:', response.status);
+        return response.json();
+    })
+    .then(data => {
+        console.log('Response data:', data);
+        
+        // صبر می‌کنیم تا Swal لود شود، سپس نمایش می‌دهیم
+        waitForSwal(() => {
+            if (data.success) {
+                console.log('Showing success alert...');
+                window.Swal.fire({
+                    icon: 'success',
+                    title: 'درخواست رزرو ارسال شد!',
+                    text: data.message || 'کارشناسان ما به زودی با شما تماس خواهند گرفت.',
+                    confirmButtonText: 'متوجه شدم',
+                    confirmButtonColor: '#B8860B',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false
+                }).then((result) => {
+                    console.log('Alert result:', result);
+                    if (result.isConfirmed) {
+                        console.log('Reloading page...');
+                        window.location.reload();
+                    }
+                });
+            } else {
+                window.Swal.fire('خطا!', data.message || 'مشکلی پیش آمد.', 'error');
+            }
+        });
+    })
+    .catch((error) => {
+        console.error('Fetch error:', error);
+        
+        waitForSwal(() => {
+            window.Swal.fire('خطا!', 'ارتباط با سرور برقرار نشد.', 'error');
+        });
+    });
+    
+    console.log('preventDefault executed');
+    return false;
+};
+</script>
+</form>
 @endsection
