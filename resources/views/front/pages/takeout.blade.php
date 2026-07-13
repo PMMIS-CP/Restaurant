@@ -131,7 +131,9 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
     }
-    
+    .category-section {
+        scroll-margin-top: 120px;
+    }
     .glow-panel {
         box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 215, 0, 0.15);
         transition: box-shadow 0.4s ease, border-color 0.4s ease;
@@ -201,9 +203,7 @@
 </style>
 
 
-<div class="min-h-screen bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
-    
-<div class="min-h-screen bg-[#0a0a0a] text-gray-100 antialiased selection:bg-[#DC143C] selection:text-white">
+<div class="min-h-screen pb-20 bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
 
     <div class="relative overflow-hidden py-16 text-center border-b-2 border-[#FFD700]/20 bg-linear-to-b from-[#1a0a0a] to-[#0a0a0a]">
         <a href="{{ url('/') }}" class="hidden lg:block absolute right-35 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
@@ -271,77 +271,135 @@
             </div>
         </div>
     </div>
-<nav id="sticky-nav" class="mb-10 sticky top-2.5 mx-0 sm:mx-auto w-full sm:max-w-304.5 z-50 bg-[#1c1416]/85 backdrop-blur-xl border border-[#dfb15b]/20 rounded-2xl transition-all duration-300 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(255,230,0,0.8)]">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8"> 
-        <div class="swiper categories-swiper overflow-hidden">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide w-auto!">
-                    <button data-category-target="all" class="cat-btn active px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border bg-[#bc1c24] border-[#bc1c24] text-white">
-                        همه منو
-                    </button>
+    <nav id="sticky-nav" class="mb-10 sticky top-2.5 mx-0 sm:mx-auto w-full sm:max-w-304.5 z-50 bg-[#1c1416]/85 backdrop-blur-xl border border-[#dfb15b]/20 rounded-2xl transition-all duration-300 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(255,230,0,0.8)]">
+        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8"> 
+            <div class="swiper categories-swiper overflow-hidden">
+                <div class="swiper-wrapper">
+                    @foreach($categories as $cat)
+                        <div class="swiper-slide w-auto!">
+                            <button data-category-target="{{ $cat }}" class="cat-btn px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border border-[#dfb15b]/10 text-gray-400 hover:text-[#ffd700] bg-[#140e10]">
+                                {{ $cat }}
+                            </button>
+                        </div>
+                    @endforeach
                 </div>
-                @foreach($categories as $cat)
-                    <div class="swiper-slide w-auto!">
-                        <button data-category-target="{{ $cat }}" class="cat-btn px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border border-[#dfb15b]/10 text-gray-400 hover:text-[#ffd700] bg-[#140e10]">
-                            {{ $cat }}
-                        </button>
-                    </div>
-                @endforeach
             </div>
         </div>
-    </div>
-</nav>
-<style>
-    #sticky-nav.is-scrolled {
-        background: rgba(28, 20, 22, 0.98);
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-    }
-    .swiper-slide {
-        margin-right: 12px !important;
-        width: auto !important;
-    }
-</style>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        // ۱. مقداردهی اولیه Swiper
-        const categorySwiper = new Swiper('.categories-swiper', {
-            slidesPerView: 'auto',
-            spaceBetween: 12,
-            freeMode: true,
-            watchOverflow: true
-        });
+    </nav>
+    <style>
+        #sticky-nav.is-scrolled {
+            background: rgba(28, 20, 22, 0.98);
+            padding-top: 0.75rem;
+            padding-bottom: 0.75rem;
+        }
+        .swiper-slide {
+            margin-right: 12px !important;
+            width: auto !important;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // ۱. مقداردهی اولیه Swiper
+            const categorySwiper = new Swiper('.categories-swiper', {
+                slidesPerView: 'auto',
+                spaceBetween: 12,
+                freeMode: true,
+                watchOverflow: true
+            });
 
-        // ۲. مدیریت افکت اسکرول (Sticky Scroll Effect)
-        const nav = document.getElementById('sticky-nav');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                nav.classList.add('is-scrolled');
-            } else {
-                nav.classList.remove('is-scrolled');
-            }
-        });
+            // ۲. مدیریت افکت اسکرول (Sticky Scroll Effect)
+            const nav = document.getElementById('sticky-nav');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    nav.classList.add('is-scrolled');
+                } else {
+                    nav.classList.remove('is-scrolled');
+                }
+            });
 
-        // ۳. مدیریت کلیک روی دکمه‌های دسته‌بندی
-        const categoryButtons = document.querySelectorAll('.cat-btn');
-        categoryButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                // حذف کلاس فعال از همه
-                categoryButtons.forEach(b => {
-                    b.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
-                    b.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+            // ۳. ارجاع به المان‌های مورد نیاز
+            const categoryButtons = document.querySelectorAll('.cat-btn');
+            const categorySections = document.querySelectorAll('.category-section');
+
+            // *** متغیر پرچم برای تشخیص اسکرول خودکار ***
+            let isAutoScrolling = false;
+            let autoScrollTimeout = null;
+
+            // ۴. تابع کمکی برای فعال کردن یک دکمه خاص
+            function activateCategoryButton(targetCategory) {
+                categoryButtons.forEach(btn => {
+                    // بازنشانی همه دکمه‌ها به حالت پیش‌فرض
+                    btn.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                    btn.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                    
+                    // اگر دکمه مربوط به targetCategory بود، فعالش کن
+                    if (btn.dataset.categoryTarget === targetCategory) {
+                        btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                        btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                        
+                        // اسلاید کردن Swiper برای نمایش دکمه فعال (در صورت نیاز)
+                        categorySwiper.slideTo(Array.from(categoryButtons).indexOf(btn), 300);
+                    }
                 });
-                
-                // فعال کردن دکمه کلیک شده
-                btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
-                btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-                
-                // در صورت نیاز به اجرای فیلتر، تابع فیلتر خود را اینجا فراخوانی کنید
-                // filterEngine(); 
+            }
+
+            // ۵. مدیریت کلیک روی دکمه‌های دسته‌بندی
+            categoryButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetCategory = btn.dataset.categoryTarget;
+                    
+                    // *** فعال کردن پرچم اسکرول خودکار ***
+                    isAutoScrolling = true;
+                    
+                    // پاک کردن تایمر قبلی در صورت وجود
+                    if (autoScrollTimeout) {
+                        clearTimeout(autoScrollTimeout);
+                    }
+                    
+                    // فعال کردن دکمه بلافاصله (نه در حین اسکرول)
+                    activateCategoryButton(targetCategory);
+                    
+                    const targetSection = document.querySelector(`.category-section[data-category="${targetCategory}"]`);
+                    if (targetSection) {
+                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                    
+                    // *** غیرفعال کردن پرچم بعد از اتمام اسکرول خودکار ***
+                    // زمان تقریبی اسکرول smooth حدود 500-800 میلی‌ثانیه است
+                    autoScrollTimeout = setTimeout(() => {
+                        isAutoScrolling = false;
+                        autoScrollTimeout = null;
+                    }, 1000); // یک ثانیه زمان کافی برای اتمام اسکرول
+                });
+            });
+
+            // ۶. Intersection Observer برای تشخیص دسته‌بندی فعال هنگام اسکرول دستی
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '-30% 0px -60% 0px', // تشخیص وقتی بخش حدوداً در وسط صفحه است
+                threshold: 0
+            };
+
+            const observerCallback = (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        // *** فقط در صورتی دکمه رو فعال کن که اسکرول خودکار نباشه ***
+                        if (!isAutoScrolling) {
+                            const category = entry.target.dataset.category;
+                            if (category) {
+                                activateCategoryButton(category);
+                            }
+                        }
+                    }
+                });
+            };
+
+            const observer = new IntersectionObserver(observerCallback, observerOptions);
+            categorySections.forEach(section => {
+                observer.observe(section);
             });
         });
-    });
-</script>
+    </script>
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         
         <div id="empty-state" class="hidden text-center py-24 bg-[#140507]/50 rounded-3xl border border-dashed border-[#ffd700]/30 max-w-xl mx-auto backdrop-blur-md">
