@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\Dashboard\MenuManagementController;
 use App\Http\Controllers\Admin\Dashboard\MenuCategoryController;
 use App\Http\Controllers\Admin\Dashboard\MenuTakeoutCategoryController;
 use App\Http\Controllers\Admin\Dashboard\MenuTakeoutManagementController;
+use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalCategoryController;
+use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalManagementController;
 use App\Http\Controllers\Admin\Dashboard\ReserveManagementController;
 
 Route::name('admin.')->group(function () {
@@ -66,6 +68,28 @@ Route::name('admin.')->group(function () {
             Route::get('/{takeoutCategory}/edit', [MenuTakeoutCategoryController::class, 'edit'])->name('edit');
             Route::put('/{takeoutCategory}', [MenuTakeoutCategoryController::class, 'update'])->name('update');
             Route::delete('/{takeoutCategory}', [MenuTakeoutCategoryController::class, 'destroy'])->name('destroy');
+        });
+
+        // Organizational Menu Management
+        Route::prefix('organizational')->name('organizational.')->group(function () {
+            Route::get('/', [MenuOrganizationalManagementController::class, 'index'])->name('index');
+            Route::get('/create', [MenuOrganizationalManagementController::class, 'create'])->name('create');
+            Route::post('/', [MenuOrganizationalManagementController::class, 'store'])->name('store');
+            Route::get('/{organizational}/edit', [MenuOrganizationalManagementController::class, 'edit'])->name('edit');
+            Route::put('/{organizational}', [MenuOrganizationalManagementController::class, 'update'])->name('update');
+            Route::delete('/{organizational}', [MenuOrganizationalManagementController::class, 'destroy'])->name('destroy');
+            Route::patch('/{organizational}/toggle-active', [MenuOrganizationalManagementController::class, 'toggleActive'])
+                ->name('toggle-active');
+        });
+
+        // Organizational Categories Management
+        Route::prefix('organizational-categories')->name('organizational-categories.')->group(function () {
+            Route::get('/', [MenuOrganizationalCategoryController::class, 'index'])->name('index');
+            Route::get('/create', [MenuOrganizationalCategoryController::class, 'create'])->name('create');
+            Route::post('/', [MenuOrganizationalCategoryController::class, 'store'])->name('store');
+            Route::get('/{organizationalCategory}/edit', [MenuOrganizationalCategoryController::class, 'edit'])->name('edit');
+            Route::put('/{organizationalCategory}', [MenuOrganizationalCategoryController::class, 'update'])->name('update');
+            Route::delete('/{organizationalCategory}', [MenuOrganizationalCategoryController::class, 'destroy'])->name('destroy');
         });
         
         // Reserve Management
