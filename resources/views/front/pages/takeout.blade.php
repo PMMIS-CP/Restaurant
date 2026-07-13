@@ -1,128 +1,8 @@
+{{-- resources\views\front\pages\takeout.blade.php --}}
 @extends('front.layouts.app')
 @section('title', 'منوی بیرون‌بر')
 @section('content')
-@php
-    if (!isset($menu)) {
-        $menuJson = '[
-            {"ردیف":1,"اسم_غذا_فارسی":"استیک با سس قارچ","اسم_غذا_لاتین":"Steak with Mushroom Sauce","نوع":"غذاهای فرنگی","قیمت":1800000,"جزئیات":"استیک گوساله- سس قارچ خامه‌ای- پوره سیب‌زمینی- سبزیجات گریل"},
-            {"ردیف":2,"اسم_غذا_فارسی":"استیک با سس فلفل","اسم_غذا_لاتین":"Steak with Pepper Sauce","نوع":"غذاهای فرنگی","قیمت":1850000,"جزئیات":"استیک گوساله- سس فلفل سیاه- سیب‌زمینی سرخ‌کرده- سبزیجات"},
-            {"ردیف":3,"اسم_غذا_فارسی":"فیله مینیون","اسم_غذا_لاتین":"Filet Mignon","نوع":"غذاهای فرنگی","قیمت":2200000,"جزئیات":"فیله گوساله- پوره سیب‌زمینی- مارچوبه گریل- سس دلخواه"},
-            {"ردیف":4,"اسم_غذا_فارسی":"بیف استروگانف","اسم_غذا_لاتین":"Beef Stroganoff","نوع":"غذاهای فرنگی","قیمت":1700000,"جزئیات":"گوشت گوساله- سس قارچ و خامه- همراه برنج زعفرانی"},
-            {"ردیف":5,"اسم_غذا_فارسی":"چیکن استروگانف","اسم_غذا_لاتین":"Chicken Stroganoff","نوع":"غذاهای فرنگی","قیمت":1300000,"جزئیات":"فیله مرغ- سس قارچ و خامه- همراه برنج زعفرانی"},
-            {"ردیف":6,"اسم_غذا_فارسی":"شنیسل مرغ","اسم_غذا_لاتین":"Chicken Schnitzel","نوع":"غذاهای فرنگی","قیمت":1200000,"جزئیات":"سینه مرغ سوخاری- سیب‌زمینی سرخ‌کرده- سس گوجه فرنگی"},
-            {"ردیف":7,"اسم_غذا_فارسی":"میگو سوخاری","اسم_غذا_لاتین":"Fried Shrimp","نوع":"غذاهای دریایی","قیمت":1600000,"جزئیات":"میگو سوخاری- سس تارتار- سیب‌زمینی سرخ‌کرده"},
-            {"ردیف":8,"اسم_غذا_فارسی":"میگو پفکی","اسم_غذا_لاتین":"Shrimp Tempura","نوع":"غذاهای دریایی","قیمت":1700000,"جزئیات":"میگو تمپورا- سس تریاکی- سالاد کلم"},
-            {"ردیف":9,"اسم_غذا_فارسی":"ماهی کبابی","اسم_غذا_لاتین":"Grilled Fish","نوع":"غذاهای دریایی","قیمت":1200000,"جزئیات":"فیله ماهی سفید کبابی- برنج یا سبزیجات- سس لیمو"},
-            {"ردیف":10,"اسم_غذا_فارسی":"میگو کبابی","اسم_غذا_لاتین":"Grilled Shrimp","نوع":"غذاهای دریایی","قیمت":1800000,"جزئیات":"میگو کبابی- برنج زعفرانی- سبزیجات گریل- سس مخصوص"},
-            {"ردیف":11,"اسم_غذا_فارسی":"پاستا آلفردو چیکن دودی","اسم_غذا_لاتین":"Smoked Chicken Alfredo Pasta","نوع":"انواع پاستا","قیمت":1400000,"جزئیات":"پاستا- سس آلفردو- تکه‌های مرغ دودی- پنیر پارمزان"},
-            {"ردیف":12,"اسم_غذا_فارسی":"پاستا بیف","اسم_غذا_لاتین":"Beef Pasta","نوع":"انواع پاستا","قیمت":1600000,"جزئیات":"پاستا- گوشت گوساله- سس گوجه و ریحان- پنیر"},
-            {"ردیف":13,"اسم_غذا_فارسی":"جوجه چینی","اسم_غذا_لاتین":"Chinese Chicken","نوع":"غذاهای فرنگی","قیمت":1300000,"جزئیات":"تکه‌های مرغ- سس سویا و سبزیجات- برنج چینی"},
-            {"ردیف":14,"اسم_غذا_فارسی":"چیکن راک","اسم_غذا_لاتین":"Rock Chicken","نوع":"غذاهای فرنگی","قیمت":1400000,"جزئیات":"فیله مرغ گریل‌شده- ادویه مخصوص- برنج و سبزیجات"},
-            {"ردیف":15,"اسم_غذا_فارسی":"شریمپ راک","اسم_غذا_لاتین":"Rock Shrimp","نوع":"غذاهای دریایی","قیمت":1800000,"جزئیات":"میگو گریل‌شده- ادویه مخصوص- برنج و سبزیجات"},
-            {"ردیف":16,"اسم_غذا_فارسی":"استیک مرغ با سس قارچ","اسم_غذا_لاتین":"Chicken Steak with Mushroom Sauce","نوع":"غذاهای فرنگی","قیمت":1400000,"جزئیات":"استیک سینه مرغ- سس قارچ خامه‌ای- پوره سیب‌زمینی"},
-            {"ردیف":17,"اسم_غذا_فارسی":"فیله سوخاری","اسم_غذا_لاتین":"Fried Chicken Fillet","نوع":"غذاهای فرنگی","قیمت":1200000,"جزئیات":"فیله مرغ سوخاری- سیب‌زمینی سرخ‌کرده- سس کچاپ"},
-            {"ردیف":18,"اسم_غذا_فارسی":"ماهی قزل‌آلا کبابی","اسم_غذا_لاتین":"Grilled Trout","نوع":"غذاهای دریایی","قیمت":1100000,"جزئیات":"قزل‌آلای کامل کبابی- برنج زعفرانی- سبزیجات و لیمو"},
-            {"ردیف":19,"اسم_غذا_فارسی":"ماهی قزل‌آلا سرخ کرده","اسم_غذا_لاتین":"Fried Trout","نوع":"غذاهای دریایی","قیمت":1000000,"جزئیات":"قزل‌آلای سرخ‌شده- برنج یا سیب‌زمینی- سس تارتار"},
-            {"ردیف":20,"اسم_غذا_فارسی":"ماهی قزل‌آلا گریل","اسم_غذا_لاتین":"Grilled Trout","نوع":"غذاهای دریایی","قیمت":1100000,"جزئیات":"قزل‌آلای گریل‌شده- سبزیجات تازه- برنج و لیمو"},
-            {"ردیف":21,"اسم_غذا_فارسی":"ماهی سالمون","اسم_غذا_لاتین":"Salmon","نوع":"غذاهای دریایی","قیمت":1900000,"جزئیات":"فیله سالمون گریل‌شده- پوره سیب‌زمینی- مارچوبه"},
-            {"ردیف":22,"اسم_غذا_فارسی":"کباب میکس دریایی","اسم_غذا_لاتین":"Mixed Seafood Kebab","نوع":"غذاهای دریایی","قیمت":2000000,"جزئیات":"ماهی- میگو- اسکوئید کبابی- برنج و سس"},
-            {"ردیف":23,"اسم_غذا_فارسی":"سینی میکس دریایی","اسم_غذا_لاتین":"Mixed Seafood Platter","نوع":"غذاهای دریایی","قیمت":2500000,"جزئیات":"انواع ماهی و میگو کبابی و سوخاری- برنج- سس‌های مخصوص"},
-            {"ردیف":24,"اسم_غذا_فارسی":"سینی مخصوص","اسم_غذا_لاتین":"Special Platter","نوع":"سینی‌های مخصوص","قیمت":3500000,"جزئیات":"مجموعه‌ای از کباب‌ها و خوراک‌های ویژه رستوران- برنج- مخلفات"},
-            {"ردیف":25,"اسم_غذا_فارسی":"میکس کباب‌ها فرنگی دریایی","اسم_غذا_لاتین":"Mixed Grill & Seafood Platter","نوع":"کباب‌ها","قیمت":3000000,"جزئیات":"استیک- میگو- ماهی کبابی- جوجه- برنج و سبزیجات"},
-            {"ردیف":26,"اسم_غذا_فارسی":"چلو کره","اسم_غذا_لاتین":"Butter Rice","نوع":"غذاهای ایرانی","قیمت":800000,"جزئیات":"برنج زعفرانی با کره- همراه ماست و سالاد"},
-            {"ردیف":27,"اسم_غذا_فارسی":"برنج تند عربی","اسم_غذا_لاتین":"Arabic Spicy Rice","نوع":"غذاهای فرنگی","قیمت":900000,"جزئیات":"برنج با ادویه‌جات تند عربی- خلال بادام و پسته"},
-            {"ردیف":28,"اسم_غذا_فارسی":"پلو شوید","اسم_غذا_لاتین":"Dill Rice","نوع":"غذاهای ایرانی","قیمت":850000,"جزئیات":"برنج- شوید تازه- باقالی- کره"},
-            {"ردیف":29,"اسم_غذا_فارسی":"پلو سبزی","اسم_غذا_لاتین":"Herbed Rice","نوع":"غذاهای ایرانی","قیمت":850000,"جزئیات":"برنج- سبزی معطر (تره، جعفری، شوید، گشنیز)- کره"},
-            {"ردیف":30,"اسم_غذا_فارسی":"جوجه کباب ترش","اسم_غذا_لاتین":"Sour Chicken Kebab","نوع":"کباب‌ها","قیمت":1500000,"جزئیات":"جوجه خوابانده در آب‌انار و گردو- کبابی- برنج و کره"},
-            {"ردیف":31,"اسم_غذا_فارسی":"کباب ترش","اسم_غذا_لاتین":"Torsh Kebab","نوع":"کباب‌ها","قیمت":1800000,"جزئیات":"گوشت ترش‌شده با آب‌انار و گردو- کبابی- برنج"},
-            {"ردیف":32,"اسم_غذا_فارسی":"کباب مصری","اسم_غذا_لاتین":"Egyptian Kebab","نوع":"کباب‌ها","قیمت":1600000,"جزئیات":"گوشت با ادویه مصری- کبابی- برنج یا نان"},
-            {"ردیف":33,"اسم_غذا_فارسی":"جوجه ماستی","اسم_غذا_لاتین":"Yogurt-Marinated Chicken Kebab","نوع":"کباب‌ها","قیمت":1400000,"جزئیات":"جوجه خوابانده در ماست و زعفران- کبابی- برنج و کره"},
-            {"ردیف":34,"اسم_غذا_فارسی":"تکه ماستی","اسم_غذا_لاتین":"Mas Tekeh","نوع":"کباب‌ها","قیمت":1700000,"جزئیات":"تکه‌های گوشت ماستی (خوابانده در ماست)- کبابی- برنج"},
-            {"ردیف":35,"اسم_غذا_فارسی":"شش طاووق","اسم_غذا_لاتین":"Shish Tawook","نوع":"کباب‌ها","قیمت":1500000,"جزئیات":"جوجه کباب ترکی با ماست و ادویه- کبابی- برنج یا نان- سیر"},
-            {"ردیف":36,"اسم_غذا_فارسی":"کباب لوله عربی","اسم_غذا_لاتین":"Arabic Kofta Kebab","نوع":"کباب‌ها","قیمت":1300000,"جزئیات":"گوشت چرخ‌کرده با ادویه عربی- کبابی- برنج"},
-            {"ردیف":37,"اسم_غذا_فارسی":"کباب مشکل","اسم_غذا_لاتین":"Mixed Kebab","نوع":"کباب‌ها","قیمت":2200000,"جزئیات":"میکس کباب برگ- جوجه- کوبیده- برنج"},
-            {"ردیف":38,"اسم_غذا_فارسی":"کباب سوری","اسم_غذا_لاتین":"Syrian Kebab","نوع":"کباب‌ها","قیمت":1600000,"جزئیات":"کباب گوشت به سبک سوری- برنج- سبزیجات"},
-            {"ردیف":39,"اسم_غذا_فارسی":"کباب شالتو (اصل لبنانی)","اسم_غذا_لاتین":"Shalto Kebab","نوع":"کباب‌ها","قیمت":1500000,"جزئیات":"گوشت چرخ‌کرده و جعفری لبنانی- کبابی- برنج"},
-            {"ردیف":40,"اسم_غذا_فارسی":"کباب فیله باربیکیو با سس برنر","اسم_غذا_لاتین":"BBQ Fillet Kebab with Berner Sauce","نوع":"کباب‌ها","قیمت":2100000,"جزئیات":"فیله گوساله باربیکیو- سس برنر خامه‌ای- برنج و سبزیجات"},
-            {"ردیف":41,"اسم_غذا_فارسی":"جوجه ترکی","اسم_غذا_لاتین":"Turkish Chicken Kebab","نوع":"کباب‌ها","قیمت":1400000,"جزئیات":"جوجه کباب ترکی با ادویه مخصوص- برنج- سالاد"},
-            {"ردیف":42,"اسم_غذا_فارسی":"جوجه کباب کاردی","اسم_غذا_لاتین":"Chicken Kebab Kardi","نوع":"کباب‌ها","قیمت":1400000,"جزئیات":"جوجه کباب با چاشنی کاردی- برنج و کره"},
-            {"ردیف":43,"اسم_غذا_فارسی":"کباب برگ","اسم_غذا_لاتین":"Barg Kebab","نوع":"کباب‌ها","قیمت":2000000,"جزئیات":"برگ گوساله- برنج زعفرانی- کره- گوجه کبابی"},
-            {"ردیف":44,"اسم_غذا_فارسی":"کباب شاندیز","اسم_غذا_لاتین":"Shandiz Kebab","نوع":"کباب‌ها","قیمت":2100000,"جزئیات":"کباب برگ مخصوص شاندیز- برنج- گوجه و فلفل کبابی"},
-            {"ردیف":45,"اسم_غذا_فارسی":"کباب تبریزی","اسم_غذا_لاتین":"Tabrizi Kebab","نوع":"کباب‌ها","قیمت":1500000,"جزئیات":"گوشت چرخ‌کرده با پیاز و ادویه تبریزی- برنج"},
-            {"ردیف":46,"اسم_غذا_فارسی":"کباب جوجه با استخوان","اسم_غذا_لاتین":"Bone-In Chicken Kebab","نوع":"کباب‌ها","قیمت":1300000,"جزئیات":"جوجه با استخوان کبابی- برنج زعفرانی- کره"},
-            {"ردیف":47,"اسم_غذا_فارسی":"سینی مخصوص کباب‌های عربی","اسم_غذا_لاتین":"Special Arabic Mixed Grill Platter","نوع":"کباب‌ها","قیمت":3200000,"جزئیات":"کباب لوله- شیش طاووق- کباب حلبی- برنج و مخلفات"},
-            {"ردیف":48,"اسم_غذا_فارسی":"سینی میکس کباب‌های ایرانی و عربی","اسم_غذا_لاتین":"Persian and Arabic Mixed Grill Platter","نوع":"کباب‌ها","قیمت":3500000,"جزئیات":"کباب برگ- جوجه- کوبیده- کباب لوله- شیش طاووق- برنج"},
-            {"ردیف":49,"اسم_غذا_فارسی":"سوپ روز","اسم_غذا_لاتین":"Soup of the day","نوع":"پیش غذا","قیمت":500000,"جزئیات":"سوپ تازه روز (جو، قارچ یا سبزیجات)"},
-            {"ردیف":50,"اسم_غذا_فارسی":"قارچ سرخ کرده با کره سیر دار","اسم_غذا_لاتین":"Sauted Mushrooms with Garlic Butter","نوع":"پیش غذا","قیمت":600000,"جزئیات":"قارچ تفت‌داده- کره- سیر تازه"},
-            {"ردیف":51,"اسم_غذا_فارسی":"سیب زمینی سرخ کرده","اسم_غذا_لاتین":"French Fries","نوع":"پیش غذا","قیمت":400000,"جزئیات":"سیب‌زمینی خلال‌شده سرخ‌شده- سس کچاپ"},
-            {"ردیف":52,"اسم_غذا_فارسی":"سالاد سزار (سوخاری یا گریل)","اسم_غذا_لاتین":"Caesar Salad (Fried or Grilled Chicken)","نوع":"سالادها","قیمت":700000,"جزئیات":"کاهو- سس سزار- پنیر پارمزان- فیله مرغ (سوخاری یا گریل)"},
-            {"ردیف":53,"اسم_غذا_فارسی":"سالاد استیک گوشت با فیله","اسم_غذا_لاتین":"Beef Fillet Steak Salad","نوع":"سالادها","قیمت":1000000,"جزئیات":"سبزیجات تازه- تکه‌های استیک فیله گوساله- سس بالزامیک"},
-            {"ردیف":54,"اسم_غذا_فارسی":"سالاد فتوش","اسم_غذا_لاتین":"Fattoush Salad","نوع":"سالادها","قیمت":500000,"جزئیات":"سبزیجات- نان سرخ‌شده- سماق- سس انار"},
-            {"ردیف":55,"اسم_غذا_فارسی":"سالاد تبوله","اسم_غذا_لاتین":"Tabbouleh Salad","نوع":"سالادها","قیمت":500000,"جزئیات":"بلغور- جعفری- گوجه- نعناع- لیمو"},
-            {"ردیف":56,"اسم_غذا_فارسی":"سالاد شیرازی","اسم_غذا_لاتین":"Shirazi Salad","نوع":"سالادها","قیمت":400000,"جزئیات":"خیار- گوجه- پیاز- نعناع خشک- آبلیمو"},
-            {"ردیف":57,"اسم_غذا_فارسی":"سینی مزه عربی","اسم_غذا_لاتین":"Arabic Mezze Platter","نوع":"پیش غذا","قیمت":1200000,"جزئیات":"حمص- متبل- تبوله- فتوش- نان عربی"},
-            {"ردیف":58,"اسم_غذا_فارسی":"سالاد اندونزی","اسم_غذا_لاتین":"Indonesian Salad","نوع":"سالادها","قیمت":600000,"جزئیات":"سبزیجات ترد- جوانه- سس بادام‌زمینی تند"},
-            {"ردیف":59,"اسم_غذا_فارسی":"حمص","اسم_غذا_لاتین":"Hummus","نوع":"پیش غذا","قیمت":500000,"جزئیات":"نخود پخته- ارده- سیر- لیمو- روغن زیتون"},
-            {"ردیف":60,"اسم_غذا_فارسی":"متبل","اسم_غذا_لاتین":"Moutabel","نوع":"پیش غذا","قیمت":500000,"جزئیات":"بادمجان کبابی- ارده- سیر- لیمو- روغن زیتون"},
-            {"ردیف":61,"اسم_غذا_فارسی":"سینی مخصوص","اسم_غذا_لاتین":"Special Platter","نوع":"سینی‌های مخصوص","قیمت":4000000,"جزئیات":"چلو لقمه- چلو جوجه زعفرانی- زرشک پلو با مرغ- چلوخورشت قیمه"},
-            {"ردیف":62,"اسم_غذا_فارسی":"سینی همایونی","اسم_غذا_لاتین":"Homayouni Platter","نوع":"سینی‌های مخصوص","قیمت":5500000,"جزئیات":"باقالی پلو با ماهیچه- چلو برگ مخصوص- چلو لقمه مخصوص-چلو خورشت قرمه"},
-            {"ردیف":63,"اسم_غذا_فارسی":"سینی موراکو","اسم_غذا_لاتین":"Morocco Platter","نوع":"سینی‌های مخصوص","قیمت":4200000,"جزئیات":"باقالی پلو با ماهیچه- چلوجوجه زعفرانی- سبزی پلو با ماهی سرخ شده"},
-            {"ردیف":64,"اسم_غذا_فارسی":"سینی عمارت","اسم_غذا_لاتین":"Mansion Platter","نوع":"سینی‌های مخصوص","قیمت":4500000,"جزئیات":"چلو ماهی کباب- چلو جوجه با استخوان-چلو برگ مخصوص- چلو بختیاری"},
-            {"ردیف":65,"اسم_غذا_فارسی":"سینی 3 نفره","اسم_غذا_لاتین":"Platter for three","نوع":"سینی‌های مخصوص","قیمت":3500000,"جزئیات":"چلو لقمه-چلو خورشت- چلوجوجه زعفرانی- چلو قیمه- چلو قرمه"},
-            {"ردیف":66,"اسم_غذا_فارسی":"سینی 2 نفره","اسم_غذا_لاتین":"Platter for two","نوع":"سینی‌های مخصوص","قیمت":25000000,"جزئیات":"کاسه کباب دونفره"},
-            {"ردیف":67,"اسم_غذا_فارسی":"سینی ویژه","اسم_غذا_لاتین":"Chef\'s Special Platter","نوع":"سینی‌های مخصوص","قیمت":4000000,"جزئیات":"چلو ماهی کباب- چلو لقمه مخصوص-چلو برگ مخصوص- زرشک پلو با مرغ"}
-        ]';
-        $menu = json_decode($menuJson, true);
-    }
 
-    // گروه‌بندی منو بر اساس نوع برای ساخت پنل‌های مجزا
-    $grouped = [];
-    foreach ($menu as $item) {
-        $category = $item['نوع'] ?? 'سایر';
-        $grouped[$category][] = $item;
-    }
-
-    function toPersianNum($num) {
-        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-        $english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        return str_replace($english, $persian, (string) $num);
-    }
-    
-    function formatPriceFull($price) {
-        return toPersianNum(number_format($price)) . ' تومان';
-    }
-    
-    function formatPrice($price) {
-        if ($price >= 1000000) {
-            $millions = $price / 1000000;
-            if ($price % 1000000 == 0) {
-                return toPersianNum((int)$millions) . ' میلیون';
-            } else {
-                $formatted = number_format($millions, 1, '.', '');
-                $parts = explode('.', $formatted);
-                return toPersianNum($parts[0]) . '٫' . toPersianNum($parts[1]) . ' میلیون';
-            }
-        } elseif ($price >= 1000) {
-            $thousands = round($price / 1000);
-            return toPersianNum($thousands) . ' هزار';
-        } else {
-            return toPersianNum($price);
-        }
-    }
-
-    $prices = array_column($menu, 'قیمت');
-    $maxPrice = !empty($prices) ? max($prices) : 0;
-    $minPrice = !empty($prices) ? min($prices) : 0;
-@endphp
-@php
-    // استخراج منحصر به فرد دسته‌بندی‌ها برای ساخت منوی اسلایدر بالا
-    $categories = array_unique(array_column($menu, 'نوع'));
-    
-    // محاسبه حداقل و حداکثر قیمت برای تنظیم خودکار اسلایدر فیلتر قیمت
-    $prices = array_column($menu, 'قیمت');
-    $maxPrice = !empty($prices) ? max($prices) : 0;
-    $minPrice = !empty($prices) ? min($prices) : 0;
-@endphp
 <style>
     .hide-scrollbar::-webkit-scrollbar {
         display: none;
@@ -201,7 +81,17 @@
         animation: textShimmer 4s linear infinite;
     }
 </style>
-
+<style>
+    #sticky-nav.is-scrolled {
+        background: rgba(28, 20, 22, 0.98);
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+    .swiper-slide {
+        margin-right: 12px !important;
+        width: auto !important;
+    }
+</style>
 
 <div class="min-h-screen pb-20 bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
 
@@ -254,7 +144,7 @@
                             <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700] animate-pulse"></span> سقف قیمت:
                         </span>
                         <span id="price-val" class="font-bold text-[#ffd700] text-sm bg-[#0a0203] px-3 py-1 rounded-md border border-[#ffd700]/20">
-                            {{ formatPriceFull($maxPrice) }}
+                            {{ $maxPriceFormatted }}
                         </span>
                     </div>
                     <input type="range" id="price-slider" 
@@ -265,12 +155,13 @@
                 <div class="text-left md:text-left text-sm text-gray-400 flex justify-end items-center gap-3">
                     <span>موارد یافت شده:</span>
                     <span id="items-count" class="text-lg font-black text-[#070203] bg-linear-to-r from-[#ffd700] to-[#dfb15b] px-4 py-1 rounded-xl shadow-[0_0_10px_rgba(255,215,0,0.3)]">
-                        {{ toPersianNum(count($menu)) }}
+                        {{ $initialCountPersian }}
                     </span>
                 </div>
             </div>
         </div>
     </div>
+
     <nav id="sticky-nav" class="mb-10 sticky top-2.5 mx-0 sm:mx-auto w-full sm:max-w-304.5 z-50 bg-[#1c1416]/85 backdrop-blur-xl border border-[#dfb15b]/20 rounded-2xl transition-all duration-300 py-2.5 sm:py-3 shadow-[0_0_20px_rgba(255,230,0,0.8)]">
         <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8"> 
             <div class="swiper categories-swiper overflow-hidden">
@@ -286,120 +177,7 @@
             </div>
         </div>
     </nav>
-    <style>
-        #sticky-nav.is-scrolled {
-            background: rgba(28, 20, 22, 0.98);
-            padding-top: 0.75rem;
-            padding-bottom: 0.75rem;
-        }
-        .swiper-slide {
-            margin-right: 12px !important;
-            width: auto !important;
-        }
-    </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // ۱. مقداردهی اولیه Swiper
-            const categorySwiper = new Swiper('.categories-swiper', {
-                slidesPerView: 'auto',
-                spaceBetween: 12,
-                freeMode: true,
-                watchOverflow: true
-            });
 
-            // ۲. مدیریت افکت اسکرول (Sticky Scroll Effect)
-            const nav = document.getElementById('sticky-nav');
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    nav.classList.add('is-scrolled');
-                } else {
-                    nav.classList.remove('is-scrolled');
-                }
-            });
-
-            // ۳. ارجاع به المان‌های مورد نیاز
-            const categoryButtons = document.querySelectorAll('.cat-btn');
-            const categorySections = document.querySelectorAll('.category-section');
-
-            // *** متغیر پرچم برای تشخیص اسکرول خودکار ***
-            let isAutoScrolling = false;
-            let autoScrollTimeout = null;
-
-            // ۴. تابع کمکی برای فعال کردن یک دکمه خاص
-            function activateCategoryButton(targetCategory) {
-                categoryButtons.forEach(btn => {
-                    // بازنشانی همه دکمه‌ها به حالت پیش‌فرض
-                    btn.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
-                    btn.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-                    
-                    // اگر دکمه مربوط به targetCategory بود، فعالش کن
-                    if (btn.dataset.categoryTarget === targetCategory) {
-                        btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
-                        btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-                        
-                        // اسلاید کردن Swiper برای نمایش دکمه فعال (در صورت نیاز)
-                        categorySwiper.slideTo(Array.from(categoryButtons).indexOf(btn), 300);
-                    }
-                });
-            }
-
-            // ۵. مدیریت کلیک روی دکمه‌های دسته‌بندی
-            categoryButtons.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const targetCategory = btn.dataset.categoryTarget;
-                    
-                    // *** فعال کردن پرچم اسکرول خودکار ***
-                    isAutoScrolling = true;
-                    
-                    // پاک کردن تایمر قبلی در صورت وجود
-                    if (autoScrollTimeout) {
-                        clearTimeout(autoScrollTimeout);
-                    }
-                    
-                    // فعال کردن دکمه بلافاصله (نه در حین اسکرول)
-                    activateCategoryButton(targetCategory);
-                    
-                    const targetSection = document.querySelector(`.category-section[data-category="${targetCategory}"]`);
-                    if (targetSection) {
-                        targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                    
-                    // *** غیرفعال کردن پرچم بعد از اتمام اسکرول خودکار ***
-                    // زمان تقریبی اسکرول smooth حدود 500-800 میلی‌ثانیه است
-                    autoScrollTimeout = setTimeout(() => {
-                        isAutoScrolling = false;
-                        autoScrollTimeout = null;
-                    }, 1000); // یک ثانیه زمان کافی برای اتمام اسکرول
-                });
-            });
-
-            // ۶. Intersection Observer برای تشخیص دسته‌بندی فعال هنگام اسکرول دستی
-            const observerOptions = {
-                root: null, // viewport
-                rootMargin: '-30% 0px -60% 0px', // تشخیص وقتی بخش حدوداً در وسط صفحه است
-                threshold: 0
-            };
-
-            const observerCallback = (entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        // *** فقط در صورتی دکمه رو فعال کن که اسکرول خودکار نباشه ***
-                        if (!isAutoScrolling) {
-                            const category = entry.target.dataset.category;
-                            if (category) {
-                                activateCategoryButton(category);
-                            }
-                        }
-                    }
-                });
-            };
-
-            const observer = new IntersectionObserver(observerCallback, observerOptions);
-            categorySections.forEach(section => {
-                observer.observe(section);
-            });
-        });
-    </script>
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         
         <div id="empty-state" class="hidden text-center py-24 bg-[#140507]/50 rounded-3xl border border-dashed border-[#ffd700]/30 max-w-xl mx-auto backdrop-blur-md">
@@ -452,17 +230,16 @@
                                     
                                     <div class="mt-4 pt-4 border-t border-[#ffd700]/10 flex justify-between items-center">
                                         <span class="text-[10px] text-gray-500 bg-[#2a050a] px-2 py-1 rounded">بیرون‌بر</span>
-                                        <span class="text-base font-black text-[#ffd700]">{{ formatPrice($item['قیمت']) }} <span class="text-[10px] font-normal text-gray-400">تومان</span></span>
+                                        <span class="text-base font-black text-[#ffd700]">{{ $item['formatted_price'] }} <span class="text-[10px] font-normal text-gray-400">تومان</span></span>
                                     </div>
                                 </div>
                             </div>
                         @endforeach
                     </div>
 
-                    {{-- حالت دسکتاپ: بازنویسی شده با ساختار سه بعدی، تصاویر بزرگتر و بهینه‌سازی انیمیشن‌ها --}}
+                    {{-- حالت دسکتاپ --}}
                     <div class="hidden md:block relative transition-all duration-500 perspective-[1000px] transform-3d hover:transform-[translateZ(8px)_rotateX(0.5deg)] bg-linear-to-br from-[#140507] to-[#050102] border border-[#ffd700]/30 rounded-3xl p-8 lg:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(255,215,0,0.02)] hover:shadow-[0_25px_60px_rgba(255,215,0,0.1)]">
                         
-                        {{-- هاله نوری پس زمینه پنل در زمان هاور دسکتاپ --}}
                         <div class="absolute -right-20 -top-20 w-80 h-80 bg-[#ffd700]/5 rounded-full blur-3xl pointer-events-none transition-opacity duration-500 group-hover/section:opacity-100"></div>
                         
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 relative z-10">
@@ -475,23 +252,20 @@
                                     data-price="{{ $item['قیمت'] }}"
                                     data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
                                     
-                                    {{-- تصویر بهینه شده دسکتاپ با ابعاد بزرگتر و افکت ترنزیشن --}}
                                     <div class="shrink-0 w-32 h-32 lg:w-36 lg:h-36 rounded-xl overflow-hidden border border-[#ffd700]/20 shadow-[0_5px_15px_rgba(0,0,0,0.4)] relative">
                                         <img src="{{ $imagePath }}" alt="{{ $item['اسم_غذا_فارسی'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         <div class="absolute inset-0 bg-linear-to-t from-[#0a0203]/40 to-transparent"></div>
                                     </div>
                                     
-                                    {{-- جزییات محصول --}}
                                     <div class="flex-1 flex flex-col justify-between min-w-0 py-1">
                                         <div>
                                             <div class="flex items-start justify-between gap-4">
                                                 <h3 class="text-lg lg:text-xl font-bold text-gray-100 group-hover:text-[#ffd700] transition-colors duration-300 truncate">
                                                     {{ $item['اسم_غذا_فارسی'] }}
                                                 </h3>
-                                                {{-- بج قیمت با دیزاین گلس‌مورفیسم به سبک تم اصلی شما --}}
                                                 <div class="shrink-0 bg-[#2a050a]/60 px-3 py-1 rounded-lg border border-[#ffd700]/30 shadow-[0_0_10px_rgba(255,215,0,0.1)]">
                                                     <span class="text-base font-black text-[#ffd700]">
-                                                        {{ formatPrice($item['قیمت']) }}
+                                                        {{ $item['formatted_price'] }}
                                                         <span class="text-[10px] font-normal text-gray-400 mr-0.5">تومان</span>
                                                     </span>
                                                 </div>
@@ -524,6 +298,87 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const categorySwiper = new Swiper('.categories-swiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 12,
+            freeMode: true,
+            watchOverflow: true
+        });
+
+        const nav = document.getElementById('sticky-nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('is-scrolled');
+            } else {
+                nav.classList.remove('is-scrolled');
+            }
+        });
+
+        const categoryButtons = document.querySelectorAll('.cat-btn');
+        const categorySections = document.querySelectorAll('.category-section');
+
+        let isAutoScrolling = false;
+        let autoScrollTimeout = null;
+
+        function activateCategoryButton(targetCategory) {
+            categoryButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                btn.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                
+                if (btn.dataset.categoryTarget === targetCategory) {
+                    btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                    btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                    categorySwiper.slideTo(Array.from(categoryButtons).indexOf(btn), 300);
+                }
+            });
+        }
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetCategory = btn.dataset.categoryTarget;
+                isAutoScrolling = true;
+                
+                if (autoScrollTimeout) {
+                    clearTimeout(autoScrollTimeout);
+                }
+                
+                activateCategoryButton(targetCategory);
+                
+                const targetSection = document.querySelector(`.category-section[data-category="${targetCategory}"]`);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                autoScrollTimeout = setTimeout(() => {
+                    isAutoScrolling = false;
+                    autoScrollTimeout = null;
+                }, 1000);
+            });
+        });
+
+        const observerOptions = {
+            root: null,
+            rootMargin: '-30% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !isAutoScrolling) {
+                    const category = entry.target.dataset.category;
+                    if (category) {
+                        activateCategoryButton(category);
+                    }
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        categorySections.forEach(section => observer.observe(section));
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('search-input');
         const priceSlider = document.getElementById('price-slider');
         const priceVal = document.getElementById('price-val');
@@ -553,7 +408,6 @@
                 const desktopItems = section.querySelectorAll('.menu-item-desktop');
                 let sectionHasVisibleItem = false;
 
-                // تابع کمکی برای بررسی و اعمال استایل روی آیتم‌ها
                 const processItems = (items) => {
                     items.forEach(item => {
                         const itemPrice = parseInt(item.dataset.price);
@@ -563,7 +417,7 @@
                         const matchSearch = !query || searchKeys.includes(query);
 
                         if (matchPrice && matchSearch) {
-                            item.style.display = ''; // بازگشت به حالت پیش‌فرض (flex/block)
+                            item.style.display = '';
                             sectionHasVisibleItem = true;
                             totalVisibleItems++;
                         } else {
@@ -573,31 +427,20 @@
                 };
 
                 processItems(mobileItems);
-                
-                // از آنجایی که در موبایل و دسکتاپ آیتم‌ها دو بار رندر شده‌اند، برای شمارش دقیق،
-                // فقط یکی را می‌شماریم. متغیر totalVisibleItems را تقسیم بر 2 می‌کنیم.
                 processItems(desktopItems);
 
-                // اگر دسته‌بندی هیچ آیتم فعالی نداشت، کل پنل/سکشن مخفی شود
                 if (sectionHasVisibleItem) {
                     section.style.display = 'block';
-                    // انیمیشن نرم با GSAP اگر در پروژه لود شده باشد
-                    if(typeof gsap !== 'undefined') {
-                        gsap.to(section, {opacity: 1, duration: 0.3});
-                    } else {
-                        section.style.opacity = '1';
-                    }
+                    section.style.opacity = '1';
                 } else {
                     section.style.display = 'none';
                     section.style.opacity = '0';
                 }
             });
 
-            // محاسبه واقعی تعداد آیتم‌ها (چون هر آیتم ۲ بار رندر شده - موبایل و دسکتاپ)
             const actualVisibleCount = totalVisibleItems / 2;
             itemsCountBadge.textContent = toPersianNumber(actualVisibleCount);
 
-            // مدیریت نمایش Empty State
             if (actualVisibleCount === 0) {
                 emptyState.classList.remove('hidden');
                 menuContainer.classList.add('hidden');
@@ -610,7 +453,6 @@
         priceSlider.addEventListener('input', filterEngine);
         searchInput.addEventListener('input', filterEngine);
 
-        // انیمیشن اولیه هنگام لود صفحه (استفاده از GSAP در صورت وجود)
         if (typeof gsap !== 'undefined') {
             gsap.from('.category-section', {
                 opacity: 0,
