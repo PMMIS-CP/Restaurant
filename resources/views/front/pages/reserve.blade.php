@@ -8,11 +8,12 @@
     @csrf
     
     {{-- فیلدهای مخفی یکتا - فقط یک نسخه از هر کدام --}}
-    <input type="hidden" name="reservation_date" id="reservation_date_input" value="">
-    <input type="hidden" name="entry_time" id="entry_time_input" value="">
-    <input type="hidden" name="exit_time" id="exit_time_input" value="">
-    <input type="hidden" name="guest_count" id="guest_count_input" value="">
-    <input type="hidden" name="event_type" id="event_type_input" value="">
+    <input type="hidden" id="reservation_date_input" value="">
+    <input type="hidden" id="entry_time_input" value="">
+    <input type="hidden" id="exit_time_input" value="">
+    <input type="hidden" id="guest_count_input" value="">
+    <input type="hidden" id="event_type_input" value="">
+    <input type="hidden" id="description_input" x-model="$store.reserveForm.description">
 
 <div class="hidden lg:block relative min-h-screen w-full bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('assets/images/21.webp') }}');">
     <div class="absolute inset-0 bg-amber-50/80 backdrop-blur-[2px]"
@@ -53,7 +54,7 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input name="email" type="email" id="email" placeholder="مثال: example@email.com" 
+                                    <input type="email" id="email" placeholder="مثال: example@email.com" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -72,7 +73,7 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input name="phone" type="tel" id="phone" placeholder="مثال: 09123456789" 
+                                    <input type="tel" id="phone" placeholder="مثال: 09123456789" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -91,7 +92,7 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input name="name" type="text" id="name" placeholder="مثال: علی رضایی" 
+                                    <input type="text" id="name" placeholder="مثال: علی رضایی" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -110,9 +111,9 @@
                             x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
 
                             {{-- فیلدهای مخفی برای ارسال به بک‌اند --}}
-                            <input type="hidden" name="reservation_date" x-model="confirmedDate">
-                            <input type="hidden" name="entry_time" x-model="confirmedEntryTime">
-                            <input type="hidden" name="exit_time" x-model="confirmedExitTime">
+                            <input type="hidden" x-model="confirmedDate">
+                            <input type="hidden" x-model="confirmedEntryTime">
+                            <input type="hidden" x-model="confirmedExitTime">
 
                             <label class="absolute text-right font-bold" 
                                 style="left: 48.65%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
@@ -192,7 +193,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 945.89 309.84" class="w-full h-full pointer-events-none absolute">
                                     <rect class="light-rect-textarea fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="0" y="0" width="945.89" height="309.84" rx="15" ry="15"/>
                                 </svg>
-                                <textarea name="description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
+                                <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -362,7 +363,7 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input name="name" type="text" id="mobile_name" placeholder="مثال: علی رضایی" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name">
+                        <input type="text" id="mobile_name" placeholder="مثال: علی رضایی" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name">
                     </div>
                 </div>
 
@@ -373,7 +374,7 @@
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input name="phone" type="tel" id="mobile_phone" placeholder="مثال: 09123456789" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone">
+                        <input type="tel" id="mobile_phone" placeholder="مثال: 09123456789" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone">
                     </div>
                 </div>
             </div>
@@ -385,7 +386,7 @@
                     <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                         <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                     </svg>
-                    <input name="email" type="email" id="mobile_email" placeholder="مثال: example@email.com" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.email">
+                    <input type="email" id="mobile_email" placeholder="مثال: example@email.com" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.email">
                 </div>
             </div>
 
@@ -569,7 +570,7 @@
             <svg viewBox="0 0 945.89 309.84" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                 <rect class="light-rect-textarea fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="2" y="2" width="941.89" height="305.84" rx="15" ry="15"/>
             </svg>
-            <textarea name="description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
+            <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
         </div>
 
         {{-- ۶. دکمه ثبت نهایی --}}
@@ -739,7 +740,8 @@ document.addEventListener('alpine:init', () => {
         guest_count: '',
         reservation_date: '',
         entry_time: '',
-        exit_time: ''
+        exit_time: '',
+        description: ''
     });
 });
 </script>

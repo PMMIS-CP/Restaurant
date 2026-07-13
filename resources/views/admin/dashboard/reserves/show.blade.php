@@ -5,74 +5,99 @@
 @section('title', 'جزئیات رزرو')
 
 @section('content')
-<div class="container-fluid px-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0 text-gray-800">جزئیات رزرو #{{ $reserve->id }}</h1>
-        <a href="{{ route('admin.reserves.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-right"></i> بازگشت به لیست
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    {{-- Header --}}
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 mb-6">
+        <h1 class="text-2xl font-bold text-gray-800">جزئیات رزرو #{{ $reserve->id }}</h1>
+        <a href="{{ route('admin.reserves.index') }}" 
+           class="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-gray-100 text-gray-700 hover:bg-gray-200 transition-colors text-sm font-medium">
+            <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            بازگشت به لیست
         </a>
     </div>
 
-    <div class="card shadow mb-4">
-        <div class="card-header py-3">
-            <h6 class="m-0 fw-bold text-primary">اطلاعات ثبت‌شده</h6>
+    {{-- Card --}}
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
+            <h3 class="text-lg font-semibold text-gray-800">اطلاعات ثبت‌شده</h3>
         </div>
-        <div class="card-body">
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">نام و نام خانوادگی:</label>
-                    <p class="form-control-plaintext">{{ $reserve->name }}</p>
+        <div class="p-4 sm:p-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {{-- Name --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">نام و نام خانوادگی</label>
+                    <p class="text-base text-gray-900">{{ $reserve->name }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">شماره تماس:</label>
-                    <p class="form-control-plaintext" dir="ltr">{{ $reserve->phone }}</p>
+
+                {{-- Phone --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">شماره تماس</label>
+                    <p class="text-base text-gray-900 dir-ltr" dir="ltr">{{ $reserve->phone }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">ایمیل:</label>
-                    <p class="form-control-plaintext">{{ $reserve->email ?? 'وارد نشده' }}</p>
+
+                {{-- Email --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">ایمیل</label>
+                    <p class="text-base text-gray-900">{{ $reserve->email ?? 'وارد نشده' }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">نوع مراسم:</label>
-                    <p class="form-control-plaintext">{{ $reserve->event_type ?? 'تعیین نشده' }}</p>
+
+                {{-- Event type --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">نوع مراسم</label>
+                    <p class="text-base text-gray-900">{{ $reserve->event_type ?? 'تعیین نشده' }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">تعداد مهمان:</label>
-                    <p class="form-control-plaintext">{{ $reserve->guest_count ?? 'تعیین نشده' }}</p>
+
+                {{-- Guest count --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">تعداد مهمان</label>
+                    <p class="text-base text-gray-900">{{ $reserve->guest_count ?? 'تعیین نشده' }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">تاریخ رزرو:</label>
-                    <p class="form-control-plaintext">{{ $reserve->reservation_date }}</p>
+
+                {{-- Reservation date --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">تاریخ رزرو</label>
+                    <p class="text-base text-gray-900">{{ $reserve->reservation_date }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">ساعت ورود:</label>
-                    <p class="form-control-plaintext">{{ $reserve->entry_time }}</p>
+
+                {{-- Entry time --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">ساعت ورود</label>
+                    <p class="text-base text-gray-900">{{ $reserve->entry_time }}</p>
                 </div>
-                <div class="col-md-6">
-                    <label class="fw-bold text-gray-600">ساعت خروج:</label>
-                    <p class="form-control-plaintext">{{ $reserve->exit_time }}</p>
+
+                {{-- Exit time --}}
+                <div>
+                    <label class="block text-sm font-medium text-gray-500 mb-1">ساعت خروج</label>
+                    <p class="text-base text-gray-900">{{ $reserve->exit_time }}</p>
                 </div>
-                <div class="col-12">
-                    <label class="fw-bold text-gray-600">وضعیت:</label>
+
+                {{-- Status (full width) --}}
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-500 mb-1">وضعیت</label>
                     <p>
                         @if($reserve->status === 'pending')
-                            <span class="badge bg-warning text-dark fs-6">در انتظار بررسی</span>
+                            <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-1 text-sm font-medium text-yellow-800">در انتظار بررسی</span>
                         @elseif($reserve->status === 'confirmed')
-                            <span class="badge bg-success fs-6">تأیید شده</span>
+                            <span class="inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800">تأیید شده</span>
                         @elseif($reserve->status === 'rejected')
-                            <span class="badge bg-danger fs-6">رد شده</span>
+                            <span class="inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-800">رد شده</span>
                         @endif
                     </p>
                 </div>
-                <div class="col-12">
-                    <label class="fw-bold text-gray-600">توضیحات:</label>
-                    <div class="p-3 bg-light rounded">
+
+                {{-- Description (full width) --}}
+                <div class="md:col-span-2">
+                    <label class="block text-sm font-medium text-gray-500 mb-1">توضیحات</label>
+                    <div class="p-4 bg-gray-50 rounded-md text-gray-700">
                         {{ $reserve->description ?? 'بدون توضیحات' }}
                     </div>
                 </div>
-                <div class="col-12">
-                    <small class="text-muted">
+
+                {{-- Created at (full width) --}}
+                <div class="md:col-span-2">
+                    <p class="text-sm text-gray-400">
                         تاریخ ثبت: {{ $reserve->created_at->format('Y/m/d ساعت H:i') }}
-                    </small>
+                    </p>
                 </div>
             </div>
         </div>
