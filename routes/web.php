@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\Front\MenuController;
 use App\Http\Controllers\Front\MenuTakeoutController;
+use App\Http\Controllers\Front\MenuOrganizationalController;
 use App\Http\Controllers\Front\ReserveController;
 use App\Http\Controllers\Front\SpinController;
 
@@ -27,6 +28,7 @@ Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
 Route::post('/reserve', [ReserveController::class, 'store'])->name('reserve.store');
 Route::get('/menu/takeout', [MenuTakeoutController::class, 'index'])->name('menu.takeout');
+Route::get('/menu/organizational', [MenuOrganizationalController::class, 'index'])->name('menu.organizational');
 Route::get('/spin', [SpinController::class, 'index'])->name('spin');
 Route::post('/spin', [SpinController::class, 'spin'])->name('spin.post');
 
