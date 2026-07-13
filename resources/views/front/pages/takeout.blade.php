@@ -205,12 +205,11 @@
                         <div class="h-px flex-1 bg-linear-to-r from-[#ffd700]/40 to-transparent"></div>
                     </div>
 
-                    {{-- حالت موبایل (بدون هیچ تغییری حفظ شده است) --}}
+                    {{-- حالت موبایل --}}
                     <div class="md:hidden flex overflow-x-auto snap-x snap-mandatory gap-5 pb-6 hide-scrollbar pt-2 px-2 -mx-2">
                         @foreach($items as $item)
                             @php
-                                $imageNumber = fmod($item['ردیف'] - 1, 12) + 1;
-                                $imagePath = asset("assets/images/menu/{$imageNumber}.webp");
+                                $imagePath = $item['main_image'] ?? asset('assets/images/default-food.webp');
                             @endphp
                             <div class="menu-item-mobile snap-center shrink-0 w-70 bg-linear-to-br from-[#1c0408] to-[#0a0203] border border-[#ffd700]/20 rounded-2xl overflow-hidden shadow-lg relative flex flex-col"
                                 data-price="{{ $item['قیمت'] }}"
@@ -245,8 +244,7 @@
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 relative z-10">
                             @foreach($items as $item)
                                 @php
-                                    $imageNumber = fmod($item['ردیف'] - 1, 12) + 1;
-                                    $imagePath = asset("assets/images/menu/{$imageNumber}.webp");
+                                    $imagePath = $item['main_image'] ?? asset('assets/images/default-food.webp');
                                 @endphp
                                 <div class="menu-item-desktop group flex gap-6 p-4 rounded-2xl bg-[#0a0203]/40 border border-[#ffd700]/10 hover:border-[#ffd700]/40 transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(255,215,0,0.05)]"
                                     data-price="{{ $item['قیمت'] }}"
