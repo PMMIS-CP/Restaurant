@@ -148,7 +148,7 @@
                         </span>
                     </div>
                     <input type="range" id="price-slider" 
-                        min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="50000"
+                        min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="1"
                         class="w-full accent-[#ffd700] h-1.5 bg-[#2a050a] rounded-lg cursor-pointer appearance-none">
                 </div>
 
