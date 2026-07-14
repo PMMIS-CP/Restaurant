@@ -8,6 +8,7 @@ use App\Models\CartItem;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
