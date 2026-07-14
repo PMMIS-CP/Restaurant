@@ -107,7 +107,7 @@
                     </div>
 
                     <div class="space-y-2">
-                        <div class="flex justify-between items-center text-xs text-gray-400">
+                        <div class="flex justify-between items-center text-sm text-gray-400">
                             <span class="flex items-center gap-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#bc1c24]"></span> حداکثر قیمت:
                             </span>

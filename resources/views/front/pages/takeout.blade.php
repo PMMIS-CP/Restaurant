@@ -139,7 +139,7 @@
                 </div>
 
                 <div class="space-y-3">
-                    <div class="flex justify-between items-center text-xs text-gray-400">
+                    <div class="flex justify-between items-center text-sm text-gray-400">
                         <span class="flex items-center gap-1.5">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700] animate-pulse"></span> سقف قیمت:
                         </span>
