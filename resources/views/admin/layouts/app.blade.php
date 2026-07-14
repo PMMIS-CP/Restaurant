@@ -52,7 +52,7 @@
                                class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                 منو سازمانی
                             </a>
-                            <a href="#" 
+                            <a href="{{ route('admin.users.index') }}" 
                                class="text-zinc-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                                 کاربران
                             </a>

@@ -28,7 +28,7 @@ Route::name('admin.')->group(function () {
             ->name('dashboard');
 
         // User Management
-        Route::prefix('users')->name('dashboard.users.')->group(function () {
+        Route::prefix('users')->name('users.')->group(function () {
             Route::get('/', [UserManagementController::class, 'index'])->name('index');
             Route::get('/create', [UserManagementController::class, 'create'])->name('create');
             Route::post('/', [UserManagementController::class, 'store'])->name('store');
