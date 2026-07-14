@@ -28,8 +28,6 @@
                 </div>
             </div>
 
-            {{-- نام لاتین --}}
-            <p id="modal-food-latin" class="text-xs text-gray-500 font-mono tracking-wider uppercase opacity-80"></p>
 
             {{-- خط جداکننده --}}
             <div class="border-t border-[#ffd700]/10"></div>
@@ -61,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalImage = document.getElementById('modal-food-image');
     const modalName = document.getElementById('modal-food-name');
     const modalPrice = document.getElementById('modal-food-price');
-    const modalLatin = document.getElementById('modal-food-latin');
     const modalDetails = document.getElementById('modal-food-details');
 
     // تابع پیدا کردن آیتم در menuData بر اساس اسم فارسی
@@ -91,7 +88,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let foodNameFa = '';
         let foodImage = '';
         let foodPrice = '';
-        let foodLatin = '';
         let foodDetails = '';
         
         // استخراج نام غذا (مشترک بین همه نوع کارت‌ها)
@@ -111,9 +107,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 foodPrice = priceElement.textContent.trim();
             }
             
-            // نام لاتین - در کارت سالن وجود ندارد
-            foodLatin = '';
-            
             // جزئیات - پاراگراف با کلاس text-xs.text-gray-400
             const detailsElement = foodCard.querySelector('p.text-xs.text-gray-400');
             if (detailsElement) {
@@ -130,7 +123,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // پر کردن مودال با اطلاعات مستقیم از PHP
                 foodImage = itemData['main_image'] || '';
                 foodPrice = itemData['formatted_price'] || '';
-                foodLatin = itemData['اسم_غذا_لاتین'] || '';
                 foodDetails = itemData['جزئیات'] || '';
             } else {
                 // fallback به استخراج از DOM
@@ -148,10 +140,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     foodPrice = priceText.replace(/[^\d,]/g, '');
                 }
                 
-                // نام لاتین
-                const latinElement = foodCard.querySelector('.font-mono');
-                foodLatin = latinElement ? latinElement.textContent.trim() : '';
-                
                 // جزئیات
                 let detailsElement = foodCard.querySelector('.line-clamp-2');
                 if (!detailsElement && isMobileCard) {
@@ -166,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
         modalImage.alt = foodNameFa;
         modalName.textContent = foodNameFa;
         modalPrice.textContent = foodPrice;
-        modalLatin.textContent = foodLatin;
         modalDetails.textContent = foodDetails;
 
         // نمایش مودال
