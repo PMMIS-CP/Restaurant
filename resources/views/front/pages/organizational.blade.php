@@ -268,9 +268,6 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                            <p class="text-xs text-gray-500 font-mono tracking-wider uppercase mt-0.5 opacity-80">
-                                                {{ $item['اسم_غذا_لاتین'] }}
-                                            </p>
                                         </div>
 
                                         <p class="text-xs lg:text-sm text-gray-400/90 leading-relaxed text-justify line-clamp-2 mt-2 group-hover:text-gray-300 transition-colors">
