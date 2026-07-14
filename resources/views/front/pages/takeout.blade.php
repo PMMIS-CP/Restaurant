@@ -285,13 +285,13 @@
                                 </div>
                             @endforeach
                         </div>
-                        @include('front.components.food-modal')
                     </div>
 
                 </div>
             @endforeach
         </div>
     </main>
+    @include('front.components.food-modal')
 </div>
 
 <script>

@@ -206,6 +206,7 @@
                 @endforeach
             </div>
         </main>
+    @include('front.components.food-modal')
     </div>
 </div>
 
