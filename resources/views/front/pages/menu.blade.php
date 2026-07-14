@@ -115,7 +115,7 @@
                                 {{ $maxPriceFormatted }}
                             </span>
                         </div>
-                        <input type="range" id="price-slider" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="50000" class="w-full accent-[#bc1c24] h-1.5 bg-[#1c1416] rounded-lg cursor-pointer appearance-none" data-min="{{ $minPrice }}" data-max="{{ $maxPrice }}">
+                        <input type="range" id="price-slider" min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="1" class="w-full accent-[#bc1c24] h-1.5 bg-[#1c1416] rounded-lg cursor-pointer appearance-none" data-min="{{ $minPrice }}" data-max="{{ $maxPrice }}">
                     </div>
 
                     <div class="text-left md:text-left text-xs text-gray-400 flex justify-end items-center gap-2">
