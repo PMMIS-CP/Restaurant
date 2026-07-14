@@ -17,18 +17,26 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        // کاربر تست
         User::factory()->create([
-            'name' => 'Test User',
+            'name'  => 'Test User',
             'email' => 'test@example.com',
         ]);
 
         // Create admin user
         Admin::create([
-            'name' => 'Admin',
-            'email' => 'admin@restaurant.test',
+            'name'     => 'Admin',
+            'email'    => 'admin@restaurant.test',
             'password' => Hash::make('1234'),
+        ]);
+
+        // فراخوانی سایر Seeders
+        $this->call([
+            MenuCategorySeeder::class,
+            MenuSeeder::class,
+            MenuOrganizationalSeeder::class,
+            MenuTakeoutSeeder::class,
+            ReserveSeeder::class,
         ]);
     }
 }
