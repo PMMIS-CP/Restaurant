@@ -94,7 +94,7 @@
         <div class="text-center mb-8">
             <h4 class="text-3xl md:text-4xl font-bold text-[#8B0000] relative inline-block">
                 بازخورد مشتریان
-                
+
             </h4>
             <p class="mt-6 text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
                 آنچه میهمانان عزیزمان درباره تجربه خود در کاخ سنتی موراکو می‌گویند
@@ -107,75 +107,12 @@
         </style>
 
         <div 
-            x-data="{
-                swiper: null,
-                timeout: null,
-                initSwiper() {
-                    this.swiper = new Swiper(this.$refs.swiperContainer, {
-                        modules: [window.SwiperAutoplay],
-                        slidesPerView: 1,
-                        spaceBetween: 30,
-                        loop: true,
-                        speed: 3000,
-                        autoplay: {
-                            delay: 0,
-                            disableOnInteraction: false,
-                            pauseOnMouseEnter: false,
-                        },
-                        pagination: {
-                            el: this.$refs.pagination,
-                            clickable: true,
-                        },
-                        navigation: {
-                            nextEl: this.$refs.nextBtn,
-                            prevEl: this.$refs.prevBtn,
-                        },
-                        breakpoints: {
-                            768: { slidesPerView: 2 },
-                            1024: { slidesPerView: 3 }
-                        }
-                    });
-
-                    // تابع کمکی برای توقف و زمان‌بندی مجدد
-                    const handleInteraction = () => {
-                        this.swiper.autoplay.stop();
-                        clearTimeout(this.timeout);
-                        this.timeout = setTimeout(() => {
-                            this.swiper.autoplay.start();
-                        }, 30000);
-                    };
-
-                    // تشخیص اسکرول موس (کمترین حرکت)
-                    this.$refs.swiperContainer.addEventListener('wheel', (e) => {
-                        // فقط اگر اسکرول عمودی باشه (نه افقی)
-                        if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                            handleInteraction();
-                        }
-                    }, { passive: true });
-
-                    // تشخیص لمس در موبایل (کمترین حرکت انگشت)
-                    let touchStartY = 0;
-                    this.$refs.swiperContainer.addEventListener('touchstart', (e) => {
-                        touchStartY = e.touches[0].clientY;
-                    });
-                    
-                    this.$refs.swiperContainer.addEventListener('touchmove', (e) => {
-                        const touchY = e.touches[0].clientY;
-                        // اگر حرکت عمودی اتفاق افتاده (حتی کم)
-                        if (Math.abs(touchY - touchStartY) > 5) {
-                            handleInteraction();
-                        }
-                    }, { passive: true });
-
-                    // کلیک موس هم بمونه (برای موارد خاص)
-                    this.$refs.swiperContainer.addEventListener('mousedown', handleInteraction);
-                }
-            }"
+            x-data="customSwiper"
             x-init="initSwiper()"
             class="relative swiper-container-custom"
         >
             {{-- محفظه اسلایدها --}}
-        <div x-ref="swiperContainer" class="swiper overflow-hidden rounded-2xl px-2! py-4!">
+            <div x-ref="swiperContainer" class="swiper overflow-hidden rounded-2xl px-2! py-4!">
                 <div class="swiper-wrapper">
                     @foreach($testimonials as $testimonial)
                         <div class="swiper-slide h-auto">
@@ -223,8 +160,6 @@
                     @endforeach
                 </div>
             </div>
-
-            {{-- دکمه‌های ناوبری --}}
 
             {{-- صفحه‌بندی --}}
             <div x-ref="pagination" class="flex justify-center mt-8 space-x-2 space-x-reverse"></div>

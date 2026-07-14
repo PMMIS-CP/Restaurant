@@ -2,6 +2,40 @@
 @section('title', 'رزرو')
 @section('content')
 @include('front.components.reserveheader')
+{{-- استایل‌ها و اسکریپت‌ها --}}
+<style>
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+ -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+ -webkit-text-fill-color: #1a1a1a !important;
+ transition: background-color 5000s ease-in-out 0s;
+}
+</style>
+<style>
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ripple-effect .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(220, 38, 38, 0.2);
+  transform: scale(0);
+  animation: ripple-animation 0.1s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+</style>
+
 {{-- نسخه دسکتاپ --}}
 <form action="{{ route('reserve.store') }}" method="POST" id="reserve-form" 
       onsubmit="event.preventDefault(); window.handleSubmit(event); return false;">
@@ -264,7 +298,7 @@
                         </div>
 
                         {{-- ساعت --}}
-                        <div class="absolute overflow-hidden" style="left: 0.027%; top: 7.32%; width: 15.73%; height: 73.66%; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.15);" x-data="timePickerInline()">
+                        <div class="absolute overflow-hidden" style="left: 0.027%; top: 7.32%; width: 15.73%; height: 73.66%; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(10px); border-radius: 20px; border: 1px solid rgba(220, 38, 38, 0.15);" x-data="window.timePickerInline()">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 289.98 520.18" class="w-full h-full pointer-events-none absolute z-10">
                                 <rect class="fill-white/40 stroke-[#B8860B] stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(184,134,11,0.15)] transition-all duration-300 ease hover:stroke-[#DC2626] hover:drop-shadow-[0_4px_12px_rgba(220,38,38,0.2)]" x="0" y="0" width="289.98" height="520.18" rx="15" ry="15"/>
                                 <rect class="light-rect-time" x="0" y="0" width="289.98" height="520.18" rx="15" ry="15" fill="none" stroke="#ff0061" stroke-width="12" stroke-dasharray="100 629.22" style="opacity: 0;"/>
@@ -523,7 +557,7 @@
             </div>
 
             {{-- ساعت (۲ ستون) --}}
-            <div class="col-span-2 relative rounded-2xl bg-white/40 backdrop-blur-md border border-red-600/20 shadow-sm" x-data="timePickerInline()">
+            <div class="col-span-2 relative rounded-2xl bg-white/40 backdrop-blur-md border border-red-600/20 shadow-sm" x-data="window.timePickerInline()">
                 <svg viewBox="0 0 289.98 520.18" preserveAspectRatio="none" class="w-full h-full pointer-events-none absolute inset-0 z-0">
                     <rect class="light-rect-time" x="2" y="2" width="285" height="516" rx="15" ry="15" fill="none" stroke="#ff0061" stroke-width="12" stroke-dasharray="100 629.22" style="opacity: 0;"/>
                 </svg>
@@ -594,522 +628,5 @@
 
     </div>
 </div>
-
-{{-- استایل‌ها و اسکریپت‌ها --}}
-<style>
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
- -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
- -webkit-text-fill-color: #1a1a1a !important;
- transition: background-color 5000s ease-in-out 0s;
-}
-</style>
-<style>
-.ripple-effect {
-  position: relative;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ripple-effect .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background-color: rgba(220, 38, 38, 0.2);
-  transform: scale(0);
-  animation: ripple-animation 0.1s ease-out;
-  pointer-events: none;
-}
-
-@keyframes ripple-animation {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-</style>
-<script>
- document.addEventListener('alpine:init', () => {
-    Alpine.data('confirmationComponent', () => ({
-        confirmedDate: '',
-        confirmedEntryTime: '',
-        confirmedExitTime: '',
-        isAnimating: false,
-
-        init() {
-            // همگام‌سازی با input‌های اصلی
-            this.$watch('confirmedDate', val => {
-                Alpine.store('reserveForm').reservation_date = val;
-                const input = document.getElementById('reservation_date_input');
-                if (input) input.value = val;
-            });
-            this.$watch('confirmedEntryTime', val => {
-                Alpine.store('reserveForm').entry_time = val;
-                const input = document.getElementById('entry_time_input');
-                if (input) input.value = val;
-            });
-            this.$watch('confirmedExitTime', val => {
-                Alpine.store('reserveForm').exit_time = val;
-                const input = document.getElementById('exit_time_input');
-                if (input) input.value = val;
-            });
-        },
-        
-        triggerAnimation(el) {
-            if (this.isAnimating) return;
-            this.isAnimating = true;
-
-            const runGsap = (selector, context = document) => {
-                // پیدا کردن تمام المان‌های مشابه و بررسی اینکه کدامشان در صفحه (دسکتاپ یا موبایل) Visible است
-                const targets = context.querySelectorAll(selector);
-                targets.forEach(target => {
-                    // offsetParent === null به این معنی است که المان مخفی (display: none) است
-                    if(target.offsetParent !== null || window.getComputedStyle(target).display !== 'none') {
-                        gsap.set(target, { opacity: 1 });
-                        gsap.fromTo(target, 
-                            { strokeDashoffset: 729.22 }, 
-                            { strokeDashoffset: -1458.44, duration: 6, ease: 'none', onComplete: () => { gsap.set(target, { opacity: 0 }); } }
-                        );
-                    }
-                });
-            };
-
-            // ۱. فیلد فعلی
-            runGsap('.light-rect', el.parentElement);
-
-            // ۲. پیدا کردن المان‌های قابل مشاهده تقویم و ساعت
-            runGsap('.light-rect-calendar', document);
-            runGsap('.light-rect-time', document);
-
-            setTimeout(() => { this.isAnimating = false; }, 6000);
-        },
-
-        get displayText() {
-            if (this.confirmedDate && this.confirmedEntryTime && this.confirmedExitTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} الی ${this.confirmedExitTime}`;
-            if (this.confirmedDate && this.confirmedEntryTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} الی ---`;
-            if (this.confirmedDate && this.confirmedExitTime) return `${this.confirmedDate} - --- الی ${this.confirmedExitTime}`;
-            if (this.confirmedDate) return `${this.confirmedDate} - ورودی و خروجی ساعت را ثبت کنید`;
-            if (this.confirmedEntryTime || this.confirmedExitTime) return `تاریخ را ثبت کنید - ${this.confirmedEntryTime || '---'} الی ${this.confirmedExitTime || '---'}`;
-            return 'تاریخ را ثبت کنید';
-        }
-    }));
-
-    Alpine.data('formAnimation', () => ({
-        isAnimating: false,
-        triggerAnimation(el) {
-            if (this.isAnimating) return;
-            this.isAnimating = true;
-            const target = el.querySelector('.light-rect-input');
-            if (target) {
-                gsap.set(target, { strokeDasharray: 729.22 });
-                gsap.fromTo(target, 
-                    { strokeDashoffset: 729.22 }, 
-                    { strokeDashoffset: -1458.44, duration: 6, ease: 'none', onComplete: () => { gsap.set(target, { clearProps: "strokeDashoffset, strokeDasharray" }); } }
-                );
-            }
-            setTimeout(() => { this.isAnimating = false; }, 6000);
-        }
-    }));
-
-    Alpine.data('textareaAnimation', () => ({
-        isAnimating: false,
-        triggerAnimation(el) {
-            if (this.isAnimating) return;
-            this.isAnimating = true;
-            const target = el.querySelector('.light-rect-textarea');
-            if (!target) { this.isAnimating = false; return; }
-
-            const perimeter = 2511.46;
-            gsap.set(target, { strokeDasharray: perimeter });
-            gsap.fromTo(target, 
-                { strokeDashoffset: perimeter }, 
-                { strokeDashoffset: -perimeter, duration: 6, ease: 'none', onComplete: () => { gsap.set(target, { clearProps: "strokeDashoffset, strokeDasharray" }); } }
-            );
-            setTimeout(() => { this.isAnimating = false; }, 6000);
-        }
-    }));
- });
-</script>
-<script>
-document.addEventListener('alpine:init', () => {
-    Alpine.store('reserveForm', {
-        name: '',
-        phone: '',
-        email: '',
-        event_type: '',
-        guest_count: '',
-        reservation_date: '',
-        entry_time: '',
-        exit_time: '',
-        description: ''
-    });
-});
-</script>
-<script>
-document.addEventListener('alpine:init', () => {
-    document.querySelectorAll('.custom-dropdown-container').forEach(container => {
-        const trigger = container.querySelector('.dropdown-trigger');
-        const menu = container.querySelector('.dropdown-menu');
-        const arrow = trigger.querySelector('svg');
-        const selectedText = container.querySelector('.selected-text');
-        const items = container.querySelectorAll('li');
-
-        if (!trigger || !menu || !arrow || !selectedText) {
-            console.warn('Dropdown container incomplete:', container);
-            return;
-        }
-
-        trigger.addEventListener('click', (e) => {
-            e.stopPropagation();
-            
-            // بستن سایر dropdownها
-            document.querySelectorAll('.dropdown-menu').forEach(m => {
-                if (m !== menu) m.classList.add('hidden');
-            });
-            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => {
-                if (svg !== arrow) svg.classList.remove('rotate-180');
-            });
-            
-            // toggle dropdown جاری
-            menu.classList.toggle('hidden');
-            arrow.classList.toggle('rotate-180');
-        });
-
-        items.forEach(item => {
-            item.addEventListener('click', (e) => {
-                e.stopPropagation();
-                
-                const value = item.getAttribute('data-value');
-                const containerType = container.getAttribute('data-type'); // 'guest' یا 'event'
-                const fieldName = containerType === 'guest' ? 'guest_count' : 'event_type';
-                
-                // به‌روزرسانی input اصلی
-                const mainInput = document.getElementById(fieldName + '_input');
-                if (mainInput) mainInput.value = value;
-                
-                // به‌روزرسانی Alpine Store
-                try {
-                    const store = Alpine.store('reserveForm');
-                    if (store) store[fieldName] = value;
-                } catch (error) {
-                    console.warn('Store not accessible:', error);
-                }
-                
-                // به‌روزرسانی UI
-                selectedText.textContent = item.textContent;
-                trigger.classList.remove('text-gray-400', 'text-gray-500');
-                trigger.classList.add('text-gray-800', 'font-bold');
-                menu.classList.add('hidden');
-                arrow.classList.remove('rotate-180');
-            });
-        });
-    });
-
-    // بستن همه dropdownها با کلیک خارج
-    document.addEventListener('click', (e) => {
-        // اگر کلیک روی dropdown نبود، همه را ببند
-        if (!e.target.closest('.custom-dropdown-container')) {
-            document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.add('hidden'));
-            document.querySelectorAll('.dropdown-trigger svg').forEach(svg => svg.classList.remove('rotate-180'));
-        }
-    });
-});
-</script>
-
-<script>
- document.addEventListener('alpine:init', () => {
-    Alpine.data('datePicker', () => ({
-        showCalendar: false,
-        selectedDate: '',
-        finalDate: '',
-        year: new persianDate().year(),
-        month: new persianDate().month(),
-        blockedDates: ['1406/4/4', '1406/4/5'],
-        
-        get viewDate() { return new persianDate([this.year, this.month, 1]); },
-        get currentYear() { return this.viewDate.year(); },
-        get currentMonthName() { return this.viewDate.format('MMMM'); },
-        get daysInMonth() { return this.viewDate.daysInMonth(); },
-        get startDayOffset() { return this.viewDate.day(); },
-
-        changeMonth(amount) {
-            let newDate = this.viewDate.add('months', amount);
-            this.year = newDate.year();
-            this.month = newDate.month();
-        },
-        selectDate(day) {
-            if (this.isBlocked(day)) return;
-            this.selectedDate = `${this.year}/${this.month}/${day}`;
-        },
-        confirmDate() {
-            if (!this.selectedDate) return;
-            this.finalDate = this.selectedDate;
-            this.$dispatch('date-confirmed', { date: this.finalDate });
-            this.showCalendar = false;
-        },
-        isSelected(day) { return this.selectedDate === `${this.year}/${this.month}/${day}`; },
-        isBlocked(day) { return this.blockedDates.includes(`${this.year}/${this.month}/${day}`); }
-    }));
- });
-</script>
-
-<script>
-function timePickerInline() {
-    const ITEM_HEIGHT = 40; // ارتفاع هر آیتم به پیکسل
-    
-    return {
-        mode: 'split', 
-        entryTime: null, 
-        exitTime: null, 
-        hourIndex: 8, 
-        minuteIndex: 0,
-        editingType: null, 
-        editingOriginalTime: null,
-        dragging: { active: false, type: null, startY: 0, startScroll: 0 },
-        scrollTimeout: { hour: null, minute: null },
-
-        // ذخیره رفرنس توابع برای حذف صحیح از حافظه
-        _boundPointerMove: null,
-        _boundPointerUp: null,
-        lastScrollTime: 0,
-        // متد پیش‌فرض Alpine.js برای راه‌اندازی کامپوننت
-        init() {
-            this._boundPointerMove = this.onPointerMove.bind(this);
-            this._boundPointerUp = this.stopDrag.bind(this);
-
-            window.addEventListener('pointermove', this._boundPointerMove);
-            window.addEventListener('pointerup', this._boundPointerUp);
-            window.addEventListener('pointercancel', this._boundPointerUp);
-            
-            // اگر نیاز به مقداردهی اولیه خاصی دارید، همین‌جا انجام دهید
-            console.log("Picker Initialized"); 
-        },
-
-        openPicker(type) {
-            this.editingType = type;
-            // ذخیره زمان قبلی برای قابلیت Cancel
-            this.editingOriginalTime = type === 'entry' ? this.entryTime : this.exitTime;
-            const currentTime = this.editingOriginalTime;
-
-            if (currentTime && currentTime.includes(':')) {
-                const [h, m] = currentTime.split(':').map(Number);
-                this.hourIndex = isNaN(h) ? 0 : Math.min(23, Math.max(0, h));
-                this.minuteIndex = isNaN(m) ? 0 : Math.min(59, Math.max(0, m));
-            } else {
-                const now = new Date();
-                this.hourIndex = now.getHours();
-                this.minuteIndex = now.getMinutes();
-            }
-
-            this.mode = type === 'entry' ? 'entry-edit' : 'exit-edit';
-            
-            // بازنشانی موقعیت اسکرول پس از رندر شدن DOM
-            this.$nextTick(() => {
-                this.scrollToIndex('hour', false);
-                this.scrollToIndex('minute', false);
-            });
-        },
-
-        scrollToIndex(type, smooth = true) {
-            const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            const index = type === 'hour' ? this.hourIndex : this.minuteIndex;
-            
-            if (scrollRef) {
-                scrollRef.scrollTo({
-                    top: index * ITEM_HEIGHT,
-                    behavior: smooth ? 'smooth' : 'auto'
-                });
-            }
-        },
-
-        onScroll(type) {
-            const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            if (!scrollRef || this.dragging.active) return;
-
-            // جلوگیری از تداخل اسکرول با رفتارهای انیمیشنی (Debounce)
-            clearTimeout(this.scrollTimeout[type]);
-            
-            const rawIndex = Math.round(scrollRef.scrollTop / ITEM_HEIGHT);
-            if (type === 'hour') {
-                this.hourIndex = Math.min(23, Math.max(0, rawIndex));
-            } else {
-                this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
-            }
-
-            // قفل شدن روی نزدیک‌ترین آیتم پس از اتمام اسکرول طبیعی
-            this.scrollTimeout[type] = setTimeout(() => {
-                this.scrollToIndex(type, true);
-            }, 150);
-        },
-
-        startDrag(event, type) {
-            // اگر رویداد ماوس بود، فقط به کلیک چپ (دکمه 0) اجازه داده شود
-            if (event.pointerType === 'mouse' && event.button !== 0) return;
-            
-            const scrollRef = type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            if (!scrollRef) return;
-
-            event.preventDefault();
-            this.dragging.active = true;
-            this.dragging.type = type;
-            this.dragging.startY = event.clientY;
-            this.dragging.startScroll = scrollRef.scrollTop;
-        },
-
-        onPointerMove(event) {
-            if (!this.dragging.active) return;
-            
-            const deltaY = event.clientY - this.dragging.startY;
-            let newScrollTop = this.dragging.startScroll - deltaY;
-            
-            const maxScroll = (this.dragging.type === 'hour' ? 23 : 59) * ITEM_HEIGHT;
-            newScrollTop = Math.max(0, Math.min(maxScroll, newScrollTop));
-            
-            const scrollRef = this.dragging.type === 'hour' ? this.$refs.hourScroll : this.$refs.minuteScroll;
-            if (scrollRef) {
-                scrollRef.scrollTop = newScrollTop;
-                
-                // به‌روزرسانی زنده ایندکس‌ها در حین درگ کردن برای تجربه کاربری نرم‌تر
-                const rawIndex = Math.round(newScrollTop / ITEM_HEIGHT);
-                if (this.dragging.type === 'hour') {
-                    this.hourIndex = Math.min(23, Math.max(0, rawIndex));
-                } else {
-                    this.minuteIndex = Math.min(59, Math.max(0, rawIndex));
-                }
-            }
-        },
-
-        stopDrag() {
-            if (!this.dragging.active) return;
-            const type = this.dragging.type;
-            this.dragging.active = false;
-            this.dragging.type = null;
-            
-            // هدایت نرم به موقعیت صحیح پس از رها کردن درگ
-            this.$nextTick(() => {
-                this.scrollToIndex(type, true);
-            });
-        },
-
-        // بهبود تجربه دسکتاپ: تغییر زمان با چرخ موس (Mouse Wheel)
-        onWheel(event, type) {
-            event.preventDefault();
-            
-            // افزایش زمان تأخیر برای جلوگیری از اسکرول سریع و خشک
-            const THROTTLE_TIME = 200; 
-            const now = Date.now();
-            
-            if (now - this.lastScrollTime < THROTTLE_TIME) return;
-            
-            this.lastScrollTime = now;
-            // استفاده از Math.sign برای اینکه جهت اسکرول فقط ۱ یا ۱- باشد
-            const direction = Math.sign(event.deltaY); 
-            
-            if (type === 'hour') {
-                this.hourIndex = (this.hourIndex + direction + 24) % 24;
-            } else {
-                this.minuteIndex = (this.minuteIndex + direction + 60) % 60;
-            }
-            this.scrollToIndex(type, true);
-        },
-
-        clickItem(index, type) {
-            if (type === 'hour') this.hourIndex = index; else this.minuteIndex = index;
-            this.scrollToIndex(type, true);
-        },
-
-        onKeydown(event, type) {
-            const keys = ['ArrowUp', 'ArrowDown', 'Enter', 'Escape'];
-            if (!keys.includes(event.key)) return;
-            event.preventDefault();
-
-            if (event.key === 'ArrowUp') {
-                if (type === 'hour') this.hourIndex = (this.hourIndex - 1 + 24) % 24;
-                else this.minuteIndex = (this.minuteIndex - 1 + 60) % 60;
-                this.scrollToIndex(type, true);
-            } else if (event.key === 'ArrowDown') {
-                if (type === 'hour') this.hourIndex = (this.hourIndex + 1) % 24;
-                // اصلاح باگ باقیمانده برای دقیقاً 60 دقیقه
-                else this.minuteIndex = (this.minuteIndex + 1) % 60; 
-                this.scrollToIndex(type, true);
-            } else if (event.key === 'Enter') { 
-                this.confirmTime(); 
-            } else if (event.key === 'Escape') { 
-                this.cancelEdit(); 
-            }
-        },
-
-        cancelEdit() {
-            const rollbackTime = this.editingOriginalTime || '';
-            if (this.editingType === 'entry') {
-                this.entryTime = rollbackTime;
-                this.$dispatch('entry-time-confirmed', { time: rollbackTime });
-            } else {
-                this.exitTime = rollbackTime;
-                this.$dispatch('exit-time-confirmed', { time: rollbackTime });
-            }
-            this.mode = 'split';
-        },
-
-        confirmTime() {
-            // ساخت فرمت دو رقمی استاندارد (مثال: 05:09) با استفاده از padStart
-            const formattedHour = String(this.hourIndex).padStart(2, '0');
-            const formattedMinute = String(this.minuteIndex).padStart(2, '0');
-            const timeStr = `${formattedHour}:${formattedMinute}`;
-
-            if (this.editingType === 'entry' || this.mode === 'entry-edit') {
-                this.entryTime = timeStr;
-                this.$dispatch('entry-time-confirmed', { time: timeStr });
-            } else {
-                this.exitTime = timeStr;
-                this.$dispatch('exit-time-confirmed', { time: timeStr });
-            }
-            this.mode = 'split';
-        },
-
-        // متد پاکسازی برای جلوگیری از هدررفت حافظه در زمان خروج از صفحه/حذف کامپوننت
-        destroy() {
-            window.removeEventListener('pointermove', this._boundPointerMove);
-            window.removeEventListener('pointerup', this._boundPointerUp);
-            window.removeEventListener('pointercancel', this._boundPointerUp);
-            clearTimeout(this.scrollTimeout.hour);
-            clearTimeout(this.scrollTimeout.minute);
-        }
-    }
-}
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  document.querySelectorAll('.ripple-effect').forEach(button => {
-    button.addEventListener('click', function(e) {
-      // حذف rippleهای قبلی
-      const existingRipple = this.querySelector('.ripple');
-      if (existingRipple) {
-        existingRipple.remove();
-      }
-      
-      const ripple = document.createElement('span');
-      ripple.classList.add('ripple');
-      
-      const rect = this.getBoundingClientRect();
-      // استفاده از قطر مستطیل برای اطمینان از پوشش کامل دکمه
-      const size = Math.sqrt(rect.width ** 2 + rect.height ** 2);
-      const x = e.clientX - rect.left - size / 2;
-      const y = e.clientY - rect.top - size / 2;
-      
-      ripple.style.width = ripple.style.height = `${size}px`;
-      ripple.style.left = `${x}px`;
-      ripple.style.top = `${y}px`;
-      
-      this.appendChild(ripple);
-      
-      setTimeout(() => {
-        ripple.remove();
-      }, 110);
-    });
-  });
-});
-</script>
 </form>
 @endsection

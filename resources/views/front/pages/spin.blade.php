@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="flex flex-col items-center justify-center min-h-screen bg-linear-to-br from-zinc-900 via-[#1a0b0b] to-zinc-900 p-4 relative overflow-hidden"
-     x-data="spinWheel">
+     x-data="spinWheel({{ json_encode($prizes) }}, {{ $total }})">
 
     <div class="absolute inset-0 opacity-20 pointer-events-none" aria-hidden="true">
         <div class="absolute top-1/4 left-1/4 w-1 h-1 bg-yellow-400 rounded-full animate-float-slow"></div>
@@ -199,104 +199,4 @@
     }
     .animate-blink { animation: blink 1.4s ease-in-out infinite; }
 </style>
-
-<script>
-    document.addEventListener('alpine:init', () => {
-        Alpine.data('spinWheel', () => ({
-            spinning: false,
-            currentRotation: 0,
-            activeSegmentIndex: 0, // ذخیره ایندکس فعلی زیر فلش
-            prizes: @json($prizes),
-            total: @json($total),
-            sliceAngle: 360 / @json($total),
-
-            init() {
-                // اعمال استایل فعال در لحظه لود صفحه
-                this.updateActiveSegment();
-            },
-
-            // تابع محاسبه قطعه‌ای که هم‌اکنون در زاویه صفر (بالا/فلش) قرار دارد
-            updateActiveSegment() {
-                // گرفتن چرخش فعلی، چه در حال انیمیشن باشد و چه ثابت
-                let rotation = this.spinning 
-                    ? gsap.getProperty(this.$refs.wheel, "rotation") 
-                    : this.currentRotation;
-                
-                if (rotation === undefined) rotation = 0;
-
-                // تبدیل چرخش‌های منفی و اعداد بزرگ به بازه استاندارد 0 تا 360
-                let normalizedRotation = rotation % 360;
-                if (normalizedRotation < 0) normalizedRotation += 360;
-                
-                // محاسبه زاویه معادل روی گردونه ثابت (چرخش برعکس عقربه‌ها)
-                let pointingAngle = (360 - normalizedRotation) % 360;
-                
-                // به دست آوردن ایندکس
-                this.activeSegmentIndex = Math.floor(pointingAngle / this.sliceAngle);
-            },
-
-            spin() {
-                if (this.spinning) return;
-                this.spinning = true;
-
-                // نرمالایز کردن موقعیت فعلی قبل از شروع
-                this.currentRotation = ((this.currentRotation % 360) + 360) % 360;
-                gsap.set(this.$refs.wheel, { rotation: this.currentRotation });
-
-                // انتخاب تصادفی گزینه برنده
-                const winnerIndex = Math.floor(Math.random() * this.prizes.length);
-                const winner = this.prizes[winnerIndex];
-                
-                // محاسبه زاویه وسط گزینه برنده
-                const sliceMiddleAngle = (winnerIndex * this.sliceAngle) + (this.sliceAngle / 2);
-                
-                // محاسبه فاصله تا گزینه برنده
-                let distance = (360 - sliceMiddleAngle - this.currentRotation + 360) % 360;
-                if (distance < 0) distance += 360;
-                
-                // اضافه کردن تعداد دور کامل
-                const fullSpins = (5 + Math.floor(Math.random() * 4)) * 360;
-                const targetRotation = this.currentRotation + distance + fullSpins;
-
-                const tl = gsap.timeline({
-                    // در هر فریم انیمیشن، استایل قطعه فعال آپدیت می‌شود
-                    onUpdate: () => {
-                        this.updateActiveSegment();
-                    },
-                    onComplete: () => {
-                        // ذخیره موقعیت نهایی نرمالایز شده
-                        this.currentRotation = ((targetRotation % 360) + 360) % 360;
-                        gsap.set(this.$refs.wheel, { rotation: this.currentRotation });
-                        
-                        this.spinning = false;
-                        this.updateActiveSegment(); // همگام‌سازی نهایی
-                        
-                        setTimeout(() => {
-                            alert('🎉 تبریک! شما برنده شدید: ' + winner.name);
-                        }, 100);
-                    }
-                });
-
-                // 1. حرکت نرم به عقب
-                tl.to(this.$refs.wheel, {
-                    rotation: this.currentRotation - 40,
-                    duration: 0.6,
-                    ease: "power1.inOut"
-                })
-                // 2. چرخش اصلی
-                .to(this.$refs.wheel, {
-                    rotation: targetRotation + 12,
-                    duration: 30,
-                    ease: "cubic-bezier(0.25, 0.1, 0.6, 1.0)"
-                })
-                // 3. برگشت نرم به نقطه نهایی
-                .to(this.$refs.wheel, {
-                    rotation: targetRotation,
-                    duration: 0.6,
-                    ease: "back.out(1.5)"
-                });
-            }
-        }));
-    });
-</script>
 @endsection
