@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Menu extends Model
 {
@@ -80,5 +81,9 @@ class Menu extends Model
                 Storage::disk('public')->delete($imagePath);
             }
         }
+    }
+    public function cartItems(): MorphMany
+    {
+        return $this->morphMany(CartItem::class, 'product');
     }
 }

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,7 +29,24 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        $redirect = redirect()->intended(route('dashboard', absolute: false));
+
+        if ($request->hasCookie('cart_session_id')) {
+            try {
+                $cartService = app(CartService::class);
+                $cartService->mergeGuestCart(
+                    $request->cookie('cart_session_id'),
+                    auth()->id()
+                );
+                // فقط در صورت موفقیت کوکی پاک می‌شود
+                $redirect->withoutCookie('cart_session_id');
+            } catch (\Exception $e) {
+                // می‌توان خطا را لاگ کرد، اما لاگین کاربر قطع نمی‌شود
+                report($e);
+            }
+        }
+
+        return $redirect;
     }
 
     /**

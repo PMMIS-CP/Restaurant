@@ -8,6 +8,7 @@ use App\Http\Controllers\Front\MenuTakeoutController;
 use App\Http\Controllers\Front\MenuOrganizationalController;
 use App\Http\Controllers\Front\ReserveController;
 use App\Http\Controllers\Front\SpinController;
+use App\Http\Controllers\Front\CartController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -31,5 +32,14 @@ Route::get('/menu/takeout', [MenuTakeoutController::class, 'index'])->name('menu
 Route::get('/menu/organizational', [MenuOrganizationalController::class, 'index'])->name('menu.organizational');
 Route::get('/spin', [SpinController::class, 'index'])->name('spin');
 Route::post('/spin', [SpinController::class, 'spin'])->name('spin.post');
+
+Route::prefix('cart')->group(function () {
+    Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/add', [CartController::class, 'addItem'])->name('cart.add');
+    Route::patch('/update/{cartItem}', [CartController::class, 'updateItem'])->name('cart.update');
+    Route::delete('/remove/{cartItem}', [CartController::class, 'removeItem'])->name('cart.remove');
+    Route::delete('/clear', [CartController::class, 'clear'])->name('cart.clear');
+    Route::post('/merge', [CartController::class, 'merge'])->middleware('auth')->name('cart.merge');
+});
 
 require __DIR__.'/auth.php';

@@ -1,0 +1,244 @@
+<?php
+
+namespace App\Http\Controllers\Front;
+
+use App\Http\Controllers\Controller;
+use App\Models\Cart;
+use App\Models\CartItem;
+use App\Services\CartService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+
+class CartController extends Controller
+{
+    protected CartService $cartService;
+
+    public function __construct(CartService $cartService)
+    {
+        $this->cartService = $cartService;
+    }
+
+    /**
+     * دریافت یا ساخت سبد جاری
+     */
+    private function getOrCreateCart(): Cart
+    {
+        if (auth()->check()) {
+            return Cart::firstOrCreate(['user_id' => auth()->id()]);
+        }
+
+        $sessionId = request()->cookie('cart_session_id');
+
+        if (!$sessionId) {
+            $sessionId = (string) Str::uuid();
+        }
+
+        return Cart::firstOrCreate(['session_id' => $sessionId]);
+    }
+
+    /**
+     * نمایش سبد خرید
+     */
+    public function index()
+    {
+        $cart = $this->getOrCreateCart();
+        $cart->load('items.product');
+
+        $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
+
+        $response = response()->json([
+            'cart_id' => $cart->id,
+            'items'   => $cart->items->map(function ($item) {
+                $product = $item->product;
+                // رفع باگ تصویر – اگر محصول و تصویری وجود داشت، اولین URL کامل را برگردان
+                $imageUrl = null;
+                if ($product) {
+                    $urls = $product->getImagesUrls();
+                    $imageUrl = !empty($urls) ? $urls[0] : null;
+                }
+
+                return [
+                    'id'           => $item->id,
+                    'product_id'   => $item->product_id,
+                    'product_type' => class_basename($item->product_type),
+                    'name'         => $product?->getNameInLocale() ?? $product?->name ?? 'محصول حذف شده',
+                    'price'        => (int) $item->price,
+                    'quantity'     => $item->quantity,
+                    'subtotal'     => (int) ($item->price * $item->quantity),
+                    'image'        => $imageUrl,
+                ];
+            }),
+            'total' => (int) $total,
+            'count' => $cart->items->sum('quantity'),
+        ]);
+
+        if (!auth()->check() && !request()->cookie('cart_session_id')) {
+            $response->cookie('cart_session_id', $cart->session_id, 60 * 24 * 30);
+        }
+
+        return $response;
+    }
+
+    /**
+     * اضافه کردن آیتم به سبد
+     */
+    public function addItem(Request $request)
+    {
+        $request->validate([
+            'product_type' => 'required|string|in:Menu,MenuTakeout,MenuOrganizational',
+            'product_id'   => 'required|integer',
+            'quantity'     => 'nullable|integer|min:1',
+        ]);
+
+        $quantity = $request->input('quantity', 1);
+
+        $productClass = $this->getProductClass($request->product_type);
+        $product = $productClass::findOrFail($request->product_id);
+
+        if (isset($product->is_active) && !$product->is_active) {
+            return response()->json(['message' => 'این محصول در حال حاضر در دسترس نیست.'], 400);
+        }
+
+        $cart = $this->getOrCreateCart();
+
+        // استفاده از updateOrCreate برای جلوگیری از Race Condition
+        $cartItem = $cart->items()->updateOrCreate(
+            [
+                'product_id'   => $product->id,
+                'product_type' => get_class($product),
+            ],
+            [
+                'quantity' => DB::raw("quantity + {$quantity}"),
+                'price'    => (int) (string) $product->price,
+            ]
+        );
+
+        // بارگذاری مجدد برای دریافت مقدار جدید quantity
+        $cartItem->refresh();
+        $cart->load('items.product');
+
+        $response = response()->json([
+            'message' => 'محصول با موفقیت به سبد خرید اضافه شد.',
+            'item'    => [
+                'id'       => $cartItem->id,
+                'name'     => $product->getNameInLocale() ?? $product->name,
+                'price'    => (int) $cartItem->price,
+                'quantity' => $cartItem->quantity,
+            ],
+            'total' => (int) $cart->items->sum(fn($i) => $i->price * $i->quantity),
+            'count' => $cart->items->sum('quantity'),
+        ]);
+
+        if (!auth()->check() && !request()->cookie('cart_session_id')) {
+            $response->cookie('cart_session_id', $cart->session_id, 60 * 24 * 30);
+        }
+
+        return $response;
+    }
+
+    /**
+     * آپدیت تعداد آیتم
+     */
+    public function updateItem(Request $request, CartItem $cartItem)
+    {
+        $request->validate([
+            'quantity' => 'required|integer|min:0',
+        ]);
+
+        $cart = $this->getOrCreateCart();
+
+        if ($cartItem->cart_id !== $cart->id) {
+            return response()->json(['message' => 'دسترسی غیرمجاز.'], 403);
+        }
+
+        if ($request->quantity == 0) {
+            $cartItem->delete();
+            $message = 'آیتم از سبد خرید حذف شد.';
+        } else {
+            $cartItem->update(['quantity' => $request->quantity]);
+            $message = 'تعداد آیتم بروزرسانی شد.';
+        }
+
+        $cart->load('items.product');
+
+        return response()->json([
+            'message' => $message,
+            'total'   => (int) $cart->items->sum(fn($i) => $i->price * $i->quantity),
+            'count'   => $cart->items->sum('quantity'),
+        ]);
+    }
+
+    /**
+     * حذف آیتم از سبد
+     */
+    public function removeItem(CartItem $cartItem)
+    {
+        $cart = $this->getOrCreateCart();
+
+        if ($cartItem->cart_id !== $cart->id) {
+            return response()->json(['message' => 'دسترسی غیرمجاز.'], 403);
+        }
+
+        $cartItem->delete();
+        $cart->load('items.product');
+
+        return response()->json([
+            'message' => 'آیتم با موفقیت از سبد خرید حذف شد.',
+            'total'   => (int) $cart->items->sum(fn($i) => $i->price * $i->quantity),
+            'count'   => $cart->items->sum('quantity'),
+        ]);
+    }
+
+    /**
+     * خالی کردن سبد خرید
+     */
+    public function clear()
+    {
+        $cart = $this->getOrCreateCart();
+        $cart->items()->delete();
+
+        return response()->json([
+            'message' => 'سبد خرید با موفقیت خالی شد.',
+            'total'   => 0,
+            'count'   => 0,
+        ]);
+    }
+
+    /**
+     * ادغام سبد مهمان با کاربر لاگین‌شده
+     */
+    public function merge(Request $request)
+    {
+        $sessionId = $request->cookie('cart_session_id');
+
+        if (!$sessionId || !auth()->check()) {
+            return response()->json(['message' => 'سبدی برای ادغام وجود ندارد.'], 400);
+        }
+
+        $userCart = $this->cartService->mergeGuestCart($sessionId, auth()->id());
+        $userCart->load('items.product');
+
+        $response = response()->json([
+            'message' => 'سبد خرید با موفقیت ادغام شد.',
+            'total'   => (int) $userCart->items->sum(fn($i) => $i->price * $i->quantity),
+            'count'   => $userCart->items->sum('quantity'),
+        ]);
+
+        $response->withoutCookie('cart_session_id');
+
+        return $response;
+    }
+
+    /**
+     * تبدیل product_type دریافتی به کلاس کامل مدل
+     */
+    private function getProductClass(string $type): string
+    {
+        return match ($type) {
+            'Menu'              => \App\Models\Menu::class,
+            'MenuTakeout'       => \App\Models\MenuTakeout::class,
+            'MenuOrganizational' => \App\Models\MenuOrganizational::class,
+            default             => throw new \InvalidArgumentException('نوع محصول نامعتبر است.'),
+        };
+    }
+}
