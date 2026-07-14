@@ -14,7 +14,7 @@ class ReserveManagementController extends Controller
     public function index()
     {
         $reserves = Reserve::latest()->paginate(15);
-        return view('admin.dashboard.reserves.index', compact('reserves'));
+        return view('admin.reserves.index', compact('reserves'));
     }
 
     /**
@@ -22,7 +22,7 @@ class ReserveManagementController extends Controller
      */
     public function show(Reserve $reserve)
     {
-        return view('admin.dashboard.reserves.show', compact('reserve'));
+        return view('admin.reserves.show', compact('reserve'));
     }
 
     /**

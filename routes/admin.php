@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\Dashboard\MenuTakeoutManagementController;
 use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalCategoryController;
 use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalManagementController;
 use App\Http\Controllers\Admin\Dashboard\ReserveManagementController;
+use App\Http\Controllers\Admin\Dashboard\UserManagementController;
 
 Route::name('admin.')->group(function () {
 
@@ -25,6 +26,17 @@ Route::name('admin.')->group(function () {
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
+
+        // User Management
+        Route::prefix('users')->name('dashboard.users.')->group(function () {
+            Route::get('/', [UserManagementController::class, 'index'])->name('index');
+            Route::get('/create', [UserManagementController::class, 'create'])->name('create');
+            Route::post('/', [UserManagementController::class, 'store'])->name('store');
+            Route::get('/{user}', [UserManagementController::class, 'show'])->name('show');
+            Route::get('/{user}/edit', [UserManagementController::class, 'edit'])->name('edit');
+            Route::put('/{user}', [UserManagementController::class, 'update'])->name('update');
+            Route::delete('/{user}', [UserManagementController::class, 'destroy'])->name('destroy');
+        });
 
         // Menu Management
         Route::prefix('menu')->name('menu.')->group(function () {
