@@ -1,7 +1,7 @@
 {{-- دکمه شناور سبد خرید - پایین صفحه --}}
 <a href="{{ route('cart.index') }}" 
    id="floating-cart-btn"
-   class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#0a0203] border-2 border-[#ffd700]/40 rounded-full flex items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.6),0_0_15px_rgba(255,215,0,0.2)] hover:border-[#ffd700] hover:shadow-[0_8px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(255,215,0,0.3)] transition-all duration-300 group hidden">
+   class="fixed bottom-6 left-6 z-50 w-14 h-14 bg-[#0a0203] border-2 border-[#ffd700]/40 rounded-full flex items-center justify-center shadow-[0_8px_30px_rgba(0,0,0,0.6),0_0_15px_rgba(255,215,0,0.2)] hover:border-[#ffd700] hover:shadow-[0_8px_35px_rgba(0,0,0,0.7),0_0_20px_rgba(255,215,0,0.3)] transition-all duration-300 group">
     
     {{-- آیکون سبد --}}
     <svg class="w-6 h-6 text-[#ffd700] group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -10,7 +10,7 @@
 
     {{-- badge تعداد --}}
     <span id="cart-badge" 
-          class="absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] bg-red-600 text-white text-[11px] font-bold rounded-full flex items-center justify-center px-1 shadow-[0_2px_8px_rgba(220,38,38,0.5)] border-2 border-[#0a0203]">
+          class="absolute -top-1.5 -right-1.5 min-w-5.5 h-5.5 bg-red-600 text-white text-[11px] font-bold rounded-full flex items-center justify-center px-1 shadow-[0_2px_8px_rgba(220,38,38,0.5)] border-2 border-[#0a0203]">
         0
     </span>
 </a>
