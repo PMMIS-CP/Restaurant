@@ -44,7 +44,7 @@ class UserManagementController extends Controller
         User::create($validated);
 
         return redirect()
-            ->route('admin.dashboard.users.index')
+            ->route('admin.users.index')
             ->with('success', 'کاربر با موفقیت ایجاد شد.');
     }
 
@@ -85,7 +85,7 @@ class UserManagementController extends Controller
         $user->update($validated);
 
         return redirect()
-            ->route('admin.dashboard.users.index')
+            ->route('admin.users.index')
             ->with('success', 'کاربر با موفقیت ویرایش شد.');
     }
 
@@ -97,7 +97,7 @@ class UserManagementController extends Controller
         $user->delete();
 
         return redirect()
-            ->route('admin.dashboard.users.index')
+            ->route('admin.users.index')
             ->with('success', 'کاربر با موفقیت حذف شد.');
     }
 }
