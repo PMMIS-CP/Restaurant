@@ -139,7 +139,7 @@
                 </div>
 
                 <div class="space-y-3">
-                    <div class="flex justify-between items-center text-xs text-gray-400">
+                    <div class="flex justify-between items-center text-sm text-gray-400">
                         <span class="flex items-center gap-1.5">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700] animate-pulse"></span> سقف قیمت:
                         </span>
@@ -148,7 +148,7 @@
                         </span>
                     </div>
                     <input type="range" id="price-slider" 
-                        min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="50000"
+                        min="{{ $minPrice }}" max="{{ $maxPrice }}" value="{{ $maxPrice }}" step="1"
                         class="w-full accent-[#ffd700] h-1.5 bg-[#2a050a] rounded-lg cursor-pointer appearance-none">
                 </div>
 
