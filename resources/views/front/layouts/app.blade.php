@@ -152,6 +152,10 @@
         @include('front.partials.footer')
     @endif
 
+    @if(!isset($hideFooter) || !$hideFooter)
+        @include('components.cart-dropdown')
+    @endif
+
     @stack('scripts')
 
     <script>

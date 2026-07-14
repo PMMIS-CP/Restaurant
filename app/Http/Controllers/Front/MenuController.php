@@ -21,6 +21,7 @@ class MenuController extends Controller
         // آماده‌سازی داده‌ها برای ویو
         $menu = $menuItems->map(function ($item, $index) {
             return [
+                'id'               => $item->id,
                 'ردیف'              => $index + 1,
                 'اسم_غذا_فارسی'     => $item->getNameInLocale('fa'),
                 'اسم_غذا_لاتین'     => $item->getNameInLocale('en'),
@@ -54,7 +55,7 @@ class MenuController extends Controller
 
         return view('front.pages.menu', [
             'hideHeader'       => true,
-            'hideFooter'       => true,
+            'hideFooter'       => false,
             'menu'             => $menu,
             'categories'       => $categories,
             'maxPrice'         => $maxPrice,

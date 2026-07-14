@@ -65,6 +65,7 @@ class MenuOrganizationalController extends Controller
             $images = $item->getImagesUrls();
 
             $menu[] = [
+                'id'               => $item->id,
                 'ردیف'             => $row++,
                 'اسم_غذا_فارسی'    => $nameFa,
                 'اسم_غذا_لاتین'    => $nameEn,
@@ -102,7 +103,7 @@ class MenuOrganizationalController extends Controller
             ),
             [
                 'hideHeader' => true,
-                'hideFooter' => true,
+                'hideFooter' => false,
             ]
         ));
     }

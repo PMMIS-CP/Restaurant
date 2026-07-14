@@ -1168,3 +1168,4 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
+

@@ -248,6 +248,8 @@
                                 @endphp
                                 <div class="menu-item-desktop group flex gap-6 p-4 rounded-2xl bg-[#0a0203]/40 border border-[#ffd700]/10 hover:border-[#ffd700]/40 transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(255,215,0,0.05)] cursor-pointer"
                                     data-price="{{ $item['قیمت'] }}"
+                                    data-product-id="{{ $item['id'] }}"
+                                    data-product-type="MenuTakeout"
                                     data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
                                     
                                     <div class="shrink-0 w-32 h-32 lg:w-36 lg:h-36 rounded-xl overflow-hidden border border-[#ffd700]/20 shadow-[0_5px_15px_rgba(0,0,0,0.4)] relative">

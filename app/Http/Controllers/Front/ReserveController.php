@@ -13,7 +13,7 @@ class ReserveController extends Controller
     {
         return view('front.pages.reserve', [
             'hideHeader' => true,
-            'hideFooter' => false
+            'hideFooter' => false,
         ]);
     }
 

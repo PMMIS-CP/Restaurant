@@ -171,6 +171,8 @@
                 <div class="menu-item-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900 rounded-2xl transition-all duration-300 hover:border-[#dfb15b]/30 hover:shadow-[0_15px_30px_rgba(0,0,0,0.6)] relative overflow-hidden flex flex-col h-full"
                     data-category="{{ $item['نوع'] ?? 'سایر' }}"
                     data-price="{{ $item['قیمت'] }}"
+                    data-product-id="{{ $item['id'] }}"
+                    data-product-type="Menu"
                     data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}"
                     style="opacity: 1; visibility: visible; display: flex;">
 

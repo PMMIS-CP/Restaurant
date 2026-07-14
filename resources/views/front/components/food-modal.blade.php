@@ -44,7 +44,6 @@
     </div>
 </div>
 
-{{-- دیتای منو برای استفاده در جاوااسکریپت --}}
 <script>
 window.menuData = @json($grouped ?? []);
 </script>
@@ -55,124 +54,91 @@ document.addEventListener('DOMContentLoaded', function() {
     const modalContent = document.getElementById('food-modal-content');
     const closeBtn = document.getElementById('modal-close-btn');
     
-    // المان‌های داخل مودال
     const modalImage = document.getElementById('modal-food-image');
     const modalName = document.getElementById('modal-food-name');
     const modalPrice = document.getElementById('modal-food-price');
     const modalDetails = document.getElementById('modal-food-details');
+    const addToCartBtn = document.getElementById('modal-add-to-cart-btn');
 
-    // تابع پیدا کردن آیتم در menuData بر اساس اسم فارسی
-    function findMenuItem(foodNameFa) {
-        if (!window.menuData) return null;
+    // ذخیره اطلاعات محصول جاری برای ارسال به API
+    let currentProduct = {
+        type: null,
+        id: null,
+        name: '',
+        price: ''
+    };
+
+    // استخراج اطلاعات از DOM (جایگزین findMenuItem)
+    function extractProductData(card) {
+        const nameEl = card.querySelector('h3');
+        const name = nameEl ? nameEl.textContent.trim() : '';
         
-        for (const category in window.menuData) {
-            const items = window.menuData[category];
-            if (Array.isArray(items)) {
-                for (const item of items) {
-                    if (item['اسم_غذا_فارسی'] === foodNameFa) {
-                        return item;
-                    }
-                }
-            }
+        // قیمت
+        let price = '';
+        if (card.classList.contains('menu-item-card')) {
+            const priceEl = card.querySelector('.text-sm.font-black');
+            price = priceEl ? priceEl.textContent.trim().replace(/[^\d]/g, '') : '';
+        } else {
+            const priceEl = card.querySelector('.text-base.font-black');
+            price = priceEl ? priceEl.textContent.trim().replace(/[^\d]/g, '') : '';
         }
-        return null;
+        
+        // تصویر
+        const imgEl = card.querySelector('img');
+        const image = imgEl ? imgEl.src : '';
+        
+        // توضیحات
+        let details = '';
+        if (card.classList.contains('menu-item-card')) {
+            const detEl = card.querySelector('p.text-xs.text-gray-400');
+            details = detEl ? detEl.textContent.trim() : '';
+        } else {
+            const detEl = card.querySelector('.line-clamp-2') || card.querySelector('p.text-xs.text-gray-400');
+            details = detEl ? detEl.textContent.trim() : '';
+        }
+        
+        // شناسه محصول و نوع
+        const productId = card.getAttribute('data-product-id');
+        const productType = card.getAttribute('data-product-type');
+        
+        return { name, price, image, details, productId, productType };
     }
 
-    // تابع باز کردن مودال با پشتیبانی از هر دو ساختار کارت
-    function openModal(foodCard) {
-        // تشخیص نوع کارت
-        const isSalonCard = foodCard.classList.contains('menu-item-card');
-        const isDesktopCard = foodCard.classList.contains('menu-item-desktop');
-        const isMobileCard = foodCard.classList.contains('menu-item-mobile');
-        
-        let foodNameFa = '';
-        let foodImage = '';
-        let foodPrice = '';
-        let foodDetails = '';
-        
-        // استخراج نام غذا (مشترک بین همه نوع کارت‌ها)
-        const nameElement = foodCard.querySelector('h3');
-        foodNameFa = nameElement ? nameElement.textContent.trim() : '';
-        
-        if (isSalonCard) {
-            // ========== استخراج از کارت سالن ==========
-            
-            // تصویر
-            const imgElement = foodCard.querySelector('img');
-            foodImage = imgElement ? imgElement.src : '';
-            
-            // قیمت - در کارت سالن با کلاس text-sm.font-black
-            const priceElement = foodCard.querySelector('.text-sm.font-black');
-            if (priceElement) {
-                foodPrice = priceElement.textContent.trim();
-            }
-            
-            // جزئیات - پاراگراف با کلاس text-xs.text-gray-400
-            const detailsElement = foodCard.querySelector('p.text-xs.text-gray-400');
-            if (detailsElement) {
-                foodDetails = detailsElement.textContent.trim();
-            }
-            
-        } else if (isDesktopCard || isMobileCard) {
-            // ========== استخراج از کارت بیرون‌بر/سازمانی ==========
-            
-            // تلاش برای پیدا کردن در menuData
-            const itemData = findMenuItem(foodNameFa);
-            
-            if (itemData) {
-                // پر کردن مودال با اطلاعات مستقیم از PHP
-                foodImage = itemData['main_image'] || '';
-                foodPrice = itemData['formatted_price'] || '';
-                foodDetails = itemData['جزئیات'] || '';
-            } else {
-                // fallback به استخراج از DOM
-                const imgElement = foodCard.querySelector('img');
-                foodImage = imgElement ? imgElement.src : '';
-                
-                // قیمت - در کارت‌های دسکتاپ با کلاس text-base.font-black
-                let priceElement = foodCard.querySelector('.text-base.font-black');
-                if (!priceElement && isMobileCard) {
-                    // در کارت موبایل قیمت با ساختار متفاوت
-                    priceElement = foodCard.querySelector('.text-base.font-black');
-                }
-                if (priceElement) {
-                    const priceText = priceElement.textContent.trim();
-                    foodPrice = priceText.replace(/[^\d,]/g, '');
-                }
-                
-                // جزئیات
-                let detailsElement = foodCard.querySelector('.line-clamp-2');
-                if (!detailsElement && isMobileCard) {
-                    detailsElement = foodCard.querySelector('p.text-xs.text-gray-400');
-                }
-                foodDetails = detailsElement ? detailsElement.textContent.trim() : '';
-            }
+    function openModal(card) {
+        const data = extractProductData(card);
+        if (!data.productId || !data.productType) {
+            console.error('Missing product identifier on card', card);
+            return;
         }
-        
-        // ========== به‌روزرسانی محتوای مودال ==========
-        modalImage.src = foodImage;
-        modalImage.alt = foodNameFa;
-        modalName.textContent = foodNameFa;
-        modalPrice.textContent = foodPrice;
-        modalDetails.textContent = foodDetails;
+
+        // ذخیره برای درخواست API
+        currentProduct = {
+            type: data.productType,
+            id: data.productId,
+            name: data.name,
+            price: data.price
+        };
+
+        // پر کردن UI
+        modalImage.src = data.image;
+        modalImage.alt = data.name;
+        modalName.textContent = data.name;
+        modalPrice.textContent = Number(data.price).toLocaleString();
+        modalDetails.textContent = data.details;
 
         // نمایش مودال
         overlay.classList.remove('hidden');
         overlay.classList.add('flex');
         document.body.classList.add('overflow-hidden');
-        
-        // انیمیشن
         setTimeout(() => {
             modalContent.classList.remove('scale-95');
             modalContent.classList.add('scale-100');
         }, 50);
     }
 
-    // تابع بستن مودال
     function closeModal() {
         modalContent.classList.remove('scale-100');
         modalContent.classList.add('scale-95');
-        
         setTimeout(() => {
             overlay.classList.add('hidden');
             overlay.classList.remove('flex');
@@ -180,73 +146,74 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 200);
     }
 
-    // کلیک روی کارت‌های غذا (Event Delegation)
+    // Event delegation روی کل document
     document.addEventListener('click', function(e) {
-        // کارت‌های بیرون‌بر/سازمانی (دسکتاپ)
-        let foodCard = e.target.closest('.menu-item-desktop');
-        
-        // کارت‌های بیرون‌بر/سازمانی (موبایل)
-        if (!foodCard) {
-            foodCard = e.target.closest('.menu-item-mobile');
-        }
-        
-        // کارت‌های سالن
-        if (!foodCard) {
-            foodCard = e.target.closest('.menu-item-card');
-        }
-        
-        if (foodCard) {
+        const card = e.target.closest('.menu-item-card, .menu-item-desktop, .menu-item-mobile');
+        if (card) {
             e.preventDefault();
-            openModal(foodCard);
+            openModal(card);
         }
     });
 
-    // کلیک روی دکمه بستن
-    if (closeBtn) {
-        closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            closeModal();
-        });
-    }
+    // بستن مودال
+    closeBtn?.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+    overlay?.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closeModal(); });
 
-    // کلیک روی overlay (خارج از مودال)
-    if (overlay) {
-        overlay.addEventListener('click', function(e) {
-            if (e.target === overlay) {
-                closeModal();
+    // ========== افزودن به سبد خرید ==========
+    addToCartBtn?.addEventListener('click', async function() {
+        if (!currentProduct.id || !currentProduct.type) {
+            alert('اطلاعات محصول ناقص است.');
+            return;
+        }
+
+        // disable button to prevent double click
+        addToCartBtn.disabled = true;
+        const originalHTML = addToCartBtn.innerHTML;
+
+        try {
+            const response = await fetch('/cart/add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                },
+                body: JSON.stringify({
+                    product_type: currentProduct.type,
+                    product_id: currentProduct.id,
+                    quantity: 1
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || 'خطا در افزودن به سبد خرید');
             }
-        });
-    }
 
-    // بستن با کلید Escape
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
-            closeModal();
+            const data = await response.json();
+
+            // نمایش موفقیت
+            addToCartBtn.innerHTML = '<span class="inline-flex items-center gap-1">✓ به سبد اضافه شد</span>';
+            addToCartBtn.classList.add('bg-green-500/20', 'border-green-500/40', 'text-green-400');
+
+            // به‌روزرسانی UI سبد (آیکون تعداد) - این تابع بعداً تعریف می‌شود
+            if (typeof updateCartCount === 'function') {
+                updateCartCount(data.count);
+            }
+
+        } catch (error) {
+            console.error(error);
+            addToCartBtn.innerHTML = '<span class="text-red-400">خطا! دوباره تلاش کنید</span>';
+            addToCartBtn.classList.add('bg-red-500/20', 'border-red-500/40');
+        } finally {
+            setTimeout(() => {
+                addToCartBtn.disabled = false;
+                addToCartBtn.innerHTML = originalHTML;
+                addToCartBtn.classList.remove('bg-green-500/20', 'border-green-500/40', 'text-green-400',
+                                            'bg-red-500/20', 'border-red-500/40', 'text-red-400');
+            }, 1500);
         }
     });
-
-    // دکمه افزودن به سبد خرید
-    const addToCartBtn = document.getElementById('modal-add-to-cart-btn');
-    if (addToCartBtn) {
-        addToCartBtn.addEventListener('click', function() {
-            const foodName = modalName.textContent;
-            const foodPrice = modalPrice.textContent;
-            
-            // اینجا منطق افزودن به سبد خرید رو پیاده‌سازی کن
-            // می‌تونی از Local Storage یا متغیرهای جاوااسکریپت استفاده کنی
-            
-            // نمایش پیام موقت
-            const originalText = addToCartBtn.innerHTML;
-            addToCartBtn.innerHTML = '✓ به سبد اضافه شد';
-            addToCartBtn.classList.add('bg-green-500/20', 'border-green-500/40', 'text-green-400');
-            
-            setTimeout(() => {
-                addToCartBtn.innerHTML = originalText;
-                addToCartBtn.classList.remove('bg-green-500/20', 'border-green-500/40', 'text-green-400');
-            }, 1500);
-            
-            console.log('اضافه شد به سبد:', foodName, foodPrice);
-        });
-    }
 });
 </script>

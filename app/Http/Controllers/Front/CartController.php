@@ -8,7 +8,6 @@ use App\Models\CartItem;
 use App\Services\CartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -40,44 +39,57 @@ class CartController extends Controller
     /**
      * نمایش سبد خرید
      */
-    public function index()
+    public function index(Request $request)
     {
         $cart = $this->getOrCreateCart();
         $cart->load('items.product');
 
-        $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
+        // اگر درخواست JSON بود، همون API قبلی رو برگردون
+        if ($request->expectsJson() || $request->wantsJson()) {
+            $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
 
-        $response = response()->json([
-            'cart_id' => $cart->id,
-            'items'   => $cart->items->map(function ($item) {
-                $product = $item->product;
-                // رفع باگ تصویر – اگر محصول و تصویری وجود داشت، اولین URL کامل را برگردان
-                $imageUrl = null;
-                if ($product) {
-                    $urls = $product->getImagesUrls();
-                    $imageUrl = !empty($urls) ? $urls[0] : null;
-                }
+            $response = response()->json([
+                'cart_id' => $cart->id,
+                'items'   => $cart->items->map(function ($item) {
+                    $product = $item->product;
+                    $imageUrl = null;
+                    if ($product) {
+                        $urls = $product->getImagesUrls();
+                        $imageUrl = !empty($urls) ? $urls[0] : null;
+                    }
 
-                return [
-                    'id'           => $item->id,
-                    'product_id'   => $item->product_id,
-                    'product_type' => class_basename($item->product_type),
-                    'name'         => $product?->getNameInLocale() ?? $product?->name ?? 'محصول حذف شده',
-                    'price'        => (int) $item->price,
-                    'quantity'     => $item->quantity,
-                    'subtotal'     => (int) ($item->price * $item->quantity),
-                    'image'        => $imageUrl,
-                ];
-            }),
-            'total' => (int) $total,
-            'count' => $cart->items->sum('quantity'),
-        ]);
+                    return [
+                        'id'           => $item->id,
+                        'product_id'   => $item->product_id,
+                        'product_type' => class_basename($item->product_type),
+                        'name'         => $product?->getNameInLocale() ?? $product?->name ?? 'محصول حذف شده',
+                        'price'        => (int) $item->price,
+                        'quantity'     => $item->quantity,
+                        'subtotal'     => (int) ($item->price * $item->quantity),
+                        'image'        => $imageUrl,
+                    ];
+                }),
+                'total' => (int) $total,
+                'count' => $cart->items->sum('quantity'),
+            ]);
 
-        if (!auth()->check() && !request()->cookie('cart_session_id')) {
-            $response->cookie('cart_session_id', $cart->session_id, 60 * 24 * 30);
+            if (!auth()->check() && !request()->cookie('cart_session_id')) {
+                $response->cookie('cart_session_id', $cart->session_id, 60 * 24 * 30);
+            }
+
+            return $response;
         }
 
-        return $response;
+        // در غیر این صورت صفحه Blade رو نشون بده
+        $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
+
+        return view('front.pages.cart-page', [
+            'cart'  => $cart,
+            'total' => $total,
+            'count' => $cart->items->sum('quantity'),
+            'hideHeader' => true,
+            'hideFooter' => true,
+        ]);
     }
 
     /**
@@ -102,20 +114,28 @@ class CartController extends Controller
 
         $cart = $this->getOrCreateCart();
 
-        // استفاده از updateOrCreate برای جلوگیری از Race Condition
-        $cartItem = $cart->items()->updateOrCreate(
-            [
+        // پیدا کردن آیتم موجود
+        $cartItem = $cart->items()
+            ->where('product_id', $product->id)
+            ->where('product_type', get_class($product))
+            ->first();
+
+        if ($cartItem) {
+            // آیتم وجود دارد: فقط quantity را افزایش بده
+            $cartItem->increment('quantity', $quantity);
+            // قیمت را هم به‌روز کن (طبق منطق قیمت داینامیک)
+            $cartItem->update(['price' => (int) (string) $product->price]);
+            $cartItem->refresh();
+        } else {
+            // آیتم جدید: create کن
+            $cartItem = $cart->items()->create([
                 'product_id'   => $product->id,
                 'product_type' => get_class($product),
-            ],
-            [
-                'quantity' => DB::raw("quantity + {$quantity}"),
-                'price'    => (int) (string) $product->price,
-            ]
-        );
+                'quantity'     => $quantity,
+                'price'        => (int) (string) $product->price,
+            ]);
+        }
 
-        // بارگذاری مجدد برای دریافت مقدار جدید quantity
-        $cartItem->refresh();
         $cart->load('items.product');
 
         $response = response()->json([
