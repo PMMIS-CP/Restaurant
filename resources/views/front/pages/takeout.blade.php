@@ -285,7 +285,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        <x-food-modal />
+                        @include('front.components.food-modal')
                     </div>
 
                 </div>
