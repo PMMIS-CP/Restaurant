@@ -17,14 +17,14 @@ window.handleSubmit = function(event) {
     formData.append('reservation_date', store.reservation_date);
     formData.append('entry_time', store.entry_time);
     formData.append('exit_time', store.exit_time);
-    formData.append('description', store.description);   // "کپشن"
+    formData.append('description', store.description);
 
     // لاگ نهایی
     console.log('📦 Final FormData:');
     for (let [k, v] of formData.entries()) console.log(`  ${k}: ${v}`);
 
     // 3. ارسال (fetch بدون تغییر، فقط body=formData)
-    fetch(event.target.action, {   // یا '{{ route("reserve.store") }}' به صورت مستقیم
+    fetch(event.target.action, {
         method: 'POST',
         body: formData,
         headers: {
@@ -36,14 +36,29 @@ window.handleSubmit = function(event) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            Swal.fire('موفق', data.message, 'success').then(() => location.reload());
+            Swal.fire({
+                icon: 'success',
+                title: 'موفق',
+                text: data.message,
+                confirmButtonText: 'متوجه شدم'  // 👈 اینجا تغییر دادیم
+            }).then(() => location.reload());
         } else {
-            Swal.fire('خطا', data.message, 'error');
+            Swal.fire({
+                icon: 'error',
+                title: 'خطا',
+                text: data.message,
+                confirmButtonText: 'متوجه شدم'  // 👈 اینجا هم تغییر دادیم
+            });
         }
     })
     .catch(err => {
         console.error(err);
-        Swal.fire('خطا', 'ارتباط با سرور برقرار نشد.', 'error');
+        Swal.fire({
+            icon: 'error',
+            title: 'خطا',
+            text: 'ارتباط با سرور برقرار نشد.',
+            confirmButtonText: 'متوجه شدم'  // 👈 و اینجا هم
+        });
     });
 };
 
