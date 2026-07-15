@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     async function fetchCart() {
         try {
-            const res = await fetch('/cart', {
+            const res = await fetch('/cart/data', {
                 headers: {
                     'Accept': 'application/json',
                     'X-CSRF-TOKEN': csrfToken

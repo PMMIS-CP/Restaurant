@@ -35,6 +35,7 @@ Route::post('/spin', [SpinController::class, 'spin'])->name('spin.post');
 
 Route::prefix('cart')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('cart.index');
+    Route::get('/data', [CartController::class, 'data'])->name('cart.data');
     Route::post('/add', [CartController::class, 'addItem'])->name('cart.add');
     Route::patch('/update/{cartItem}', [CartController::class, 'updateItem'])->name('cart.update');
     Route::delete('/remove/{cartItem}', [CartController::class, 'removeItem'])->name('cart.remove');

@@ -44,43 +44,7 @@ class CartController extends Controller
         $cart = $this->getOrCreateCart();
         $cart->load('items.product');
 
-        // اگر درخواست JSON بود، همون API قبلی رو برگردون
-        if ($request->expectsJson() || $request->wantsJson()) {
-            $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
-
-            $response = response()->json([
-                'cart_id' => $cart->id,
-                'items'   => $cart->items->map(function ($item) {
-                    $product = $item->product;
-                    $imageUrl = null;
-                    if ($product) {
-                        $urls = $product->getImagesUrls();
-                        $imageUrl = !empty($urls) ? $urls[0] : null;
-                    }
-
-                    return [
-                        'id'           => $item->id,
-                        'product_id'   => $item->product_id,
-                        'product_type' => class_basename($item->product_type),
-                        'name'         => $product?->getNameInLocale() ?? $product?->name ?? 'محصول حذف شده',
-                        'price'        => (int) $item->price,
-                        'quantity'     => $item->quantity,
-                        'subtotal'     => (int) ($item->price * $item->quantity),
-                        'image'        => $imageUrl,
-                    ];
-                }),
-                'total' => (int) $total,
-                'count' => $cart->items->sum('quantity'),
-            ]);
-
-            if (!auth()->check() && !request()->cookie('cart_session_id')) {
-                $response->cookie('cart_session_id', $cart->session_id, 60 * 24 * 30);
-            }
-
-            return $response;
-        }
-
-        // در غیر این صورت صفحه Blade رو نشون بده
+        // فقط صفحه Blade، بدون هیچ JSON
         $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
 
         return view('front.pages.cart-page', [
@@ -90,6 +54,48 @@ class CartController extends Controller
             'hideHeader' => true,
             'hideFooter' => true,
         ]);
+    }
+
+    /**
+     * API: دریافت اطلاعات سبد خرید
+     */
+    public function data(Request $request)
+    {
+        $cart = $this->getOrCreateCart();
+        $cart->load('items.product');
+
+        $total = $cart->items->sum(fn($item) => $item->price * $item->quantity);
+
+        $response = response()->json([
+            'cart_id' => $cart->id,
+            'items'   => $cart->items->map(function ($item) {
+                $product = $item->product;
+                $imageUrl = null;
+                if ($product) {
+                    $urls = $product->getImagesUrls();
+                    $imageUrl = !empty($urls) ? $urls[0] : null;
+                }
+
+                return [
+                    'id'           => $item->id,
+                    'product_id'   => $item->product_id,
+                    'product_type' => class_basename($item->product_type),
+                    'name'         => $product?->getNameInLocale() ?? $product?->name ?? 'محصول حذف شده',
+                    'price'        => (int) $item->price,
+                    'quantity'     => $item->quantity,
+                    'subtotal'     => (int) ($item->price * $item->quantity),
+                    'image'        => $imageUrl,
+                ];
+            }),
+            'total' => (int) $total,
+            'count' => $cart->items->sum('quantity'),
+        ]);
+
+        if (!auth()->check() && !request()->cookie('cart_session_id')) {
+            $response->cookie('cart_session_id', $cart->session_id, 60 * 24 * 30);
+        }
+
+        return $response;
     }
 
     /**
