@@ -38,10 +38,8 @@ class AuthenticatedSessionController extends Controller
                     $request->cookie('cart_session_id'),
                     auth()->id()
                 );
-                // فقط در صورت موفقیت کوکی پاک می‌شود
                 $redirect->withoutCookie('cart_session_id');
             } catch (\Exception $e) {
-                // می‌توان خطا را لاگ کرد، اما لاگین کاربر قطع نمی‌شود
                 report($e);
             }
         }

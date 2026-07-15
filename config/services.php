@@ -34,5 +34,12 @@ return [
             'channel' => env('SLACK_BOT_USER_DEFAULT_CHANNEL'),
         ],
     ],
+    // پنل پیامکی
+    'sms' => [
+        'username'    => env('SMS_USERNAME'),
+        'api_key'     => env('SMS_API_KEY'),
+        'from_number' => env('SMS_FROM_NUMBER'),
+        'api_url'     => env('SMS_API_URL', 'https://rest.payamak-panel.com/api/SmartSMS/Send'),
+    ],
 
 ];
