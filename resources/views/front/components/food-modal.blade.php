@@ -73,21 +73,12 @@
             const nameEl = card.querySelector('h3');
             const name = nameEl ? nameEl.textContent.trim() : '';
             
-            // قیمت
-            let price = '';
-            if (card.classList.contains('menu-item-card')) {
-                const priceEl = card.querySelector('.text-sm.font-black');
-                price = priceEl ? priceEl.textContent.trim().replace(/[^\d]/g, '') : '';
-            } else {
-                const priceEl = card.querySelector('.text-base.font-black');
-                price = priceEl ? priceEl.textContent.trim().replace(/[^\d]/g, '') : '';
-            }
+            // استفاده از data-price به‌جای جستجوی کلاس‌های متغیر
+            const price = card.getAttribute('data-price') || '';
             
-            // تصویر
             const imgEl = card.querySelector('img');
             const image = imgEl ? imgEl.src : '';
             
-            // توضیحات
             let details = '';
             if (card.classList.contains('menu-item-card')) {
                 const detEl = card.querySelector('p.text-xs.text-gray-400');
@@ -97,7 +88,6 @@
                 details = detEl ? detEl.textContent.trim() : '';
             }
             
-            // شناسه محصول و نوع
             const productId = card.getAttribute('data-product-id');
             const productType = card.getAttribute('data-product-type');
             
