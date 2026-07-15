@@ -88,8 +88,9 @@
         let modalCurrentIndex = 0;
 
         // ذخیره اطلاعات محصول جاری برای ارسال به API سبد خرید
+        // ✅ product_type را به فرمت کوتاه (منطبق با ولیدیشن کنترلر) ذخیره می‌کنیم
         let currentProduct = {
-            type: null,
+            type: null,        // فرمت کوتاه: Menu | MenuTakeout | MenuOrganizational
             id: null,
             name: '',
             price: ''
@@ -164,6 +165,20 @@
         }
 
         /**
+         * ✅ مپ type کوتاه دریافتی از API به product_type معتبر برای CartController
+         * API برمی‌گرداند: 'menu', 'organizational', 'takeout'
+         * CartController نیاز دارد: 'Menu', 'MenuOrganizational', 'MenuTakeout'
+         */
+        function mapApiTypeToProductType(apiType) {
+            const map = {
+                'menu': 'Menu',
+                'organizational': 'MenuOrganizational',
+                'takeout': 'MenuTakeout',
+            };
+            return map[apiType] || apiType;
+        }
+
+        /**
          * باز کردن مودال با fetch از API
          */
         async function openModal(type, id) {
@@ -200,12 +215,12 @@
 
                 // پر کردن اطلاعات
                 modalName.textContent = data.name;
-                modalPrice.textContent = Number(data.price).toLocaleString();
+                modalPrice.textContent = Number(data.price).toLocaleString('fa-IR');
                 modalDetails.textContent = data.description || 'بدون توضیحات';
 
-                // ذخیره برای سبد خرید
+                // ✅ ذخیره برای سبد خرید با product_type صحیح (فرمت کوتاه)
                 currentProduct = {
-                    type: data.type,
+                    type: mapApiTypeToProductType(data.type),  // تبدیل به فرمت کوتاه
                     id: data.id,
                     name: data.name,
                     price: data.price
@@ -298,19 +313,11 @@
                 return;
             }
 
-            // مپ کردن type به product_type مناسب برای API سبد خرید
-            const productTypeMap = {
-                'menu': 'App\\Models\\Menu',
-                'organizational': 'App\\Models\\MenuOrganizational',
-                'takeout': 'App\\Models\\MenuTakeout',
-            };
-
-            const productType = productTypeMap[currentProduct.type] || currentProduct.type;
-
             addToCartBtn.disabled = true;
             const originalHTML = addToCartBtn.innerHTML;
 
             try {
+                // ✅ حالا currentProduct.type مستقیماً مقدار صحیح دارد (Menu, MenuTakeout, MenuOrganizational)
                 const response = await fetch('/cart/add', {
                     method: 'POST',
                     headers: {
@@ -319,7 +326,7 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        product_type: productType,
+                        product_type: currentProduct.type,  // ✅ فرمت کوتاه صحیح
                         product_id: currentProduct.id,
                         quantity: 1
                     })
