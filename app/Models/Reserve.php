@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Reserve extends Model
 {
     protected $fillable = [
+        'user_id',
         'name',
         'phone',
         'email',
@@ -18,4 +19,9 @@ class Reserve extends Model
         'description',
         'status',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Reserve;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log; // اضافه کنید
+use Illuminate\Support\Facades\Log;
 
 class ReserveController extends Controller
 {
@@ -19,9 +19,8 @@ class ReserveController extends Controller
 
     public function store(Request $request)
     {
-        // لاگ کردن داده‌های دریافتی
         Log::info('Reserve store called', $request->all());
-        
+
         $validated = $request->validate([
             'name'             => 'required|string|max:255',
             'phone'            => 'required|string|max:20',
@@ -34,10 +33,18 @@ class ReserveController extends Controller
             'description'      => 'nullable|string|max:2000',
         ]);
 
+        if (auth()->check()) {
+            $validated['user_id'] = auth()->id();
+
+            if (empty($validated['email'])) {
+                $validated['email'] = auth()->user()->email;
+            }
+        }
+
         Log::info('Validated data:', $validated);
 
         $reserve = Reserve::create($validated + ['status' => 'pending']);
-        
+
         Log::info('Reserve created:', ['id' => $reserve->id]);
 
         return response()->json([
