@@ -213,8 +213,12 @@
                             @endphp
                             <div class="menu-item-mobile snap-center shrink-0 w-70 bg-linear-to-br from-[#1c0408] to-[#0a0203] border border-[#ffd700]/20 rounded-2xl overflow-hidden shadow-lg relative flex flex-col"
                                 data-price="{{ $item['قیمت'] }}"
+                                data-modal-type="takeout"
+                                data-modal-id="{{ $item['id'] }}"
+                                data-product-id="{{ $item['id'] }}"
+                                data-product-type="MenuTakeout"
                                 data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
-                                
+
                                 <div class="relative h-40 w-full overflow-hidden">
                                     <img src="{{ $imagePath }}" alt="{{ $item['اسم_غذا_فارسی'] }}" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-linear-to-t from-[#0a0203] via-transparent to-transparent"></div>
@@ -248,6 +252,8 @@
                                 @endphp
                                 <div class="menu-item-desktop group flex gap-6 p-4 rounded-2xl bg-[#0a0203]/40 border border-[#ffd700]/10 hover:border-[#ffd700]/40 transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(255,215,0,0.05)] cursor-pointer"
                                     data-price="{{ $item['قیمت'] }}"
+                                    data-modal-type="takeout"
+                                    data-modal-id="{{ $item['id'] }}"
                                     data-product-id="{{ $item['id'] }}"
                                     data-product-type="MenuTakeout"
                                     data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">

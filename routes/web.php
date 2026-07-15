@@ -9,6 +9,7 @@ use App\Http\Controllers\Front\MenuOrganizationalController;
 use App\Http\Controllers\Front\ReserveController;
 use App\Http\Controllers\Front\SpinController;
 use App\Http\Controllers\Front\CartController;
+use App\Http\Controllers\Front\FoodModalController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -42,5 +43,7 @@ Route::prefix('cart')->group(function () {
     Route::delete('/clear', [CartController::class, 'clear'])->name('cart.clear');
     Route::post('/merge', [CartController::class, 'merge'])->middleware('auth')->name('cart.merge');
 });
+
+Route::get('/api/food-modal', [FoodModalController::class, 'show'])->name('food-modal.show');
 
 require __DIR__.'/auth.php';

@@ -213,6 +213,10 @@
                             @endphp
                             <div class="menu-item-mobile snap-center shrink-0 w-70 bg-linear-to-br from-[#1c0408] to-[#0a0203] border border-[#ffd700]/20 rounded-2xl overflow-hidden shadow-lg relative flex flex-col"
                                 data-price="{{ $item['قیمت'] }}"
+                                data-modal-type="organizational"
+                                data-modal-id="{{ $item['id'] }}"
+                                data-product-id="{{ $item['id'] }}"
+                                data-product-type="MenuOrganizational"
                                 data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
                                 
                                 <div class="relative h-40 w-full overflow-hidden">
@@ -246,8 +250,10 @@
                                 @php
                                     $imagePath = $item['main_image'] ?? asset('assets/images/default-food.webp');
                                 @endphp
-                                <div class="menu-item-desktop group flex gap-6 p-4 rounded-2xl bg-[#0a0203]/40 border border-[#ffd700]/10 hover:border-[#ffd700]/40 transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(255,215,0,0.05)]"
+                                <div class="menu-item-desktop group flex gap-6 p-4 rounded-2xl bg-[#0a0203]/40 border border-[#ffd700]/10 hover:border-[#ffd700]/40 transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(255,215,0,0.05)] cursor-pointer"
                                     data-price="{{ $item['قیمت'] }}"
+                                    data-modal-type="organizational"
+                                    data-modal-id="{{ $item['id'] }}"
                                     data-product-id="{{ $item['id'] }}"
                                     data-product-type="MenuOrganizational"
                                     data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
@@ -281,7 +287,6 @@
                                             <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700]/40 group-hover:bg-[#ffd700] group-hover:scale-125 transition-all duration-300"></span>
                                         </div>
                                     </div>
-
                                 </div>
                             @endforeach
                         </div>
