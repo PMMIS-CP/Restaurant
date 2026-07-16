@@ -34,6 +34,9 @@ Route::post('/reserve', [ReserveController::class, 'store'])->name('reserve.stor
 Route::post('/reserve/send-otp', [ReserveController::class, 'sendOtp'])->name('reserve.sendOtp');
 Route::post('/reserve/verify-otp', [ReserveController::class, 'verifyOtp'])->name('reserve.verifyOtp');
 
+Route::get('/check-phone', [ReserveController::class, 'checkPhone'])->name('check.phone');
+Route::post('/reserve/direct-submit', [ReserveController::class, 'directSubmit'])->name('reserve.directSubmit');
+
 Route::get('/menu/takeout', [MenuTakeoutController::class, 'index'])->name('menu.takeout');
 Route::get('/menu/organizational', [MenuOrganizationalController::class, 'index'])->name('menu.organizational');
 Route::get('/spin', [SpinController::class, 'index'])->name('spin');
