@@ -652,7 +652,7 @@ input:-webkit-autofill:focus {
             <div class="flex gap-2">
                 <button @click="verifyOtp" :disabled="verifying" class="flex-1 py-2 rounded-lg text-white font-bold transition-all duration-200" :class="verifying ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'" style="background: linear-gradient(135deg, #DC2626, #B8860B);">
                     <span x-show="!verifying">تأیید</span>
-                    <span x-show="verifying" class="inline-block">⏳</span>
+                    <span x-show="verifying" class="inline-block">در حال تایید کد...</span>
                 </button>
                 <button @click="resendOtp" :disabled="resendCooldown > 0" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100" x-text="resendCooldown > 0 ? 'ارسال مجدد (' + resendCooldown + ')' : 'ارسال مجدد'"></button>
             </div>
