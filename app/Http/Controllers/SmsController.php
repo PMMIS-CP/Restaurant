@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\PhoneVerification;
 use App\Models\User;
 use App\Services\CartService;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
@@ -15,62 +15,67 @@ use Carbon\Carbon;
 class SmsController extends Controller
 {
     /**
-     * ارسال کد تأیید به شماره موبایل
+     * بررسی وجود کاربر با شماره موبایل
+     */
+    public function checkPhone(Request $request)
+    {
+        $request->validate(['phone' => 'required|regex:/^09[0-9]{9}$/']);
+        $exists = User::where('phone', $request->phone)->exists();
+        return response()->json(['exists' => $exists]);
+    }
+
+    /**
+     * ارسال کد تأیید (ثبت‌نام یا بازیابی رمز)
      */
     public function sendVerificationCode(Request $request)
     {
-        try {
-            $request->validate([
-                'phone'        => 'required|regex:/^09[0-9]{9}$/',
-                'name'         => 'sometimes|string|max:255',
-                'family_name'  => 'sometimes|string|max:255',
-            ]);
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            return response()->json([
-                'message' => 'شماره موبایل نامعتبر است.',
-            ], 422);
-        }
+        $request->validate([
+            'phone'       => 'required|regex:/^09[0-9]{9}$/',
+            'purpose'     => 'required|in:register,reset',
+            // فیلدهای ثبت‌نام
+            'name'        => 'required_if:purpose,register|string|max:255',
+            'family_name' => 'required_if:purpose,register|string|max:255',
+            'email'       => 'nullable|email|max:255',
+            'password'    => 'required_if:purpose,register|string|min:6|confirmed',
+        ]);
 
-        $phone = $request->input('phone');
-        
-        // API پنل پیامک شماره بدون صفر می‌خواهد
-        $phoneForAPI = ltrim($phone, '0');
+        $phone = $request->phone;
+        $purpose = $request->purpose;
 
-        // محدودیت ۶۰ ثانیه برای ارسال مجدد
+        // محدودیت ۶۰ ثانیه
         $recent = PhoneVerification::where('phone', $phone)
             ->where('created_at', '>=', Carbon::now()->subSeconds(60))
             ->exists();
-
         if ($recent) {
-            return response()->json([
-                'message' => 'لطفاً ۶۰ ثانیه دیگر مجدداً درخواست دهید.',
-            ], 429);
+            return response()->json(['message' => 'لطفاً ۶۰ ثانیه دیگر مجدداً درخواست دهید.'], 429);
         }
 
-        // تولید کد ۴ رقمی
+        // تولید کد
         $code = random_int(1000, 9999);
-
-        // ذخیره در دیتابیس
         PhoneVerification::create([
             'phone'      => $phone,
             'code'       => $code,
             'expires_at' => Carbon::now()->addMinutes(2),
         ]);
 
-        // ذخیره نام و نام‌خانوادگی برای ثبت‌نام
-        if ($request->has('name') && $request->has('family_name')) {
+        // ذخیره اطلاعات ثبت‌نام در session
+        if ($purpose === 'register') {
             session([
-                'register_name'   => $request->input('name'),
-                'register_family' => $request->input('family_name'),
+                'register_name'     => $request->name,
+                'register_family'   => $request->family_name,
+                'register_email'    => $request->email,
+                'register_password' => $request->password, // موقتاً ذخیره می‌شود
+                'register_purpose'  => 'register'
             ]);
         } else {
-            session()->forget(['register_name', 'register_family']);
+            // بازیابی رمز عبور
+            session(['register_purpose' => 'reset']);
+            session()->forget(['register_name','register_family','register_email','register_password']);
         }
 
-        // متن پیامک
-        $message = "رستوران سنتی کاخ موراکو\nکد ثبت‌نام/ورود شما:\n#{$code}\nلغو11";
-
-        // ارسال پیامک
+        // ارسال پیامک (همانند قبل)
+        $phoneForAPI = ltrim($phone, '0');
+        $message = "رستوران سنتی کاخ موراکو\nکد شما:\n#{$code}\nلغو11";
         try {
             $response = Http::timeout(10)->post(config('services.sms.api_url'), [
                 'username' => config('services.sms.username'),
@@ -82,18 +87,12 @@ class SmsController extends Controller
 
             if ($response->successful()) {
                 $data = $response->json();
-                
                 if (($data['RetStatus'] ?? null) == 1) {
-                    Log::info("پیامک با موفقیت به {$phone} ارسال شد. ID: {$data['Value']}");
-                    
-                    return response()->json([
-                        'message'    => 'کد تأیید ارسال شد.',
-                        'expires_at' => Carbon::now()->addMinutes(2)->toDateTimeString(),
-                    ]);
+                    Log::info("پیامک ارسال شد به {$phone}");
+                    return response()->json(['message' => 'کد تأیید ارسال شد.']);
                 }
-                
-                // خطاهای مستند پنل
-                $errorMessages = [
+                // خطاهای مستند
+                $errors = [
                     0 => 'نام کاربری یا رمز عبور اشتباه است.',
                     2 => 'اعتبار کافی نیست.',
                     4 => 'محدودیت در حجم ارسال.',
@@ -103,46 +102,32 @@ class SmsController extends Controller
                     14 => 'متن حاوی لینک است.',
                     15 => 'عدم وجود لغو11 در انتهای پیامک.',
                 ];
-                
-                $errorCode = $data['RetStatus'] ?? 'نامشخص';
-                $errorMsg = $errorMessages[$errorCode] ?? "خطای {$errorCode}";
-                
-                Log::error("خطا در ارسال پیامک: {$errorMsg}", $data);
-                
-                return response()->json([
-                    'message' => $errorMsg,
-                ], 500);
+                $errCode = $data['RetStatus'] ?? 'نامشخص';
+                $msg = $errors[$errCode] ?? "خطای {$errCode}";
+                Log::error("خطای پنل پیامک: {$msg}", $data);
+                return response()->json(['message' => $msg], 500);
             }
-            
             Log::error('خطای HTTP از API پیامک', ['status' => $response->status()]);
-            
-            return response()->json([
-                'message' => 'خطا در ارتباط با سرور پیامک.',
-            ], 500);
-            
+            return response()->json(['message' => 'خطا در ارتباط با سرور پیامک.'], 500);
         } catch (\Exception $e) {
             Log::error('خطای ارسال پیامک: ' . $e->getMessage());
-            
-            return response()->json([
-                'message' => 'خطا در ارسال پیامک. لطفاً دوباره تلاش کنید.',
-            ], 500);
+            return response()->json(['message' => 'خطا در ارسال پیامک.'], 500);
         }
     }
 
     /**
-     * تأیید کد و ورود کاربر
+     * تأیید کد ثبت‌نام و ایجاد کاربر
      */
-    public function verifyCode(Request $request): RedirectResponse
+    public function verifyCode(Request $request)
     {
         $request->validate([
             'phone' => 'required|regex:/^09[0-9]{9}$/',
             'code'  => 'required|digits:4',
         ]);
 
-        $phone = $request->input('phone');
-        $code  = $request->input('code');
+        $phone = $request->phone;
+        $code  = $request->code;
 
-        // جستجوی کد معتبر
         $verification = PhoneVerification::where('phone', $phone)
             ->where('code', $code)
             ->where('used', false)
@@ -151,59 +136,110 @@ class SmsController extends Controller
             ->first();
 
         if (!$verification) {
-            return back()->withErrors([
-                'code' => 'کد وارد شده نامعتبر یا منقضی شده است.',
-            ])->withInput();
+            return response()->json(['message' => 'کد نامعتبر یا منقضی شده است.'], 422);
         }
 
-        // علامت‌گذاری به عنوان استفاده‌شده
         $verification->update(['used' => true]);
 
-        // یافتن یا ایجاد کاربر
-        $user = User::where('phone', $phone)->first();
-
-        if (!$user) {
-            // دریافت نام از session (برای ثبت‌نام)
-            $name   = session('register_name', 'کاربر');
-            $family = session('register_family', '');
-            $fullName = trim($name . ' ' . $family) ?: 'کاربر ' . $phone;
-            
-            session()->forget(['register_name', 'register_family']);
-
-            $user = User::create([
-                'name'              => $fullName,
-                'phone'             => $phone,
-                'phone_verified_at' => now(),
-            ]);
-        } else {
-            if (!$user->phone_verified_at) {
-                $user->update(['phone_verified_at' => now()]);
-            }
+        // فقط برای ثبت‌نام جدید
+        if (session('register_purpose') !== 'register') {
+            return response()->json(['message' => 'درخواست نامعتبر.'], 400);
         }
 
-        // احراز هویت
-        Auth::login($user);
+        $name     = session('register_name', 'کاربر');
+        $family   = session('register_family', '');
+        $email    = session('register_email');
+        $password = session('register_password');
 
-        // بازسازی session
+        $fullName = trim($name . ' ' . $family) ?: 'کاربر ' . $phone;
+
+        // ایجاد کاربر
+        $user = User::create([
+            'name'              => $fullName,
+            'phone'             => $phone,
+            'email'             => $email,
+            'password'          => Hash::make($password),
+            'phone_verified_at' => now(),
+        ]);
+
+        session()->forget(['register_name','register_family','register_email','register_password','register_purpose']);
+
+        Auth::login($user);
         $request->session()->regenerate();
 
-        // ریدایرکت به مسیر مورد نظر
-        $redirect = redirect()->intended(route('dashboard', absolute: false));
+        $redirect = redirect()->intended(route('dashboard'))->getTargetUrl();
 
-        // ادغام سبد خرید مهمان
+        // ادغام سبد خرید در صورت نیاز
         if ($request->hasCookie('cart_session_id')) {
             try {
                 $cartService = app(CartService::class);
-                $cartService->mergeGuestCart(
-                    $request->cookie('cart_session_id'),
-                    auth()->id()
-                );
-                $redirect->withoutCookie('cart_session_id');
+                $cartService->mergeGuestCart($request->cookie('cart_session_id'), $user->id);
+                // حذف کوکی در پاسخ JSON ممکن نیست، در کلاینت انجام می‌شود
             } catch (\Exception $e) {
                 report($e);
             }
         }
 
-        return $redirect;
+        return response()->json(['redirect' => $redirect]);
+    }
+
+    /**
+     * بررسی صحت کد برای بازیابی رمز (بدون ورود کاربر)
+     */
+    public function verifyResetOtp(Request $request)
+    {
+        $request->validate([
+            'phone' => 'required|regex:/^09[0-9]{9}$/',
+            'code'  => 'required|digits:4',
+        ]);
+
+        $verification = PhoneVerification::where('phone', $request->phone)
+            ->where('code', $request->code)
+            ->where('used', false)
+            ->where('expires_at', '>', Carbon::now())
+            ->latest()
+            ->first();
+
+        if (!$verification) {
+            return response()->json(['message' => 'کد نامعتبر است.', 'valid' => false], 422);
+        }
+
+        // کد معتبر است؛ آن را هنوز استفاده‌شده علامت نزن (تا در مرحله‌ی بعد استفاده شود)
+        return response()->json(['valid' => true]);
+    }
+
+    /**
+     * ثبت رمز عبور جدید پس از بازیابی
+     */
+    public function resetPassword(Request $request)
+    {
+        $request->validate([
+            'phone'    => 'required|regex:/^09[0-9]{9}$/',
+            'code'     => 'required|digits:4',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $verification = PhoneVerification::where('phone', $request->phone)
+            ->where('code', $request->code)
+            ->where('used', false)
+            ->where('expires_at', '>', Carbon::now())
+            ->latest()
+            ->first();
+
+        if (!$verification) {
+            return response()->json(['message' => 'کد نامعتبر یا منقضی شده است.'], 422);
+        }
+
+        $verification->update(['used' => true]);
+
+        $user = User::where('phone', $request->phone)->firstOrFail();
+        $user->password = Hash::make($request->password);
+        $user->save();
+
+        Auth::login($user);
+        $request->session()->regenerate();
+
+        $redirect = redirect()->intended(route('dashboard'))->getTargetUrl();
+        return response()->json(['redirect' => $redirect]);
     }
 }

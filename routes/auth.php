@@ -7,27 +7,41 @@ use App\Http\Controllers\Auth\EmailVerificationPromptController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\PhoneLoginController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use App\Http\Controllers\SmsController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
-        ->name('register');
-
-    Route::post('register', [RegisteredUserController::class, 'store']);
-
+    // صفحه لاگین (نمایش)
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
-    Route::post('login', [AuthenticatedSessionController::class, 'store']);
+    // ورود با رمز عبور (برای کاربران موجود)
+    Route::post('login/phone', [PhoneLoginController::class, 'login'])
+        ->name('login.phone');
 
+    // بررسی وجود کاربر با شماره موبایل
+    Route::post('/check-phone', [SmsController::class, 'checkPhone'])
+        ->name('check.phone');
+
+    // ارسال کد تأیید (ثبت‌نام یا بازیابی رمز)
     Route::post('/send-otp', [SmsController::class, 'sendVerificationCode'])
         ->name('send.otp');
+
+    // تأیید کد و ثبت‌نام کاربر جدید
     Route::post('/verify-otp', [SmsController::class, 'verifyCode'])
         ->name('verify.otp');
 
+    // تأیید کد برای بازیابی رمز عبور
+    Route::post('/verify-reset-otp', [SmsController::class, 'verifyResetOtp'])
+        ->name('verify.reset.otp');
+
+    // ثبت رمز عبور جدید (بازیابی رمز با SMS)
+    Route::post('/reset-password-sms', [SmsController::class, 'resetPassword'])
+        ->name('reset.password.sms');
+
+    // روت‌های فراموشی رمز عبور (روش ایمیلی - اختیاری)
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 
