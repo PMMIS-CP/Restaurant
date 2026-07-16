@@ -25,6 +25,45 @@ class SmsController extends Controller
     }
 
     /**
+     * اعتبارسنجی اطلاعات ثبت‌نام قبل از ارسال کد
+     */
+    public function validateRegistration(Request $request)
+    {
+        $validator = validator($request->all(), [
+            'name'        => 'required|string|max:255',
+            'family_name' => 'required|string|max:255',
+            'email'       => 'nullable|email|max:255',
+            'password'    => 'required|string|min:6|confirmed',
+        ], [
+            'name.required'         => 'نام الزامی است.',
+            'family_name.required'  => 'نام خانوادگی الزامی است.',
+            'email.email'           => 'فرمت ایمیل معتبر نیست.',
+            'password.required'     => 'رمز عبور الزامی است.',
+            'password.min'          => 'رمز عبور حداقل ۶ کاراکتر باشد.',
+            'password.confirmed'    => 'رمز عبور و تکرار آن یکسان نیستند.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        // بررسی یکتایی ایمیل (اگر وارد شده باشد)
+        if ($request->filled('email')) {
+            $emailExists = User::where('email', $request->email)->exists();
+            if ($emailExists) {
+                return response()->json([
+                    'message' => 'این ایمیل قبلاً ثبت شده است. لطفاً ایمیل دیگری وارد کنید یا با این ایمیل وارد شوید.',
+                    'errors' => ['email' => 'ایمیل تکراری']
+                ], 422);
+            }
+        }
+
+        return response()->json(['valid' => true]);
+    }
+
+    /**
      * ارسال کد تأیید (ثبت‌نام یا بازیابی رمز)
      */
     public function sendVerificationCode(Request $request)
@@ -41,6 +80,16 @@ class SmsController extends Controller
 
         $phone = $request->phone;
         $purpose = $request->purpose;
+
+        // اعتبارسنجی اضافه برای ایمیل تکراری
+        if ($purpose === 'register' && $request->filled('email')) {
+            $emailExists = User::where('email', $request->email)->exists();
+            if ($emailExists) {
+                return response()->json([
+                    'message' => 'این ایمیل قبلاً ثبت شده است. لطفاً ایمیل دیگری وارد کنید یا با این ایمیل وارد شوید.'
+                ], 422);
+            }
+        }
 
         // محدودیت ۶۰ ثانیه
         $recent = PhoneVerification::where('phone', $phone)
@@ -64,16 +113,15 @@ class SmsController extends Controller
                 'register_name'     => $request->name,
                 'register_family'   => $request->family_name,
                 'register_email'    => $request->email,
-                'register_password' => $request->password, // موقتاً ذخیره می‌شود
+                'register_password' => $request->password,
                 'register_purpose'  => 'register'
             ]);
         } else {
-            // بازیابی رمز عبور
             session(['register_purpose' => 'reset']);
             session()->forget(['register_name','register_family','register_email','register_password']);
         }
 
-        // ارسال پیامک (همانند قبل)
+        // ارسال پیامک
         $phoneForAPI = ltrim($phone, '0');
         $message = "رستوران سنتی کاخ موراکو\nکد شما:\n#{$code}\nلغو11";
         try {
@@ -91,7 +139,6 @@ class SmsController extends Controller
                     Log::info("پیامک ارسال شد به {$phone}");
                     return response()->json(['message' => 'کد تأیید ارسال شد.']);
                 }
-                // خطاهای مستند
                 $errors = [
                     0 => 'نام کاربری یا رمز عبور اشتباه است.',
                     2 => 'اعتبار کافی نیست.',
@@ -141,7 +188,6 @@ class SmsController extends Controller
 
         $verification->update(['used' => true]);
 
-        // فقط برای ثبت‌نام جدید
         if (session('register_purpose') !== 'register') {
             return response()->json(['message' => 'درخواست نامعتبر.'], 400);
         }
@@ -152,6 +198,13 @@ class SmsController extends Controller
         $password = session('register_password');
 
         $fullName = trim($name . ' ' . $family) ?: 'کاربر ' . $phone;
+
+        // بررسی نهایی ایمیل تکراری قبل از ایجاد کاربر
+        if ($email && User::where('email', $email)->exists()) {
+            return response()->json([
+                'message' => 'این ایمیل در لحظه ثبت‌نام توسط کاربر دیگری ثبت شد. لطفاً ایمیل دیگری وارد کنید.'
+            ], 422);
+        }
 
         // ایجاد کاربر
         $user = User::create([
@@ -169,12 +222,10 @@ class SmsController extends Controller
 
         $redirect = redirect()->intended(route('dashboard'))->getTargetUrl();
 
-        // ادغام سبد خرید در صورت نیاز
         if ($request->hasCookie('cart_session_id')) {
             try {
                 $cartService = app(CartService::class);
                 $cartService->mergeGuestCart($request->cookie('cart_session_id'), $user->id);
-                // حذف کوکی در پاسخ JSON ممکن نیست، در کلاینت انجام می‌شود
             } catch (\Exception $e) {
                 report($e);
             }
@@ -204,7 +255,6 @@ class SmsController extends Controller
             return response()->json(['message' => 'کد نامعتبر است.', 'valid' => false], 422);
         }
 
-        // کد معتبر است؛ آن را هنوز استفاده‌شده علامت نزن (تا در مرحله‌ی بعد استفاده شود)
         return response()->json(['valid' => true]);
     }
 

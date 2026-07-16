@@ -108,6 +108,9 @@ Route::name('admin.')->group(function () {
         Route::prefix('reserves')->name('reserves.')->group(function () {
             Route::get('/', [ReserveManagementController::class, 'index'])->name('index');
             Route::get('/{reserve}', [ReserveManagementController::class, 'show'])->name('show');
+            Route::get('/{reserve}/edit', [ReserveManagementController::class, 'edit'])->name('edit');
+            Route::put('/{reserve}', [ReserveManagementController::class, 'update'])->name('update');
+            Route::post('/{reserve}/status', [ReserveManagementController::class, 'updateStatus'])->name('status');
             Route::delete('/{reserve}', [ReserveManagementController::class, 'destroy'])->name('destroy');
         });
 

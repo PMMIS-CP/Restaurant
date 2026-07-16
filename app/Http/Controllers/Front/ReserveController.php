@@ -76,6 +76,9 @@ class ReserveController extends Controller
 
         Log::info('رزرو مستقیم ایجاد شد', ['id' => $reserve->id]);
 
+        // ارسال پیامک وضعیت (pending)
+        self::sendStatusSms($reserve);
+
         return response()->json([
             'success' => true,
             'message' => 'درخواست رزرو با موفقیت ثبت شد.',
@@ -114,6 +117,9 @@ class ReserveController extends Controller
         $reserve = Reserve::create($validated + ['status' => 'pending']);
 
         Log::info('Reserve created:', ['id' => $reserve->id]);
+
+        // ارسال پیامک وضعیت
+        self::sendStatusSms($reserve);
 
         return response()->json([
             'success' => true,
@@ -292,8 +298,8 @@ class ReserveController extends Controller
             }
 
             // ایجاد دو رزرو جداگانه برای هر دو کاربر
-            Reserve::create($basePayload + ['user_id' => $loggedInUserId]);
-            Reserve::create($basePayload + ['user_id' => $otherUser->id]);
+            $reserveA = Reserve::create($basePayload + ['user_id' => $loggedInUserId]);
+            $reserveB = Reserve::create($basePayload + ['user_id' => $otherUser->id]);
 
             session()->forget(['reserve_data', 'reserve_options']);
 
@@ -301,6 +307,10 @@ class ReserveController extends Controller
                 'user_a' => $loggedInUserId,
                 'user_b' => $otherUser->id,
             ]);
+
+            // ارسال پیامک وضعیت برای هر دو رزرو
+            self::sendStatusSms($reserveA);
+            self::sendStatusSms($reserveB);
 
             return response()->json([
                 'success' => true,
@@ -326,9 +336,98 @@ class ReserveController extends Controller
 
         Log::info('رزرو با تأیید OTP ایجاد شد.', ['id' => $reserve->id]);
 
+        // ارسال پیامک وضعیت
+        self::sendStatusSms($reserve);
+
         return response()->json([
             'success' => true,
             'message' => 'درخواست رزرو با موفقیت ثبت شد.',
         ]);
+    }
+
+    /**
+     * ارسال پیامک اطلاع‌رسانی وضعیت رزرو
+     * (هم برای وضعیت pending و هم confirmed)
+     *
+     * این متد public static تعریف شده تا از پنل ادمین نیز فراخوانی شود.
+     */
+    public static function sendStatusSms(Reserve $reserve): void
+    {
+        // شماره حساب کاربری (در صورت وجود)
+        $accountPhone = null;
+        if ($reserve->user_id) {
+            $user = User::find($reserve->user_id);
+            if ($user && !empty($user->phone)) {
+                $accountPhone = $user->phone;
+            }
+        }
+
+        // شماره درج‌شده در خود رزرو
+        $reservationPhone = $reserve->phone;
+
+        // یکتاسازی شماره‌ها
+        $phones = array_values(array_unique(array_filter([$accountPhone, $reservationPhone])));
+
+        if (empty($phones)) {
+            Log::warning('هیچ شماره‌ای برای ارسال پیامک وضعیت یافت نشد.', ['reserve_id' => $reserve->id]);
+            return;
+        }
+
+        // لینک پیگیری (همیشه /dashboard)
+        $trackingUrl = url('/dashboard');
+
+        // تعیین متن متناسب با وضعیت
+        $statusText = '';
+        if ($reserve->status === 'pending') {
+            $statusText = "وضعیت: در انتظار تأیید\nبا شما تماس گرفته خواهد شد.";
+        } elseif ($reserve->status === 'confirmed') {
+            $statusText = "وضعیت: تأیید نهایی\nدر اسرع وقت حضور یابید.";
+        } else {
+            $statusText = "وضعیت: {$reserve->status}";
+        }
+
+        // ساخت پیام نهایی
+        $message = "رزرو شما ثبت شد.\n"
+                 . "نام: {$reserve->name}\n"
+                 . "تاریخ: {$reserve->reservation_date}\n"
+                 . "ساعت: {$reserve->entry_time} تا {$reserve->exit_time}\n"
+                 . $statusText . "\n"
+                 . "لغو11";
+
+        // ارسال به هر شماره
+        foreach ($phones as $phone) {
+            $phoneForAPI = ltrim($phone, '0');
+
+            try {
+                $response = Http::timeout(10)->post(config('services.sms.api_url'), [
+                    'username' => config('services.sms.username'),
+                    'password' => config('services.sms.api_key'),
+                    'to'       => $phoneForAPI,
+                    'from'     => config('services.sms.from_number'),
+                    'text'     => $message,
+                ]);
+
+                if ($response->successful()) {
+                    $data = $response->json();
+                    if (($data['RetStatus'] ?? null) == 1) {
+                        Log::info("پیامک وضعیت رزرو به {$phone} ارسال شد.", ['reserve_id' => $reserve->id, 'status' => $reserve->status]);
+                    } else {
+                        Log::error("خطای پنل پیامک برای شماره {$phone}", [
+                            'reserve_id' => $reserve->id,
+                            'response'   => $data,
+                        ]);
+                    }
+                } else {
+                    Log::error("خطای HTTP در ارسال پیامک وضعیت به {$phone}", [
+                        'reserve_id' => $reserve->id,
+                        'status'     => $response->status(),
+                    ]);
+                }
+            } catch (\Exception $e) {
+                Log::error("استثناء در ارسال پیامک وضعیت به {$phone}: " . $e->getMessage(), [
+                    'reserve_id' => $reserve->id,
+                ]);
+            }
+        }
     }
 }

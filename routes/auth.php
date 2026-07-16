@@ -25,6 +25,10 @@ Route::middleware('guest')->group(function () {
     Route::post('/check-phone', [SmsController::class, 'checkPhone'])
         ->name('check.phone');
 
+    // اعتبارسنجی اطلاعات ثبت‌نام قبل از ارسال کد (جدید)
+    Route::post('/validate-registration', [SmsController::class, 'validateRegistration'])
+        ->name('validate.registration');
+
     // ارسال کد تأیید (ثبت‌نام یا بازیابی رمز)
     Route::post('/send-otp', [SmsController::class, 'sendVerificationCode'])
         ->name('send.otp');

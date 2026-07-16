@@ -160,10 +160,6 @@ document.addEventListener('DOMContentLoaded', function () {
     function setError(el, msg) { el.textContent = msg; show(el); }
     function clearError(el) { el.textContent = ''; hide(el); }
 
-    function redirectToDashboard() {
-        window.location.href = '{{ route("dashboard") }}';
-    }
-
     // بررسی وجود کاربر با شماره موبایل
     checkPhoneBtn.addEventListener('click', async function() {
         const phone = phoneInput.value.trim();
@@ -252,6 +248,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }, 1000);
     }
 
+    function stopRegResendTimer() {
+        if (regTimerInterval) {
+            clearInterval(regTimerInterval);
+            regTimerInterval = null;
+        }
+    }
+
     async function sendRegisterOtp() {
         const name = document.getElementById('name').value.trim();
         const family = document.getElementById('family').value.trim();
@@ -259,25 +262,96 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = document.getElementById('password').value;
         const passwordConf = document.getElementById('password_confirmation').value;
 
-        if (!name || !family || !password || !passwordConf) {
-            setError(regOtpError, 'لطفاً تمام فیلدهای ضروری را پر کنید.');
+        // پاک کردن خطاهای قبلی
+        clearError(regOtpError);
+        hide(regOtpMsg);
+        
+        // اعتبارسنجی اولیه
+        if (!name || !family) {
+            setError(regOtpError, 'نام و نام خانوادگی الزامی است.');
+            if (!name) document.getElementById('name').focus();
+            else document.getElementById('family').focus();
             return;
         }
+        
+        if (!password) {
+            setError(regOtpError, 'رمز عبور الزامی است.');
+            document.getElementById('password').focus();
+            return;
+        }
+        
         if (password.length < 6) {
             setError(regOtpError, 'رمز عبور حداقل ۶ کاراکتر باشد.');
+            document.getElementById('password').focus();
             return;
         }
+        
         if (password !== passwordConf) {
             setError(regOtpError, 'رمز عبور و تکرار آن یکسان نیستند.');
+            document.getElementById('password_confirmation').focus();
             return;
         }
+        
+        // اگر ایمیل وارد شده، فرمت آن را چک کن
+        if (email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                setError(regOtpError, 'فرمت ایمیل معتبر نیست.');
+                document.getElementById('email').focus();
+                return;
+            }
+        }
 
-        clearError(regOtpError);
         sendRegOtp.disabled = true;
-        sendRegOtp.textContent = 'در حال ارسال...';
+        sendRegOtp.textContent = 'در حال اعتبارسنجی...';
 
         try {
-            const response = await fetch('{{ route("send.otp") }}', {
+            // مرحله ۱: اعتبارسنجی اطلاعات (بررسی ایمیل تکراری)
+            const validateResponse = await fetch('{{ route("validate.registration") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    family_name: family,
+                    email: email,
+                    password: password,
+                    password_confirmation: passwordConf
+                })
+            });
+
+            const validateData = await validateResponse.json();
+            
+            if (!validateResponse.ok) {
+                // خطا در اعتبارسنجی - نمایش پیام و فوکوس روی فیلد مربوطه
+                const errorMsg = validateData.message || 'اطلاعات وارد شده معتبر نیست.';
+                
+                if (errorMsg.includes('ایمیل')) {
+                    setError(regOtpError, errorMsg);
+                    document.getElementById('email').focus();
+                } else if (errorMsg.includes('رمز عبور')) {
+                    setError(regOtpError, errorMsg);
+                    document.getElementById('password').focus();
+                } else if (errorMsg.includes('نام')) {
+                    setError(regOtpError, errorMsg);
+                    if (errorMsg.includes('خانوادگی')) document.getElementById('family').focus();
+                    else document.getElementById('name').focus();
+                } else {
+                    setError(regOtpError, errorMsg);
+                }
+                
+                sendRegOtp.disabled = false;
+                sendRegOtp.textContent = 'دریافت کد تأیید';
+                return;
+            }
+
+            // مرحله ۲: ارسال کد تأیید
+            sendRegOtp.textContent = 'در حال ارسال کد...';
+            
+            const otpResponse = await fetch('{{ route("send.otp") }}', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -294,19 +368,32 @@ document.addEventListener('DOMContentLoaded', function () {
                     purpose: 'register'
                 })
             });
-            const data = await response.json();
-            if (response.ok && data.message) {
+            
+            const otpData = await otpResponse.json();
+            
+            if (otpResponse.ok && otpData.message) {
+                // موفقیت - نمایش بخش ورود کد
                 hide(sendRegOtp);
                 show(regOtpMsg);
-                regOtpMsg.textContent = 'کد تأیید ارسال شد.';
+                regOtpMsg.textContent = 'کد تأیید به شماره ' + currentPhone + ' ارسال شد.';
                 show(regOtpSection);
                 startRegResendTimer();
+                regCodeInput.value = '';
+                regCodeInput.focus();
+                clearError(regOtpError);
             } else {
-                setError(regOtpError, data.message || 'خطا در ارسال کد.');
+                // خطا در ارسال کد
+                if (otpResponse.status === 429) {
+                    setError(regOtpError, otpData.message || 'لطفاً کمی صبر کنید.');
+                } else {
+                    setError(regOtpError, otpData.message || 'خطا در ارسال کد تأیید.');
+                }
+                sendRegOtp.disabled = false;
+                sendRegOtp.textContent = 'دریافت کد تأیید';
             }
         } catch (err) {
-            setError(regOtpError, 'خطای شبکه.');
-        } finally {
+            console.error('Error:', err);
+            setError(regOtpError, 'خطا در ارتباط با سرور. لطفاً دوباره تلاش کنید.');
             sendRegOtp.disabled = false;
             sendRegOtp.textContent = 'دریافت کد تأیید';
         }
@@ -315,12 +402,16 @@ document.addEventListener('DOMContentLoaded', function () {
     sendRegOtp.addEventListener('click', sendRegisterOtp);
     resendRegBtn.addEventListener('click', sendRegisterOtp);
 
+    // تأیید کد ثبت‌نام
     verifyRegBtn.addEventListener('click', async function() {
         const code = regCodeInput.value.trim();
         if (!/^\d{4}$/.test(code)) {
-            alert('کد ۴ رقمی را وارد کنید.');
+            setError(regOtpError, 'کد ۴ رقمی را وارد کنید.');
+            regCodeInput.focus();
             return;
         }
+        
+        clearError(regOtpError);
         verifyRegBtn.disabled = true;
         verifyRegBtn.textContent = 'در حال تأیید...';
 
@@ -338,19 +429,47 @@ document.addEventListener('DOMContentLoaded', function () {
                     purpose: 'register'
                 })
             });
+            
             const data = await response.json();
+            
             if (response.ok && data.redirect) {
+                stopRegResendTimer();
                 window.location.href = data.redirect;
             } else {
-                setError(regOtpError, data.message || 'کد نامعتبر است.');
+                const errorMsg = data.message || 'کد نامعتبر است.';
+                
+                // مدیریت خطاهای خاص
+                if (errorMsg.includes('ایمیل')) {
+                    // خطای ایمیل تکراری - برگشت به فرم ثبت‌نام
+                    setError(regOtpError, errorMsg);
+                    show(sendRegOtp);
+                    hide(regOtpSection);
+                    hide(regOtpMsg);
+                    document.getElementById('email').focus();
+                    document.getElementById('email').value = '';
+                    stopRegResendTimer();
+                } else if (errorMsg.includes('کد') || errorMsg.includes('نامعتبر') || errorMsg.includes('منقضی')) {
+                    setError(regOtpError, errorMsg);
+                    regCodeInput.value = '';
+                    regCodeInput.focus();
+                } else {
+                    setError(regOtpError, errorMsg);
+                }
+                
                 verifyRegBtn.disabled = false;
                 verifyRegBtn.textContent = 'تأیید و ثبت‌نام';
             }
         } catch (err) {
-            setError(regOtpError, 'خطای شبکه.');
+            console.error('Error:', err);
+            setError(regOtpError, 'خطای شبکه. لطفاً دوباره تلاش کنید.');
             verifyRegBtn.disabled = false;
             verifyRegBtn.textContent = 'تأیید و ثبت‌نام';
         }
+    });
+
+    // پاک کردن تایمر هنگام خروج از صفحه
+    window.addEventListener('beforeunload', function() {
+        stopRegResendTimer();
     });
 
     // ----- بخش ورود با رمز عبور (کاربر موجود) -----
@@ -363,6 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const password = loginPassword.value;
         if (!password) {
             setError(loginError, 'رمز عبور را وارد کنید.');
+            loginPassword.focus();
             return;
         }
         clearError(loginError);
@@ -387,19 +507,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 window.location.href = data.redirect;
             } else {
                 setError(loginError, data.message || 'اطلاعات ورود اشتباه است.');
+                loginPassword.value = '';
+                loginPassword.focus();
             }
         } catch (err) {
-            setError(loginError, 'خطای شبکه.');
+            console.error('Error:', err);
+            setError(loginError, 'خطای شبکه. لطفاً دوباره تلاش کنید.');
         } finally {
             loginBtn.disabled = false;
             loginBtn.textContent = 'ورود';
         }
     });
 
+    // ورود با زدن Enter در فیلد رمز عبور
+    loginPassword.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            loginBtn.click();
+        }
+    });
+
     // ----- بازیابی رمز عبور -----
+    const resetCodeInput = document.getElementById('reset-code');
+    const verifyResetBtn = document.getElementById('verify-reset-btn');
+    const resetCodeError = document.getElementById('reset-code-error');
+    const newPasswordSection = document.getElementById('new-password-section');
+    const setNewPasswordBtn = document.getElementById('set-new-password-btn');
+    const newPassword = document.getElementById('new-password');
+    const newPasswordConfirm = document.getElementById('new-password-confirm');
+    const newPasswordError = document.getElementById('new-password-error');
+
     forgotBtn.addEventListener('click', async function() {
         hide(loginStep);
         show(resetStep);
+        clearError(resetCodeError);
+        
         // ارسال کد بازیابی
         try {
             const response = await fetch('{{ route("send.otp") }}', {
@@ -416,22 +558,20 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             const data = await response.json();
             if (!response.ok) {
-                setError(document.getElementById('reset-code-error'), data.message || 'خطا در ارسال کد.');
+                setError(resetCodeError, data.message || 'خطا در ارسال کد.');
             }
         } catch (err) {
-            setError(document.getElementById('reset-code-error'), 'خطای شبکه.');
+            console.error('Error:', err);
+            setError(resetCodeError, 'خطای شبکه. لطفاً دوباره تلاش کنید.');
         }
     });
 
-    const resetCodeInput = document.getElementById('reset-code');
-    const verifyResetBtn = document.getElementById('verify-reset-btn');
-    const resetCodeError = document.getElementById('reset-code-error');
-    const newPasswordSection = document.getElementById('new-password-section');
-
+    // تأیید کد بازیابی
     verifyResetBtn.addEventListener('click', async function() {
         const code = resetCodeInput.value.trim();
         if (!/^\d{4}$/.test(code)) {
             setError(resetCodeError, 'کد ۴ رقمی را وارد کنید.');
+            resetCodeInput.focus();
             return;
         }
         clearError(resetCodeError);
@@ -454,40 +594,45 @@ document.addEventListener('DOMContentLoaded', function () {
             const data = await response.json();
             if (response.ok && data.valid) {
                 // کد درست بود → نمایش فیلدهای رمز جدید
-                hide(verifyResetBtn);
-                hide(resetCodeInput);
+                hide(verifyResetBtn.parentElement);
                 show(newPasswordSection);
+                newPassword.focus();
             } else {
                 setError(resetCodeError, data.message || 'کد نامعتبر است.');
+                resetCodeInput.value = '';
+                resetCodeInput.focus();
             }
         } catch (err) {
-            setError(resetCodeError, 'خطای شبکه.');
+            console.error('Error:', err);
+            setError(resetCodeError, 'خطای شبکه. لطفاً دوباره تلاش کنید.');
         } finally {
             verifyResetBtn.disabled = false;
             verifyResetBtn.textContent = 'تأیید کد';
         }
     });
 
-    const setNewPasswordBtn = document.getElementById('set-new-password-btn');
-    const newPassword = document.getElementById('new-password');
-    const newPasswordConfirm = document.getElementById('new-password-confirm');
-    const newPasswordError = document.getElementById('new-password-error');
-
+    // ثبت رمز عبور جدید
     setNewPasswordBtn.addEventListener('click', async function() {
         const pwd = newPassword.value;
         const pwdConf = newPasswordConfirm.value;
+        
         if (!pwd || !pwdConf) {
             setError(newPasswordError, 'هر دو فیلد را پر کنید.');
+            if (!pwd) newPassword.focus();
+            else newPasswordConfirm.focus();
             return;
         }
         if (pwd.length < 6) {
             setError(newPasswordError, 'رمز عبور حداقل ۶ کاراکتر باشد.');
+            newPassword.focus();
             return;
         }
         if (pwd !== pwdConf) {
             setError(newPasswordError, 'رمز عبور و تکرار آن یکسان نیستند.');
+            newPasswordConfirm.focus();
             return;
         }
+        
         clearError(newPasswordError);
         setNewPasswordBtn.disabled = true;
         setNewPasswordBtn.textContent = 'در حال ثبت...';
@@ -514,13 +659,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 setError(newPasswordError, data.message || 'خطا در تغییر رمز.');
             }
         } catch (err) {
-            setError(newPasswordError, 'خطای شبکه.');
+            console.error('Error:', err);
+            setError(newPasswordError, 'خطای شبکه. لطفاً دوباره تلاش کنید.');
         } finally {
             setNewPasswordBtn.disabled = false;
             setNewPasswordBtn.textContent = 'ثبت رمز عبور جدید';
         }
     });
 
+    // فوکوس خودکار روی اولین فیلد هنگام لود صفحه
+    phoneInput.focus();
 });
 </script>
 @endpush
