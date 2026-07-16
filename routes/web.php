@@ -30,6 +30,10 @@ Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lan
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
 Route::get('/reserve', [ReserveController::class, 'index'])->name('reserve');
 Route::post('/reserve', [ReserveController::class, 'store'])->name('reserve.store');
+
+Route::post('/reserve/send-otp', [ReserveController::class, 'sendOtp'])->name('reserve.sendOtp');
+Route::post('/reserve/verify-otp', [ReserveController::class, 'verifyOtp'])->name('reserve.verifyOtp');
+
 Route::get('/menu/takeout', [MenuTakeoutController::class, 'index'])->name('menu.takeout');
 Route::get('/menu/organizational', [MenuOrganizationalController::class, 'index'])->name('menu.organizational');
 Route::get('/spin', [SpinController::class, 'index'])->name('spin');

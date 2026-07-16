@@ -629,4 +629,34 @@ input:-webkit-autofill:focus {
     </div>
 </div>
 </form>
+{{-- مودال تأیید OTP --}}
+<div x-data="otpModal()" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-init="()=>{ $watch('show', val => $el.style.display = val ? 'flex' : 'none') }">
+    <div class="bg-white/95 rounded-2xl shadow-2xl p-6 w-80 max-w-[90vw] text-right" @click.outside="if(step==='send') show=false">
+        {{-- مرحله ارسال کد --}}
+        <div x-show="step === 'send'">
+            <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">تأیید شماره موبایل</h2>
+            <p class="text-sm mb-4 text-gray-600">کد تأیید به شماره <span x-text="phone" class="font-bold text-gray-800"></span> ارسال می‌شود.</p>
+            <div class="flex gap-2">
+                <button @click="sendOtp" :disabled="sending" class="flex-1 py-2 rounded-lg text-white font-bold transition-all duration-200" :class="sending ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'" style="background: linear-gradient(135deg, #DC2626, #B8860B);">
+                    <span x-show="!sending">ارسال کد تأیید</span>
+                    <span x-show="sending" class="inline-block">در حال ارسال...</span>
+                </button>
+                <button @click="cancel" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100">بازگشت</button>
+            </div>
+        </div>
+
+        {{-- مرحله ورود کد --}}
+        <div x-show="step === 'verify'">
+            <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">کد تأیید را وارد کنید</h2>
+            <input type="text" x-model="code" maxlength="4" placeholder="کد ۴ رقمی" class="w-full text-center text-2xl tracking-widest border-2 border-red-600/50 rounded-lg p-2 mb-4 outline-none focus:border-red-600" autofocus @keyup.enter="verifyOtp">
+            <div class="flex gap-2">
+                <button @click="verifyOtp" :disabled="verifying" class="flex-1 py-2 rounded-lg text-white font-bold transition-all duration-200" :class="verifying ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'" style="background: linear-gradient(135deg, #DC2626, #B8860B);">
+                    <span x-show="!verifying">تأیید</span>
+                    <span x-show="verifying" class="inline-block">⏳</span>
+                </button>
+                <button @click="resendOtp" :disabled="resendCooldown > 0" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100" x-text="resendCooldown > 0 ? 'ارسال مجدد (' + resendCooldown + ')' : 'ارسال مجدد'"></button>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection

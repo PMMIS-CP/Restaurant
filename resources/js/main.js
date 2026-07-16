@@ -1,65 +1,294 @@
-// مختص به فایل resources\views\front\pages\reserve.blade.php
+// تابع کمکی برای CSRF
+function csrfToken() {
+    return document.querySelector('meta[name="csrf-token"]').content;
+}
+
+// کامپوننت Alpine برای کنترل مودال
+document.addEventListener('alpine:init', () => {
+    Alpine.data('otpModal', () => ({
+        show: false,
+        step: 'send',
+        phone: '',
+        code: '',
+        sending: false,
+        verifying: false,
+        message: '',
+        resendCooldown: 0,
+        intervalId: null,
+
+        open(phone) {
+            this.phone = phone;
+            this.step = 'send';
+            this.code = '';
+            this.show = true;
+            this.sending = false;
+            this.verifying = false;
+            this.message = '';
+            this.clearCooldown();
+        },
+
+        cancel() {
+            this.show = false;
+            this.clearCooldown();
+        },
+
+        async sendOtp() {
+            this.sending = true;
+            try {
+                const store = Alpine.store('reserveForm');
+                const formData = new FormData();
+                formData.append('_token', csrfToken());
+                formData.append('name', store.name);
+                formData.append('phone', store.phone);
+                formData.append('email', store.email);
+                formData.append('event_type', store.event_type);
+                formData.append('guest_count', store.guest_count);
+                formData.append('reservation_date', store.reservation_date);
+                formData.append('entry_time', store.entry_time);
+                formData.append('exit_time', store.exit_time);
+                formData.append('description', store.description);
+
+                const res = await fetch('/reserve/send-otp', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken()
+                    }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    this.step = 'verify';
+                    this.startCooldown(60);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا',
+                        text: data.message || 'خطا در ارسال کد',
+                        confirmButtonText: 'باشه'
+                    });
+                    if (res.status !== 429) this.show = false;
+                }
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'خطا', text: 'ارتباط با سرور برقرار نشد.', confirmButtonText: 'باشه' });
+                this.show = false;
+            } finally {
+                this.sending = false;
+            }
+        },
+
+        async verifyOtp() {
+            if (this.code.length !== 4) {
+                Swal.fire({ icon: 'warning', title: 'کد ۴ رقمی را وارد کنید', confirmButtonText: 'باشه' });
+                return;
+            }
+            this.verifying = true;
+            try {
+                const res = await fetch('/reserve/verify-otp', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken()
+                    },
+                    body: JSON.stringify({
+                        phone: this.phone,
+                        code: this.code
+                    })
+                });
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    // بستن مودال
+                    this.show = false;
+                    this.clearCooldown();
+                    
+                    // نمایش فقط یک پیام نهایی
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'رزرو با موفقیت ثبت شد',
+                        text: data.message || 'رزرو شما با موفقیت ثبت شد.',
+                        confirmButtonText: 'متوجه شدم'
+                    }).then(() => {
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'خطا',
+                        text: data.message || 'کد نادرست است.',
+                        confirmButtonText: 'باشه'
+                    });
+                }
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'خطا', text: 'ارتباط با سرور برقرار نشد.', confirmButtonText: 'باشه' });
+            } finally {
+                this.verifying = false;
+            }
+        },
+
+        async resendOtp() {
+            if (this.resendCooldown > 0) return;
+            this.sending = true;
+            try {
+                const store = Alpine.store('reserveForm');
+                const formData = new FormData();
+                formData.append('_token', csrfToken());
+                formData.append('name', store.name);
+                formData.append('phone', store.phone);
+                formData.append('email', store.email);
+                formData.append('event_type', store.event_type);
+                formData.append('guest_count', store.guest_count);
+                formData.append('reservation_date', store.reservation_date);
+                formData.append('entry_time', store.entry_time);
+                formData.append('exit_time', store.exit_time);
+                formData.append('description', store.description);
+
+                const res = await fetch('/reserve/send-otp', {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken()
+                    }
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    this.startCooldown(60);
+                    Swal.fire({ icon: 'success', title: 'کد مجدداً ارسال شد', showConfirmButton: false, timer: 1500 });
+                } else {
+                    Swal.fire({ icon: 'error', title: 'خطا', text: data.message || 'خطا در ارسال کد', confirmButtonText: 'باشه' });
+                }
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'خطا', text: 'ارتباط با سرور برقرار نشد.', confirmButtonText: 'باشه' });
+            } finally {
+                this.sending = false;
+            }
+        },
+
+        startCooldown(seconds) {
+            this.clearCooldown();
+            this.resendCooldown = seconds;
+            this.intervalId = setInterval(() => {
+                this.resendCooldown--;
+                if (this.resendCooldown <= 0) {
+                    this.clearCooldown();
+                }
+            }, 1000);
+        },
+
+        clearCooldown() {
+            if (this.intervalId) {
+                clearInterval(this.intervalId);
+                this.intervalId = null;
+            }
+            this.resendCooldown = 0;
+        }
+    }));
+});
+
+// تابع handleSubmit اصلاح شده
 window.handleSubmit = function(event) {
     event.preventDefault();
-    
-    // 1. خواندن فروشگاه Alpine (همان منبع یکتا)
     const store = Alpine.store('reserveForm');
-    console.log('📦 Store data:', store);
-
-    // 2. ساخت FormData تمیز
-    const formData = new FormData();
-    formData.append('_token', document.querySelector('meta[name="csrf-token"]').content);
-    formData.append('name', store.name);
-    formData.append('phone', store.phone);
-    formData.append('email', store.email);
-    formData.append('event_type', store.event_type);
-    formData.append('guest_count', store.guest_count);
-    formData.append('reservation_date', store.reservation_date);
-    formData.append('entry_time', store.entry_time);
-    formData.append('exit_time', store.exit_time);
-    formData.append('description', store.description);
-
-    // لاگ نهایی
-    console.log('📦 Final FormData:');
-    for (let [k, v] of formData.entries()) console.log(`  ${k}: ${v}`);
-
-    // 3. ارسال (fetch بدون تغییر، فقط body=formData)
-    fetch(event.target.action, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            Swal.fire({
-                icon: 'success',
-                title: 'موفق',
-                text: data.message,
-                confirmButtonText: 'متوجه شدم'  // 👈 اینجا تغییر دادیم
-            }).then(() => location.reload());
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: 'خطا',
-                text: data.message,
-                confirmButtonText: 'متوجه شدم'  // 👈 اینجا هم تغییر دادیم
-            });
-        }
-    })
-    .catch(err => {
-        console.error(err);
-        Swal.fire({
-            icon: 'error',
-            title: 'خطا',
-            text: 'ارتباط با سرور برقرار نشد.',
-            confirmButtonText: 'متوجه شدم'  // 👈 و اینجا هم
+    
+    if (!store.phone || !store.name) {
+        Swal.fire({ 
+            icon: 'warning', 
+            title: 'اطلاعات ضروری را تکمیل کنید.', 
+            confirmButtonText: 'باشه' 
         });
-    });
+        return;
+    }
+    
+    // روش صحیح دسترسی به کامپوننت Alpine
+    const modalEl = document.querySelector('[x-data="otpModal()"]');
+    
+    if (!modalEl) {
+        Swal.fire({ 
+            icon: 'error', 
+            title: 'خطا', 
+            text: 'مودال یافت نشد. لطفاً صفحه را رفرش کنید.', 
+            confirmButtonText: 'باشه' 
+        });
+        return;
+    }
+    
+    // استفاده از Alpine.$data برای دسترسی به دیتای کامپوننت
+    try {
+        const modalData = Alpine.$data(modalEl);
+        if (modalData && typeof modalData.open === 'function') {
+            modalData.open(store.phone);
+        } else {
+            // روش جایگزین: استفاده از __x
+            if (modalEl.__x && modalEl.__x.$data) {
+                modalEl.__x.$data.open(store.phone);
+            } else {
+                throw new Error('Cannot access modal data');
+            }
+        }
+    } catch (error) {
+        console.error('Error accessing modal:', error);
+        Swal.fire({ 
+            icon: 'error', 
+            title: 'خطا', 
+            text: 'خطا در باز کردن مودال. لطفاً دوباره تلاش کنید.', 
+            confirmButtonText: 'باشه' 
+        });
+    }
+};
+
+// تابع handleSubmit اصلاح شده
+window.handleSubmit = function(event) {
+    event.preventDefault();
+    const store = Alpine.store('reserveForm');
+    
+    if (!store.phone || !store.name) {
+        Swal.fire({ 
+            icon: 'warning', 
+            title: 'اطلاعات ضروری را تکمیل کنید.', 
+            confirmButtonText: 'باشه' 
+        });
+        return;
+    }
+    
+    // روش صحیح دسترسی به کامپوننت Alpine
+    const modalEl = document.querySelector('[x-data="otpModal()"]');
+    
+    if (!modalEl) {
+        Swal.fire({ 
+            icon: 'error', 
+            title: 'خطا', 
+            text: 'مودال یافت نشد. لطفاً صفحه را رفرش کنید.', 
+            confirmButtonText: 'باشه' 
+        });
+        return;
+    }
+    
+    // استفاده از Alpine.$data برای دسترسی به دیتای کامپوننت
+    try {
+        const modalData = Alpine.$data(modalEl);
+        if (modalData && typeof modalData.open === 'function') {
+            modalData.open(store.phone);
+        } else {
+            // روش جایگزین: استفاده از __x
+            if (modalEl.__x && modalEl.__x.$data) {
+                modalEl.__x.$data.open(store.phone);
+            } else {
+                throw new Error('Cannot access modal data');
+            }
+        }
+    } catch (error) {
+        console.error('Error accessing modal:', error);
+        Swal.fire({ 
+            icon: 'error', 
+            title: 'خطا', 
+            text: 'خطا در باز کردن مودال. لطفاً دوباره تلاش کنید.', 
+            confirmButtonText: 'باشه' 
+        });
+    }
 };
 
 // resources\views\front\components\gallery.blade.php
