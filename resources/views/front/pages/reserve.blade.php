@@ -630,7 +630,7 @@ input:-webkit-autofill:focus {
 </div>
 </form>
 {{-- مودال تأیید OTP --}}
-<div x-data="otpModal()" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-init="()=>{ $watch('show', val => $el.style.display = val ? 'flex' : 'none') }">
+<div x-data="otpModal()" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-100 flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-init="()=>{ $watch('show', val => $el.style.display = val ? 'flex' : 'none') }">
     <div class="bg-white/95 rounded-2xl shadow-2xl p-6 w-80 max-w-[90vw] text-right" @click.outside="if(step==='send') show=false">
         {{-- مرحله ارسال کد --}}
         <div x-show="step === 'send'">
