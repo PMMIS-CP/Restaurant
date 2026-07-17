@@ -93,4 +93,18 @@ return array (
       'enter_text' => 'ورود',
     ),
   ),
+  'comments' => [
+      'section_title' => 'بازخورد مشتریان',
+      'section_description' => 'آنچه میهمانان عزیزمان درباره تجربه خود در کاخ سنتی موراکو می‌گویند',
+      'form_title' => 'نظر شما درباره کاخ سنتی موراکو',
+      'form_name_label' => 'نام شما (نمایش داده می‌شود)',
+      'form_comment_label' => 'متن نظر',
+      'form_submit' => 'ارسال نظر',
+      'form_notice' => 'نظر شما پس از تأیید مدیر در این بخش نمایش داده می‌شود.',
+      'guest_placeholder_name' => 'مهمان',
+      'guest_placeholder_submit' => 'ارسال نظر',
+      'guest_overlay_title' => 'برای ثبت نظر وارد شوید',
+      'guest_overlay_description' => 'برای به اشتراک گذاشتن تجربه خود در کاخ سنتی موراکو، لطفاً ابتدا وارد حساب کاربری خود شوید.',
+      'guest_login_button' => 'ورود به سایت',
+  ],
 );

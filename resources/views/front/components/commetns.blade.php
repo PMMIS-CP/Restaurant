@@ -4,11 +4,10 @@
         <div class="w-24 h-1 bg-[#D4AF37] mx-auto mb-4 rounded-full"></div>
         <div class="text-center mb-8">
             <h4 class="text-3xl md:text-4xl font-bold text-[#8B0000] relative inline-block">
-                بازخورد مشتریان
-
+                {{ __('home.comments.section_title') }}
             </h4>
             <p class="mt-6 text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
-                آنچه میهمانان عزیزمان درباره تجربه خود در کاخ سنتی موراکو می‌گویند
+                {{ __('home.comments.section_description') }}
             </p>
         </div>
 
@@ -78,7 +77,7 @@
 
         {{-- ==================== بخش ارسال نظر ==================== --}}
         <div class="mt-20 max-w-2xl mx-auto">
-            <h3 class="text-2xl font-bold text-[#8B0000] text-center mb-8">نظر شما درباره کاخ سنتی موراکو</h3>
+            <h3 class="text-2xl font-bold text-[#8B0000] text-center mb-8">{{ __('home.comments.form_title') }}</h3>
 
             {{-- نمایش پیام موفقیت --}}
             @if(session('success'))
@@ -92,7 +91,7 @@
                 <form action="{{ route('comments.store') }}" method="POST" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border-t-4 border-[#D4AF37] space-y-6">
                     @csrf
                     <div>
-                        <label for="comment-name" class="block text-sm font-medium text-gray-700 mb-1">نام شما (نمایش داده می‌شود)</label>
+                        <label for="comment-name" class="block text-sm font-medium text-gray-700 mb-1">{{ __('home.comments.form_name_label') }}</label>
                         <input type="text" name="name" id="comment-name" 
                                value="{{ old('name', Auth::user()->name) }}"
                                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/50 focus:border-[#8B0000] transition"
@@ -102,7 +101,7 @@
                         @enderror
                     </div>
                     <div>
-                        <label for="comment-body" class="block text-sm font-medium text-gray-700 mb-1">متن نظر</label>
+                        <label for="comment-body" class="block text-sm font-medium text-gray-700 mb-1">{{ __('home.comments.form_comment_label') }}</label>
                         <textarea name="comment" id="comment-body" rows="5"
                                   class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/50 focus:border-[#8B0000] transition"
                                   required>{{ old('comment') }}</textarea>
@@ -112,9 +111,9 @@
                     </div>
                     <button type="submit" 
                             class="w-full py-3 bg-[#8B0000] text-white rounded-xl hover:bg-[#6b0000] transition font-medium text-sm">
-                        ارسال نظر
+                        {{ __('home.comments.form_submit') }}
                     </button>
-                    <p class="text-xs text-gray-400 text-center">نظر شما پس از تأیید مدیر در این بخش نمایش داده می‌شود.</p>
+                    <p class="text-xs text-gray-400 text-center">{{ __('home.comments.form_notice') }}</p>
                 </form>
             @else
                 {{-- حالت مهمان: فرم مات با لینک ورود --}}
@@ -122,14 +121,14 @@
                     <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border-t-4 border-gray-200 opacity-50 blur-xs pointer-events-none select-none">
                         <div class="space-y-6">
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">نام شما</label>
-                                <div class="w-full rounded-xl border border-gray-300 px-4 py-3 bg-gray-50 text-sm text-gray-400">مهمان</div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('home.comments.form_name_label') }}</label>
+                                <div class="w-full rounded-xl border border-gray-300 px-4 py-3 bg-gray-50 text-sm text-gray-400">{{ __('home.comments.guest_placeholder_name') }}</div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-1">متن نظر</label>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">{{ __('home.comments.form_comment_label') }}</label>
                                 <div class="w-full rounded-xl border border-gray-300 px-4 py-3 bg-gray-50 h-32 text-sm text-gray-400"></div>
                             </div>
-                            <div class="w-full py-3 bg-gray-300 rounded-xl text-center text-sm text-gray-500">ارسال نظر</div>
+                            <div class="w-full py-3 bg-gray-300 rounded-xl text-center text-sm text-gray-500">{{ __('home.comments.guest_placeholder_submit') }}</div>
                         </div>
                     </div>
                     {{-- لایه راهنما --}}
@@ -138,10 +137,10 @@
                             <svg class="w-10 h-10 text-[#D4AF37] mx-auto mb-3" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/>
                             </svg>
-                            <p class="text-gray-800 font-semibold mb-2">برای ثبت نظر وارد شوید</p>
-                            <p class="text-sm text-gray-600 mb-4">برای به اشتراک گذاشتن تجربه خود در کاخ سنتی موراکو، لطفاً ابتدا وارد حساب کاربری خود شوید.</p>
+                            <p class="text-gray-800 font-semibold mb-2">{{ __('home.comments.guest_overlay_title') }}</p>
+                            <p class="text-sm text-gray-600 mb-4">{{ __('home.comments.guest_overlay_description') }}</p>
                             <a href="/login" class="inline-block px-6 py-2 bg-[#8B0000] text-white rounded-full hover:bg-[#6b0000] transition text-sm font-medium">
-                                ورود به سایت
+                                {{ __('home.comments.guest_login_button') }}
                             </a>
                         </div>
                     </div>
