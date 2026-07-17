@@ -9,24 +9,24 @@
                     {{ config('app.name', 'رستوران') }}
                 </a>
                 <p class="text-sm text-[#E8C88A] leading-relaxed">
-                    بهترین تجربه غذایی را با ما داشته باشید. کیفیت، طعم و اصالت در هر وعده.
+                    {{ __('footer.brand_description') }}
                 </p>
             </div>
 
             {{-- ستون ۲: لینک‌های سریع --}}
             <div>
-                <h3 class="text-[#F5C518] font-semibold mb-4 text-lg">دسترسی سریع</h3>
+                <h3 class="text-[#F5C518] font-semibold mb-4 text-lg">{{ __('footer.quick_access') }}</h3>
                 <ul class="space-y-2.5">
-                    <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">خانه</a></li>
-                    <li><a href="{{ url('/menu') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">منوی غذا</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">تماس با ما</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">درباره ما</a></li>
+                    <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.home') }}</a></li>
+                    <li><a href="{{ url('/menu') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.menu') }}</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.contact_us') }}</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.about_us') }}</a></li>
                 </ul>
             </div>
 
             {{-- ستون ۳: اطلاعات تماس با شماره‌ها --}}
             <div>
-                <h3 class="text-[#F5C518] font-semibold mb-4 text-lg">ارتباط با ما</h3>
+                <h3 class="text-[#F5C518] font-semibold mb-4 text-lg">{{ __('footer.contact_title') }}</h3>
                 <ul class="space-y-3 text-sm">
                     {{-- شماره موبایل --}}
                     <li class="flex items-center justify-center md:justify-start gap-2 text-gray-200">
@@ -51,7 +51,7 @@
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-[#F5C518] shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
-                        <span>info@restaurant.ir</span>
+                        <span>{{ __('footer.email') }}</span>
                     </li>
                 </ul>
             </div>
@@ -60,7 +60,7 @@
         {{-- خط جداکننده و کپی‌رایت --}}
         <div class="border-t border-[#7A2A3E] mt-8 pt-6 text-center">
             <p class="text-sm text-[#B88A6B]">
-                &copy; {{ date('Y') }} {{ config('app.name') }}. تمام حقوق محفوظ است.
+                &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('footer.copyright') }}
             </p>
         </div>
     </div>
