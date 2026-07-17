@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalManagementController;
 use App\Http\Controllers\Admin\Dashboard\ReserveManagementController;
 use App\Http\Controllers\Admin\Dashboard\UserManagementController;
 use App\Http\Controllers\Admin\Dashboard\TranslationController;
+use App\Http\Controllers\Admin\Dashboard\CommentController;
 
 Route::name('admin.')->group(function () {
 
@@ -27,6 +28,16 @@ Route::name('admin.')->group(function () {
         // Dashboard
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
+
+        // Comments Management
+        Route::prefix('comments')->name('comments.')->group(function () {
+            Route::get('/', [CommentController::class, 'index'])->name('index');
+            Route::get('/{comment}', [CommentController::class, 'show'])->name('show');
+            Route::get('/{comment}/edit', [CommentController::class, 'edit'])->name('edit');
+            Route::put('/{comment}', [CommentController::class, 'update'])->name('update');
+            Route::delete('/{comment}', [CommentController::class, 'destroy'])->name('destroy');
+            Route::patch('/{comment}/toggle', [CommentController::class, 'toggleStatus'])->name('toggle');
+        });
 
         // User Management
         Route::prefix('users')->name('users.')->group(function () {

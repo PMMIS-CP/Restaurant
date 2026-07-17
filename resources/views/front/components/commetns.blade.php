@@ -1,91 +1,14 @@
 @php
-    $testimonials = $testimonials ?? [
-        [
-            'name' => 'سارا احمدی',
-            'comment' => 'دیشب تولد همسرم رو تو سالن VIP کاخ سنتی موراکو گرفتیم. دکور سرخ و طلایی سالن واقعاً مجلل و شاهانه بود. پرسنل هم سنگ تموم گذاشتن. یه شب رویایی ساختین برامون.',
-            'tags' => ['VIP', 'رزرو میز'],
-        ],
-        [
-            'name' => 'امیرحسین کاظمی',
-            'comment' => 'برای اولین بار از سایت سفارش آنلاین غذا دادم. بسته‌بندی بسیار شکیل و باکیفیت بود. طعم چلوکباب کوبیده‌شون دقیقاً همون طعم اصیل ایرانی رو داشت که تو خود رستوران سرو می‌کنن.',
-            'tags' => ['سفارش آنلاین'],
-        ],
-        [
-            'name' => 'دکتر مریم هاشمی',
-            'comment' => 'جلسه کاری با شرکای خارجی‌مون رو تو اتاق VIP کاخ موراکو برگزار کردم. ترکیب معماری سنتی ایرانی با اون رنگ‌های سرخ و زرد سلطنتی، مهمان‌های خارجی رو میخکوب کرده بود. افتخار فرهنگ ایرانی رو بهشون نشون دادم.',
-            'tags' => ['VIP', 'رزرو میز'],
-        ],
-        [
-            'name' => 'رضا نیکخواه',
-            'comment' => 'من و خانواده‌م عاشق محوطه گردش کاخ موراکو هستیم. بعد از صرف شام، قدم زدن تو حیاط سنتی با حوض فیروزه‌ای و نورپردازی گرم، یه حس نوستالژیک فوق‌العاده داره. هر هفته میایم اینجا.',
-            'tags' => ['بازدید از کاخ سنتی موراکو', 'رزرو میز'],
-        ],
-        [
-            'name' => 'شیرین الیاسی',
-            'comment' => 'مراسم بله‌برون دخترم رو تو سالن اصلی کاخ موراکو برگزار کردیم. سقف‌های مقرنس‌کاری شده با نورپردازی طلایی، یه فضای رویایی ساخته بود. همه مهمونا محو زیبایی فضا بودن. بی‌نهایت ممنون از تیم حرفه‌ای کاخ.',
-            'tags' => ['VIP', 'رزرو میز'],
-        ],
-        [
-            'name' => 'پویا فرهادی',
-            'comment' => 'سفارش آنلاین دیزی سنگی کاخ موراکو یه تجربه متفاوت بود. همه چی دقیقاً مثل سرو داخل رستوران چیده شده بود. گوشت کوبیده و آبگوشت جاافتاده‌ش واقعاً نوستالژیک و دلچسب بود.',
-            'tags' => ['سفارش آنلاین'],
-        ],
-        [
-            'name' => 'کتایون صالحی',
-            'comment' => 'برای سالگرد ازدواجمون میز VIP کنار پنجره‌های ارسی رزرو کردم. وقتی نور از شیشه‌های رنگی رد میشد و روی میز ما می‌تابید، همسرم اشک تو چشماش جمع شد. کاخ موراکو خاطره‌سازترین جای تهران برای ماست.',
-            'tags' => ['VIP', 'رزرو میز'],
-        ],
-        [
-            'name' => 'مهندس کامران ملکی',
-            'comment' => 'به عنوان یه معمار سنتی‌کار، بازدید از کاخ موراکو برام حکم کلاس درس رو داشت. جزئیات آجرکاری، کاشی‌های هفت‌رنگ و ترکیب بی‌نظیر سرخ و زرد سلطنتی تو نما، یه شاهکار احیا شده از معماری قاجاریه.',
-            'tags' => ['بازدید از کاخ سنتی موراکو'],
-        ],
-        [
-            'name' => 'نرگس جعفری',
-            'comment' => 'سه‌شنبه‌ها که موسیقی سنتی زنده دارن رو از دست نمیدم. نشستن تو محوطه گردش کاخ زیر نور فانوس‌ها، با صدای تار و نی و یه بشقاب بادمجان شکم‌پر... اینجا انگار زمان متوقف میشه.',
-            'tags' => ['بازدید از کاخ سنتی موراکو', 'رزرو میز'],
-        ],
-        [
-            'name' => 'هادی توکلی',
-            'comment' => 'رزرو آنلاین میز برای شب یلدا رو یه هفته قبل انجام دادم. به محض ورود، یه میز تزئین شده با انار و هندوانه و شمع‌های قرمز منتظرمون بود. حواس‌جمعی تیم رزرو کاخ موراکو تحسین‌برانگیزه.',
-            'tags' => ['رزرو میز'],
-        ],
-        [
-            'name' => 'آیدا رحیمی',
-            'comment' => 'دیروز برای ناهار مهمون کاخ موراکو بودیم. تور بازدید از بخش‌های تاریخی کاخ مثل تالار آینه و شربت‌خانه قدیمی برامون گذاشتن. بعدش یه ناهار مجلسی تو سالن اصلی خوردیم. یه روز کامل و خاطره‌انگیز بود.',
-            'tags' => ['بازدید از کاخ سنتی موراکو', 'رزرو میز'],
-        ],
-        [
-            'name' => 'فرزاد امینی',
-            'comment' => 'برای مهمونی ۲۰ نفره فامیل، اتاق VIP اختصاصی گرفتم. منوی شخصی‌سازی شده با اسم فامیل چاپ کرده بودن. موسیقی زنده سنتی هم مارو تا آخر شب سرحال نگه داشت. حرفه‌ای‌ترین سرویس VIP که دیدم.',
-            'tags' => ['VIP'],
-        ],
-        [
-            'name' => 'محدثه کریمی',
-            'comment' => 'تجربه سفارش آنلاین کاخ موراکو از خیلی رستوران‌های حضوری بهتر بود! فسنجونشون با گردو تازه و رب انار ترش، عین غذاهای دست‌پخت مادربزرگم بود. بسته‌بندی مسی رنگ هم خیلی چشمنواز بود.',
-            'tags' => ['سفارش آنلاین'],
-        ],
-        [
-            'name' => 'تورج پارسایی',
-            'comment' => 'جهانگرد هستم و رستوران‌های تاریخی زیادی تو دنیا دیدم. کاخ سنتی موراکو تو تهران یه جواهر پنهانه. تلفیق غذاهای اصیل ایرانی با اون فضای باشکوه قجری، یه تجربه جهانی در کلاس جهانیه.',
-            'tags' => ['بازدید از کاخ سنتی موراکو', 'VIP'],
-        ],
-        [
-            'name' => 'گلناز صادقی',
-            'comment' => 'هر وقت میخوام یه مهمون ویژه رو تحت تأثیر بذارم، بدون فکر رزرو میز VIP کاخ موراکو رو میزنم. لوسترهای کریستال، دیوارهای سرخ مخملی و سرویس طلایی، ترکیبیه که هیچ‌کس نمی‌تونه فراموش کنه.',
-            'tags' => ['VIP', 'رزرو میز'],
-        ],
-    ];
-
     $starIcon = '<svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
 
-    // نگاشت تگ‌ها به رنگ‌های مناسب
     $tagColors = [
         'سفارش آنلاین' => 'bg-green-100 text-green-800',
         'رزرو میز' => 'bg-blue-100 text-blue-800',
         'VIP' => 'bg-[#D4AF37]/20 text-[#8B0000] font-bold',
         'بازدید از کاخ سنتی موراکو' => 'bg-[#8B0000]/10 text-[#8B0000]',
     ];
+    
+    $testimonials = $testimonials ?? [];
 @endphp
 <div class="w-full py-16 bg-linear-to-b from-[#8B0000]/5 to-transparent">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -163,6 +86,79 @@
 
             {{-- صفحه‌بندی --}}
             <div x-ref="pagination" class="flex justify-center mt-8 space-x-2 space-x-reverse"></div>
+        </div>
+
+        {{-- ==================== بخش ارسال نظر ==================== --}}
+        <div class="mt-20 max-w-2xl mx-auto">
+            <h3 class="text-2xl font-bold text-[#8B0000] text-center mb-8">نظر شما درباره کاخ سنتی موراکو</h3>
+
+            {{-- نمایش پیام موفقیت --}}
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl text-center">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @auth
+                {{-- فرم ارسال نظر برای کاربر لاگین‌شده --}}
+                <form action="{{ route('comments.store') }}" method="POST" class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border-t-4 border-[#D4AF37] space-y-6">
+                    @csrf
+                    <div>
+                        <label for="comment-name" class="block text-sm font-medium text-gray-700 mb-1">نام شما (نمایش داده می‌شود)</label>
+                        <input type="text" name="name" id="comment-name" 
+                               value="{{ old('name', Auth::user()->name) }}"
+                               class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/50 focus:border-[#8B0000] transition"
+                               required>
+                        @error('name')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <div>
+                        <label for="comment-body" class="block text-sm font-medium text-gray-700 mb-1">متن نظر</label>
+                        <textarea name="comment" id="comment-body" rows="5"
+                                  class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/50 focus:border-[#8B0000] transition"
+                                  required>{{ old('comment') }}</textarea>
+                        @error('comment')
+                            <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                    <button type="submit" 
+                            class="w-full py-3 bg-[#8B0000] text-white rounded-xl hover:bg-[#6b0000] transition font-medium text-sm">
+                        ارسال نظر
+                    </button>
+                    <p class="text-xs text-gray-400 text-center">نظر شما پس از تأیید مدیر در این بخش نمایش داده می‌شود.</p>
+                </form>
+            @else
+                {{-- حالت مهمان: فرم مات با لینک ورود --}}
+                <div class="relative">
+                    <div class="bg-white rounded-2xl shadow-lg p-6 md:p-8 border-t-4 border-gray-200 opacity-50 blur-xs pointer-events-none select-none">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">نام شما</label>
+                                <div class="w-full rounded-xl border border-gray-300 px-4 py-3 bg-gray-50 text-sm text-gray-400">مهمان</div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">متن نظر</label>
+                                <div class="w-full rounded-xl border border-gray-300 px-4 py-3 bg-gray-50 h-32 text-sm text-gray-400"></div>
+                            </div>
+                            <div class="w-full py-3 bg-gray-300 rounded-xl text-center text-sm text-gray-500">ارسال نظر</div>
+                        </div>
+                    </div>
+                    {{-- لایه راهنما --}}
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="bg-white/90 backdrop-blur-xs rounded-xl px-8 py-6 shadow-2xl text-center max-w-xs">
+                            <svg class="w-10 h-10 text-[#D4AF37] mx-auto mb-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/>
+                            </svg>
+                            <p class="text-gray-800 font-semibold mb-2">برای ثبت نظر وارد شوید</p>
+                            <p class="text-sm text-gray-600 mb-4">برای به اشتراک گذاشتن تجربه خود در کاخ سنتی موراکو، لطفاً ابتدا وارد حساب کاربری خود شوید.</p>
+                            <a href="/login" class="inline-block px-6 py-2 bg-[#8B0000] text-white rounded-full hover:bg-[#6b0000] transition text-sm font-medium">
+                                ورود به سایت
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            @endauth
         </div>
     </div>
 </div>

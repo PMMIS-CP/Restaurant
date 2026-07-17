@@ -11,6 +11,7 @@ use App\Http\Controllers\Front\SpinController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\FoodModalController;
 use App\Http\Controllers\Front\DashboardController;
+use App\Http\Controllers\Front\CommentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,7 +25,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    Route::post('/comments', [CommentController::class, 'store'])->name('comments.store');
 });
+
+Route::get('/comments', [CommentController::class, 'index'])->name('comments.index');
 
 Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
 Route::get('/menu', [MenuController::class, 'index'])->name('menu');
