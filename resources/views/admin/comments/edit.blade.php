@@ -60,16 +60,39 @@
 
             {{-- تگ‌ها --}}
             <div class="mb-6">
-                <label for="tags" class="block text-sm font-medium text-gray-700 mb-1">
-                    تگ‌ها 
-                    <span class="text-gray-400 text-xs font-normal">(با کاما جدا کنید)</span>
-                </label>
-                <input type="text" name="tags_input" id="tags" 
-                       value="{{ old('tags_input', is_array($comment->tags) ? implode('، ', $comment->tags) : '') }}"
-                       class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/50 focus:border-[#8B0000] transition"
-                       placeholder="مثال: VIP، رزرو میز، سفارش آنلاین">
-                <p class="mt-1 text-xs text-gray-400">تگ‌ها در فرانت به‌صورت خودکار دسته‌بندی می‌شوند. می‌توانید ویرایش کنید.</p>
+                <label class="block text-sm font-medium text-gray-700 mb-2">تگ‌ها</label>
+                
+                {{-- تگ‌های از پیش تعریف‌شده --}}
+                <div class="flex flex-wrap gap-3">
+                    @foreach($tagColors as $tagName => $colorClass)
+                        <label class="inline-flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" name="tags[]" value="{{ $tagName }}"
+                                {{ in_array($tagName, old('tags', $comment->tags ?? [])) ? 'checked' : '' }}
+                                class="w-5 h-5 rounded border-gray-300 text-[#8B0000] focus:ring-[#8B0000]/50">
+                            <span class="text-xs font-semibold px-3 py-1.5 rounded-full {{ $colorClass }}">
+                                {{ $tagName }}
+                            </span>
+                        </label>
+                    @endforeach
+                </div>
+
+                {{-- تگ‌های سفارشی --}}
+                <div class="mt-4">
+                    <label for="custom_tags" class="block text-sm font-medium text-gray-700 mb-1">
+                        تگ‌های سفارشی
+                        <span class="text-gray-400 text-xs font-normal">(با کاما جدا کنید)</span>
+                    </label>
+                    <input type="text" name="custom_tags" id="custom_tags"
+                        value="{{ old('custom_tags', $customTagsString ?? '') }}"
+                        class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/50 focus:border-[#8B0000] transition"
+                        placeholder="مثال: مهمان ویژه، شام رمانتیک">
+                    <p class="mt-1 text-xs text-gray-400">تگ‌های سفارشی با رنگ طوسی نمایش داده می‌شوند.</p>
+                </div>
+
                 @error('tags')
+                    <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
+                @enderror
+                @error('custom_tags')
                     <p class="mt-1 text-xs text-red-600">{{ $message }}</p>
                 @enderror
             </div>

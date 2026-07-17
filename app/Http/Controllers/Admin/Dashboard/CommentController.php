@@ -34,7 +34,20 @@ class CommentController extends Controller
     public function edit(Comments $comment)
     {
         $comment->load('user');
-        return view('admin.comments.edit', compact('comment'));
+
+        $tagColors = [
+            'سفارش آنلاین'           => 'bg-green-100 text-green-800',
+            'رزرو میز'                => 'bg-blue-100 text-blue-800',
+            'VIP'                     => 'bg-[#D4AF37]/20 text-[#8B0000] font-bold',
+            'بازدید از کاخ سنتی موراکو' => 'bg-[#8B0000]/10 text-[#8B0000]',
+        ];
+
+        $predefinedKeys = array_keys($tagColors);
+        $currentTags = $comment->tags ?? [];
+        $customTags = array_diff($currentTags, $predefinedKeys);
+        $customTagsString = implode('، ', $customTags);
+
+        return view('admin.comments.edit', compact('comment', 'tagColors', 'customTagsString'));
     }
 
     /**
@@ -43,25 +56,29 @@ class CommentController extends Controller
     public function update(Request $request, Comments $comment)
     {
         $validated = $request->validate([
-            'name'       => 'required|string|max:255',
-            'comment'    => 'required|string',
-            'tags_input' => 'nullable|string|max:500',     // تغییر کرد: دریافت رشته
-            'is_active'  => 'boolean',
+            'name'        => 'required|string|max:255',
+            'comment'     => 'required|string',
+            'tags'        => 'nullable|array',
+            'tags.*'      => 'string|max:255',
+            'custom_tags' => 'nullable|string|max:500',
+            'is_active'   => 'boolean',
         ]);
 
-        // تبدیل رشته تگ‌ها به آرایه
-        $tags = [];
-        if (!empty($validated['tags_input'])) {
-            $tags = array_map('trim', explode('،', $validated['tags_input']));
-            // حذف آیتم‌های خالی
-            $tags = array_filter($tags, fn($tag) => !empty($tag));
+        $predefined = $request->input('tags', []);
+        $customRaw  = $request->input('custom_tags', '');
+
+        $custom = [];
+        if (!empty($customRaw)) {
+            $custom = array_map('trim', explode('،', $customRaw));
+            $custom = array_filter($custom, fn($tag) => !empty($tag));
         }
 
-        // جایگزینی tags_input با آرایه tags برای ذخیره در دیتابیس
+        $allTags = array_values(array_unique(array_merge($predefined, $custom)));
+
         $comment->update([
             'name'      => $validated['name'],
             'comment'   => $validated['comment'],
-            'tags'      => array_values($tags),   // ریست کلیدهای آرایه
+            'tags'      => $allTags,
             'is_active' => $request->boolean('is_active'),
         ]);
 
