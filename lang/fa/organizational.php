@@ -1,0 +1,14 @@
+<?php
+
+return [
+    'page_title' => 'منوی سازمانی',
+    'title' => 'منوی سازمانی',
+    'subtitle' => 'منوی ویژه سازمان‌ها و شرکت‌ها',
+    'search_placeholder' => 'جستجوی غذا یا ترکیبات...',
+    'max_price_label' => 'سقف قیمت:',
+    'items_found_label' => 'موارد یافت شده:',
+    'empty_title' => 'آیتمی یافت نشد',
+    'empty_description' => 'لطفاً فیلترها یا عبارت جستجوی خود را تغییر دهید.',
+    'organizational_badge' => 'سازمانی',
+    'currency' => 'تومان',
+];

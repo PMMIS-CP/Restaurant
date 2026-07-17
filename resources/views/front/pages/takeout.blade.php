@@ -1,6 +1,6 @@
 {{-- resources\views\front\pages\takeout.blade.php --}}
 @extends('front.layouts.app')
-@section('title', 'منوی بیرون‌بر')
+@section('title', __('takeout.page_title'))
 @section('content')
 
 <style>
@@ -110,10 +110,10 @@
         
         <div class="relative z-10 mt-10">
             <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
-                منوی بیرون‌بر
+                {{ __('takeout.title') }}
             </h1>
             <p class="mt-4 text-sm md:text-base tracking-[0.3em] uppercase text-[#FFD700]/70 font-medium">
-                سفارش آنلاین - تحویل سریع
+                {{ __('takeout.subtitle') }}
             </p>
             <div class="mt-6 flex justify-center gap-3">
                 <span class="w-16 h-0.5 bg-linear-to-r from-transparent via-[#FFD700] to-transparent"></span>
@@ -134,14 +134,14 @@
                         </svg>
                     </span>
                     <input type="text" id="search-input" 
-                        placeholder="جستجوی غذا یا ترکیبات..." 
+                        placeholder="{{ __('takeout.search_placeholder') }}"
                         class="w-full bg-[#0a0203] text-sm text-gray-100 pr-11 pl-4 py-3.5 rounded-xl border border-[#ffd700]/20 focus:outline-none focus:border-[#ffd700] focus:ring-1 focus:ring-[#ffd700] transition-all duration-300 placeholder-gray-600">
                 </div>
 
                 <div class="space-y-3">
                     <div class="flex justify-between items-center text-sm text-gray-400">
                         <span class="flex items-center gap-1.5">
-                            <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700] animate-pulse"></span> سقف قیمت:
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700] animate-pulse"></span> {{ __('takeout.max_price_label') }}
                         </span>
                         <span id="price-val" class="font-bold text-[#ffd700] text-sm bg-[#0a0203] px-3 py-1 rounded-md border border-[#ffd700]/20">
                             {{ $maxPriceFormatted }}
@@ -153,7 +153,7 @@
                 </div>
 
                 <div class="text-left md:text-left text-sm text-gray-400 flex justify-end items-center gap-3">
-                    <span>موارد یافت شده:</span>
+                    <span>{{ __('takeout.items_found_label') }}</span>
                     <span id="items-count" class="text-lg font-black text-[#070203] bg-linear-to-r from-[#ffd700] to-[#dfb15b] px-4 py-1 rounded-xl shadow-[0_0_10px_rgba(255,215,0,0.3)]">
                         {{ $initialCountPersian }}
                     </span>
@@ -184,8 +184,8 @@
             <svg class="w-20 h-20 text-[#ffd700]/40 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
             </svg>
-            <h3 class="text-xl font-bold text-[#ffd700]">آیتمی یافت نشد</h3>
-            <p class="text-sm text-gray-400 mt-2">لطفاً فیلترها یا عبارت جستجوی خود را تغییر دهید.</p>
+            <h3 class="text-xl font-bold text-[#ffd700]">{{ __('takeout.empty_title') }}</h3>
+            <p class="text-sm text-gray-400 mt-2">{{ __('takeout.empty_description') }}</p>
         </div>
 
         <div id="menu-container" class="space-y-16">
@@ -232,8 +232,8 @@
                                     </p>
                                     
                                     <div class="mt-4 pt-4 border-t border-[#ffd700]/10 flex justify-between items-center">
-                                        <span class="text-[10px] text-gray-500 bg-[#2a050a] px-2 py-1 rounded">بیرون‌بر</span>
-                                        <span class="text-base font-black text-[#ffd700]">{{ $item['formatted_price'] }} <span class="text-[10px] font-normal text-gray-400">تومان</span></span>
+                                        <span class="text-[10px] text-gray-500 bg-[#2a050a] px-2 py-1 rounded">{{ __('takeout.takeout_badge') }}</span>
+                                        <span class="text-base font-black text-[#ffd700]">{{ $item['formatted_price'] }} <span class="text-[10px] font-normal text-gray-400">{{ __('takeout.currency') }}</span></span>
                                     </div>
                                 </div>
                             </div>
@@ -272,7 +272,7 @@
                                                 <div class="shrink-0 bg-[#2a050a]/60 px-3 py-1 rounded-lg border border-[#ffd700]/30 shadow-[0_0_10px_rgba(255,215,0,0.1)]">
                                                     <span class="text-base font-black text-[#ffd700]">
                                                         {{ $item['formatted_price'] }}
-                                                        <span class="text-[10px] font-normal text-gray-400 mr-0.5">تومان</span>
+                                                        <span class="text-[10px] font-normal text-gray-400 mr-0.5">{{ __('takeout.currency') }}</span>
                                                     </span>
                                                 </div>
                                             </div>
@@ -283,7 +283,7 @@
                                         </p>
 
                                         <div class="flex justify-between items-center mt-2 pt-2 border-t border-[#ffd700]/5">
-                                            <span class="text-[10px] text-gray-400 bg-[#140507] px-2 py-0.5 rounded border border-[#ffd700]/10">بیرون‌بر</span>
+                                            <span class="text-[10px] text-gray-400 bg-[#140507] px-2 py-0.5 rounded border border-[#ffd700]/10">{{ __('takeout.takeout_badge') }}</span>
                                             <span class="w-1.5 h-1.5 rounded-full bg-[#ffd700]/40 group-hover:bg-[#ffd700] group-hover:scale-125 transition-all duration-300"></span>
                                         </div>
                                     </div>

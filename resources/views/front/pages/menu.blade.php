@@ -1,5 +1,5 @@
 @extends('front.layouts.app')
-@section('title', 'منو')
+@section('title', __('menu.page_title'))
 @section('content')
 
 <style>
@@ -57,10 +57,10 @@
         
         <div class="relative z-10 mt-15">
             <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
-                منوی سالن
+                {{ __('menu.title') }}
             </h1>
             <p class="mt-4 text-sm md:text-base uppercase text-[#FFD700]/70 font-medium">
-                از منوی رستوران ما لذت ببرید!
+                {{ __('menu.subtitle') }}
             </p>
             <div class="mt-6 flex justify-center gap-3">
                 <span class="w-16 h-0.5 bg-linear-to-r from-transparent via-[#FFD700] to-transparent"></span>
@@ -78,7 +78,7 @@
 
     <div id="category-page" class="max-w-5xl mx-auto px-4 py-12 relative z-30">
         <h2 class="text-xl md:text-2xl font-bold text-center text-[#ffd700] mb-8 drop-shadow-[0_2px_10px_rgba(255,215,0,0.15)]">
-            لطفاً یک دسته‌بندی را انتخاب کنید
+            {{ __('menu.select_category') }}
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($categories as $cat)
@@ -103,14 +103,14 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                             </svg>
                         </span>
-                        <input type="text" id="search-input" placeholder="جستجوی نام غذا یا ترکیبات و جزئیات..." class="w-full bg-[#1c1416] text-sm text-gray-200 pr-11 pl-4 py-3 rounded-xl border border-[#dfb15b]/10 focus:outline-none focus:border-[#bc1c24] focus:ring-1 focus:ring-[#bc1c24] transition-all duration-300 placeholder-gray-500">
+                        <input type="text" id="search-input" placeholder="{{ __('menu.search_placeholder') }}" class="w-full bg-[#1c1416] text-sm text-gray-200 pr-11 pl-4 py-3 rounded-xl border border-[#dfb15b]/10 focus:outline-none focus:border-[#bc1c24] focus:ring-1 focus:ring-[#bc1c24] transition-all duration-300 placeholder-gray-500">
                     </div>
 
                     <div class="space-y-2">
                         <div class="flex justify-between items-center text-sm text-gray-400">
                             <span class="flex items-center gap-1">
-                                <span class="w-1.5 h-1.5 rounded-full bg-[#bc1c24]"></span> حداکثر قیمت:
-                            </span>
+                                <span class="w-1.5 h-1.5 rounded-full bg-[#bc1c24]"></span> {{ __('menu.max_price_label') }}
+                            </span>                            </span>
                             <span id="price-val" class="font-bold text-[#ffd700] text-sm bg-[#1c1416] px-2 py-0.5 rounded border border-[#dfb15b]/10">
                                 {{ $maxPriceFormatted }}
                             </span>
@@ -119,7 +119,7 @@
                     </div>
 
                     <div class="text-left md:text-left text-xs text-gray-400 flex justify-end items-center gap-2">
-                        <span>موارد یافت شده:</span>
+                        <span>{{ __('menu.items_found_label') }}</span>
                         <span id="items-count" class="text-base font-bold text-[#bc1c24] bg-[#1c1416] px-3 py-1 rounded-xl border border-[#bc1c24]/20">
                             {{ count($menu) }}
                         </span>
@@ -133,7 +133,7 @@
                     <svg class="w-4 h-4 transform rotate-180 text-[#bc1c24]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 5l7 7-7 7"></path>
                     </svg>
-                    <span class="hidden sm:inline">بازگشت</span>
+                    <span class="hidden sm:inline">{{ __('menu.back_button') }}</span>
                 </button>
 
                 <div class="w-px h-6 bg-[#dfb15b]/20 mx-0.5"></div>
@@ -142,7 +142,7 @@
                     <div class="swiper-wrapper">
                         <div class="swiper-slide w-auto!">
                             <button data-category-target="all" class="cat-btn active px-4 py-1.5 text-[12px] sm:text-[13px] rounded-full font-medium border bg-[#bc1c24] border-[#bc1c24] text-white">
-                                همه منو
+                                {{ __('menu.all_menu') }}
                             </button>
                         </div>
                         @foreach($categories as $cat)
@@ -162,8 +162,8 @@
                 <svg class="w-16 h-16 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                 </svg>
-                <h3 class="text-lg font-bold text-gray-400">آیتمی یافت نشد</h3>
-                <p class="text-sm text-gray-500 mt-1">لطفاً فیلترها یا عبارت جستجوی خود را تغییر دهید.</p>
+                <h3 class="text-lg font-bold text-gray-400">{{ __('menu.empty_title') }}</h3>
+                <p class="text-sm text-gray-500 mt-1">{{ __('menu.empty_description') }}</p>
             </div>
 
             <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -200,7 +200,7 @@
                             {{ $item['جزئیات'] }}
                         </p>
                         <div class="mt-6 flex justify-between items-center bg-[#181113] p-3 rounded-xl border border-neutral-900/50">
-                            <span class="text-xs text-gray-500">بهای هر سهم</span>
+                            <span class="text-xs text-gray-500">{{ __('menu.price_per_serving') }}</span>
                             <div class="text-sm font-black text-[#ffd700] tracking-wide">
                                 {{ $item['formatted_price'] }}
                             </div>
