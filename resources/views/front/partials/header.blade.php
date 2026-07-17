@@ -11,9 +11,9 @@
         <nav class="hidden lg:flex items-center gap-6">
             @php
                 $links = [
-                    ['name' => __('messages.nav.home'), 'url' => '/'],
-                    ['name' => __('messages.nav.menu'), 'url' => route('menu')],
-                    ['name' => __('messages.nav.reserve'), 'url' => 'reserve'],
+                    ['name' => __('header.nav.home'), 'url' => '/'],
+                    ['name' => __('header.nav.menu'), 'url' => route('menu')],
+                    ['name' => __('header.nav.reserve'), 'url' => 'reserve'],
                 ];
                 $isRtl = app()->getLocale() === 'fa';
             @endphp
@@ -86,9 +86,9 @@
                     {{ Auth::user()->name }}
                 </button>
             @else
-                <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-yellow-500 transition-all">{{ __('messages.auth.login') }}</a>
+                <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-yellow-500 transition-all">{{ __('header.auth.login') }}</a>
                 <a href="#" class="bg-yellow-600 hover:bg-yellow-500 text-red-950 px-6 py-2.5 rounded-full text-sm font-black uppercase tracking-wide transition-all shadow-lg hover:shadow-yellow-600/50">
-                    {{ __('messages.cta.book_online') }}
+                    {{ __('header.cta.book_online') }}
                 </a>
             @endauth
         </div>
@@ -149,10 +149,10 @@
                         <span class="text-white font-bold text-lg">{{ Auth::user()->name }}</span>
                     @else
                         <a href="{{ route('login') }}" @click="mobileMenuOpen = false" class="w-full bg-yellow-600 hover:bg-yellow-500 text-red-950 py-3 rounded-xl font-bold text-lg transition-colors">
-                            {{ __('messages.auth.login') }}
+                            {{ __('header.auth.login') }}
                         </a>
                         <a href="#" @click="mobileMenuOpen = false" class="w-full border-2 border-yellow-600 text-yellow-500 hover:bg-yellow-600 hover:text-red-950 py-3 rounded-xl font-bold text-lg transition-all">
-                            {{ __('messages.cta.book_online') }}
+                            {{ __('header.cta.book_online') }}
                         </a>
                     @endauth
                 </div>

@@ -34,7 +34,7 @@
 
     <div class="relative z-10">
         <div class="text-center mb-6 mt-10">
-            <h2 class="text-3xl lg:text-4xl font-extrabold text-amber-100 drop-shadow-lg">گالری رستوران کاخ موراکو</h2>
+            <h2 class="text-3xl lg:text-4xl font-extrabold text-amber-100 drop-shadow-lg">{{ __('home.gallery.title') }}</h2>
         </div>
         <div class="mb-20 mt-8 py-8 flex justify-center items-center overflow-hidden">
             <div class="swiper card-swiper w-[85%] md:w-[90%] max-w-2xl aspect-9/4">

@@ -7,13 +7,10 @@
             <div class="w-24 h-1 bg-[#D4AF37] mx-auto mb-4 rounded-full"></div>
             
             <h2 id="ceremony-heading" class="text-3xl md:text-5xl font-extrabold text-[#8B1A1A] mb-4 tracking-tight">
-                بهترین سالن پذیرایی برای مراسم شما در کاخ سنتی موراکو
+                {{ __('home.ceremony.heading') }}
             </h2>
             <p class="text-base md:text-lg text-[#4a3e35] max-w-4xl mx-auto leading-relaxed font-light">
-                رستوران کاخ سنتی موراکو، فراتر از یک رستوران لوکس، فضایی رویایی و اصیل برای برگزاری ماندگارترین مراسم شماست. 
-                از <strong class="font-semibold text-[#8B1A1A]">جشن تولدهای خاطره‌انگیز کودک</strong> با دکوراسیونی شاد و منویی اختصاصی گرفته تا <strong class="font-semibold text-[#8B1A1A]">مراسم عروسی باشکوه</strong> در فضایی سلطنتی و کاملاً تشریفاتی، و همچنین <strong class="font-semibold text-[#8B1A1A]">مهمانی‌ها و جلسات سازمانی</strong> حرفه‌ای با امکانات کامل صوتی و تصویری؛ 
-                تیم ما با مدیریتی کارآزموده، فضای اختصاصی شما را با بهترین پذیرایی و خدمات تشریفات فراهم می‌کند. 
-                <span class="font-bold text-[#D4AF37]">رزرو سالن اختصاصی موراکو</span>، انتخابی بی‌نظیر برای ثبت زیباترین لحظات زندگی و کسب‌وکار شماست.
+                {!! __('home.ceremony.description') !!}
             </p>
         </div>
 
@@ -28,7 +25,7 @@
                 <div class="relative overflow-hidden h-56 md:h-64">
                     <img 
                         src="{{ asset('assets/images/7-1.webp') }}" 
-                        alt="جشن تولد کودک در کاخ سنتی موراکو - سالن پذیرایی لوکس و شاد" 
+                        alt="{{ __('home.ceremony.cards.birthday.image_alt') }}" 
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         loading="lazy"
                         width="400"
@@ -43,10 +40,10 @@
                         🎂
                     </div>
                     <h3 class="text-xl md:text-2xl font-bold text-[#8B1A1A] mb-2 tracking-wide">
-                        جشن تولد کودک
+                        {{ __('home.ceremony.cards.birthday.title') }}
                     </h3>
                     <p class="text-[#5a4e42] text-sm leading-relaxed">
-                        دنیایی از شادی و رنگ را برای فرزند دلبندتان با تم‌های اختصاصی، بادکنک‌آرایی حرفه‌ای و منوی ویژه کودکان در فضایی امن و شیک خلق کنید.
+                        {{ __('home.ceremony.cards.birthday.description') }}
                     </p>
                 </div>
             </div>
@@ -58,7 +55,7 @@
                 <div class="relative overflow-hidden h-56 md:h-64">
                     <img 
                         src="{{ asset('assets/images/14.webp') }}" 
-                        alt="مراسم عروسی رویایی در کاخ سنتی موراکو - تالار پذیرایی مجلل و تشریفاتی" 
+                        alt="{{ __('home.ceremony.cards.wedding.image_alt') }}" 
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         loading="lazy"
                         width="400"
@@ -72,10 +69,10 @@
                         💍
                     </div>
                     <h3 class="text-xl md:text-2xl font-bold text-[#8B1A1A] mb-2 tracking-wide">
-                        مراسم عروسی
+                        {{ __('home.ceremony.cards.wedding.title') }}
                     </h3>
                     <p class="text-[#5a4e42] text-sm leading-relaxed">
-                        زیباترین شب زندگی‌تان را در تالار باشکوه موراکو با چیدمان سلطنتی، گل‌آرایی نفیس، موسیقی زنده و شامی مجلل در خاطرها جاودانه سازید.
+                        {{ __('home.ceremony.cards.wedding.description') }}
                     </p>
                 </div>
             </div>
@@ -87,7 +84,7 @@
                 <div class="relative overflow-hidden h-56 md:h-64">
                     <img 
                         src="{{ asset('assets/images/118.webp') }}" 
-                        alt="سالن جلسات سازمانی و مهمانی‌های رسمی در رستوران کاخ سنتی موراکو" 
+                        alt="{{ __('home.ceremony.cards.corporate.image_alt') }}" 
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         loading="lazy"
                         width="400"
@@ -101,10 +98,10 @@
                         💼
                     </div>
                     <h3 class="text-xl md:text-2xl font-bold text-[#8B1A1A] mb-2 tracking-wide">
-                        مهمانی و جلسات سازمانی
+                        {{ __('home.ceremony.cards.corporate.title') }}
                     </h3>
                     <p class="text-[#5a4e42] text-sm leading-relaxed">
-                        از سمینارها و جلسات کاری رسمی تا ضیافت‌های سازمانی، فضای اختصاصی ما مجهز به سیستم‌های صوتی/تصویری پیشرفته و پذیرایی در خور برند شماست.
+                        {{ __('home.ceremony.cards.corporate.description') }}
                     </p>
                 </div>
             </div>
@@ -115,7 +112,7 @@
         <div class="text-center mt-10 md:mt-14">
             <a class="relative inline-block group bg-[#8B1A1A] hover:bg-[#6b1414] text-white font-bold py-3.5 px-8 md:py-4 md:px-10 rounded-full shadow-xl transition-all duration-300 text-base md:text-lg overflow-hidden">
                 <span class="relative z-10 flex items-center justify-center gap-2">
-                    همین حالا سالن اختصاصی خود را رزرو کنید
+                    {{ __('home.ceremony.cta') }}
                     <svg class="w-5 h-5 transition-transform duration-300 ltr:rotate-0 rtl:rotate-180
                                 group-hover:ltr:translate-x-1 group-hover:rtl:-translate-x-1" 
                         fill="none" 

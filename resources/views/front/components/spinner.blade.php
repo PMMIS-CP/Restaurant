@@ -104,17 +104,17 @@
         <div class="text-center space-y-2 w-full">
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
                 <span class="w-2 h-2 rounded-full bg-[#d4a017] animate-ping"></span>
-                کمپین شانس روزانه
+                {{ __('home.spinner.campaign_badge') }}
             </div>
             <h3 class="text-[#fef3c7] font-extrabold text-lg tracking-wide">
-                🎰 گردونه شانس و جوایز!
+                {{ __('home.spinner.mobile.title') }}
             </h3>
             <p class="text-[#d4a017]/90 text-sm font-medium animate-promo-text">
-                همین حالا شانس خودت رو امتحان کن 🎁
+                {{ __('home.spinner.mobile.promo_text') }}
             </p>
             <div class="pt-1">
                 <span class="text-sm text-[#fef3c7]/80 font-bold inline-flex items-center gap-1.5">
-                    ورود به صفحه گردونه
+                    {{ __('home.spinner.mobile.enter_text') }}
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
@@ -130,13 +130,13 @@
         <div class="text-right space-y-1.5 shrink-0">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping"></span>
-                کمپین شانس روزانه
+                 {{ __('home.spinner.campaign_badge') }}
             </div>
             <h3 class="text-[#fef3c7] font-extrabold text-lg lg:text-xl tracking-wide group-hover:text-[#d4a017] transition-colors duration-300 drop-shadow-[0_0_8px_rgba(139,0,0,0.5)]">
-                🎰 گردونه شانس
+                {{ __('home.spinner.desktop.spinner_title') }}
             </h3>
             <p class="text-[#d4a017]/90 text-sm lg:text-base font-medium animate-promo-text">
-                شانس خودت رو امتحان کن 🎁
+                {{ __('home.spinner.desktop.spinner_promo') }}
             </p>
         </div>
 
@@ -220,23 +220,23 @@
         </div>
 
         {{-- <!-- متن سمت چپ --> --}}
-        <div class="text-left space-y-1.5 shrink-0">
+        <div class="text-right space-y-1.5 shrink-0" dir="auto">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping"></span>
-                جوایز امروز
+                {{ __('home.spinner.prizes_badge') }}
             </div>
             <h3 class="text-[#fef3c7] font-extrabold text-lg lg:text-xl tracking-wide group-hover:text-[#d4a017] transition-colors duration-300 drop-shadow-[0_0_8px_rgba(139,0,0,0.5)]">
-                🎁 تا ۱۰۰٪ هدیه!
+                {{ __('home.spinner.desktop.prizes_title') }}
             </h3>
             <p class="text-[#d4a017]/90 text-sm lg:text-base font-medium">
-                فرصت طلایی ✨
+                {{ __('home.spinner.desktop.prizes_promo') }}
             </p>
-            <div class="pt-1">
+            <div class="pt-1 flex justify-start">
                 <span class="text-xs lg:text-sm text-[#fef3c7]/80 group-hover:text-[#d4a017] font-bold inline-flex items-center gap-1 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 lg:h-4 lg:w-4 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 lg:h-4 lg:w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
-                    ورود
+                    {{ __('home.spinner.desktop.enter_text') }}
                 </span>
             </div>
         </div>

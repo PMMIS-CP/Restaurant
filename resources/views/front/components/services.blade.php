@@ -17,8 +17,8 @@
                 </svg>
             </div>
             <div>
-                <h4 class="text-3xl font-bold text-[#8B0000] tracking-tight">خدمات کاخ سنتی موراکو</h4>
-                <p class="text-[#6B0000] font-medium italic mt-1">شکوه یک ضیافت شاهانه را به سازمان خود هدیه دهید</p>
+                <h4 class="text-3xl font-bold text-[#8B0000] tracking-tight">{{ __('home.services.title') }}</h4>
+                <p class="text-[#6B0000] font-medium italic mt-1">{{ __('home.services.subtitle_desktop') }}</p>
             </div>
         </div>
 
@@ -26,9 +26,21 @@
             
             @php
                 $services = [
-                    ['title' => 'ضیافت‌های سازمانی باشکوه', 'desc' => 'طراحی و اجرای مراسم در تالارهای آینه‌کاری با پذیرایی اصیل ایرانی', 'icon' => asset('assets/svg/Restaurant/restaurant (105).svg')],
-                    ['title' => 'سفره‌آرایی سلطنتی کارکنان', 'desc' => 'سبد غذایی روزانه با دستورپخت‌های کهن و طعم‌های به‌یادماندنی دربار', 'icon' => asset('assets/svg/Restaurant/restaurant (178).svg')],
-                    ['title' => 'نشان‌های زرین ارمغان', 'desc' => 'موراکوکارت و هدایای فاخر با بسته‌بندی الهام‌گرفته از گنجینه‌های پارسه', 'icon' => asset('assets/svg/Restaurant/restaurant (125).svg')]
+                    [
+                        'title' => __('home.services.items.0.title'),
+                        'desc' => __('home.services.items.0.desc'),
+                        'icon' => asset('assets/svg/Restaurant/restaurant (105).svg')
+                    ],
+                    [
+                        'title' => __('home.services.items.1.title'),
+                        'desc' => __('home.services.items.1.desc'),
+                        'icon' => asset('assets/svg/Restaurant/restaurant (178).svg')
+                    ],
+                    [
+                        'title' => __('home.services.items.2.title'),
+                        'desc' => __('home.services.items.2.desc'),
+                        'icon' => asset('assets/svg/Restaurant/restaurant (125).svg')
+                    ],
                 ];
             @endphp
 
@@ -60,8 +72,8 @@
                 </svg>
             </div>
             <div>
-                <h4 class="text-lg font-bold text-[#8B0000] leading-tight">خدمات کاخ سنتی موراکو</h4>
-                <p class="text-[#6B0000] text-xs italic mt-0.5">شکوه یک ضیافت شاهانه</p>
+                <h4 class="text-lg font-bold text-[#8B0000] leading-tight">{{ __('home.services.title') }}</h4>
+                <p class="text-[#6B0000] text-xs italic mt-0.5">{{ __('home.services.subtitle_mobile') }}</p>
             </div>
         </div>
 
@@ -69,9 +81,21 @@
             
             @php
                 $services = [
-                    ['title' => 'ضیافت‌های سازمانی باشکوه', 'desc' => 'طراحی و اجرای مراسم در تالارهای آینه‌کاری با پذیرایی اصیل ایرانی', 'icon' => asset('assets/svg/Restaurant/restaurant (105).svg')],
-                    ['title' => 'سفره‌آرایی سلطنتی کارکنان', 'desc' => 'سبد غذایی روزانه با دستورپخت‌های کهن و طعم‌های به‌یادماندنی دربار', 'icon' => asset('assets/svg/Restaurant/restaurant (178).svg')],
-                    ['title' => 'نشان‌های زرین ارمغان', 'desc' => 'موراکوکارت و هدایای فاخر با بسته‌بندی الهام‌گرفته از گنجینه‌های پارسه', 'icon' => asset('assets/svg/Restaurant/restaurant (125).svg')]
+                    [
+                        'title' => __('home.services.items.0.title'),
+                        'desc' => __('home.services.items.0.desc'),
+                        'icon' => asset('assets/svg/Restaurant/restaurant (105).svg')
+                    ],
+                    [
+                        'title' => __('home.services.items.1.title'),
+                        'desc' => __('home.services.items.1.desc'),
+                        'icon' => asset('assets/svg/Restaurant/restaurant (178).svg')
+                    ],
+                    [
+                        'title' => __('home.services.items.2.title'),
+                        'desc' => __('home.services.items.2.desc'),
+                        'icon' => asset('assets/svg/Restaurant/restaurant (125).svg')
+                    ],
                 ];
             @endphp
 
