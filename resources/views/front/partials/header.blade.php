@@ -77,6 +77,8 @@
                 <a href="{{ url('/lang/fa') }}" class="{{ app()->getLocale() == 'fa' ? 'text-yellow-500' : 'hover:text-white' }}">FA</a>
                 <span>|</span>
                 <a href="{{ url('/lang/en') }}" class="{{ app()->getLocale() == 'en' ? 'text-yellow-500' : 'hover:text-white' }}">EN</a>
+                <span>|</span>
+                <a href="{{ url('/lang/ar') }}" class="{{ app()->getLocale() == 'ar' ? 'text-yellow-500' : 'hover:text-white' }}">AR</a>
             </div>
 
             @auth

@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalCategoryController;
 use App\Http\Controllers\Admin\Dashboard\MenuOrganizationalManagementController;
 use App\Http\Controllers\Admin\Dashboard\ReserveManagementController;
 use App\Http\Controllers\Admin\Dashboard\UserManagementController;
+use App\Http\Controllers\Admin\Dashboard\TranslationController;
 
 Route::name('admin.')->group(function () {
 
@@ -112,6 +113,13 @@ Route::name('admin.')->group(function () {
             Route::put('/{reserve}', [ReserveManagementController::class, 'update'])->name('update');
             Route::post('/{reserve}/status', [ReserveManagementController::class, 'updateStatus'])->name('status');
             Route::delete('/{reserve}', [ReserveManagementController::class, 'destroy'])->name('destroy');
+        });
+
+        // Translation Management
+        Route::prefix('translations')->name('translations.')->group(function () {
+            Route::get('/', [TranslationController::class, 'index'])->name('index');
+            Route::get('/{translation}/edit', [TranslationController::class, 'edit'])->name('edit');
+            Route::put('/{translation}', [TranslationController::class, 'update'])->name('update');
         });
 
         Route::post('/logout', [AdminAuthenticatedSessionController::class, 'destroy'])

@@ -13,5 +13,5 @@ return [
     ],
     'cta' => [
         'book_online' => 'Book Online',
-    ]
+    ],
 ];
