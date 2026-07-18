@@ -4,7 +4,7 @@ return [
     'page_title' => 'Reservation',
     'desktop' => [
         'title' => 'Reservation Request',
-        'warning' => 'Please complete the form below to request a reservation at Moraco Palace (reservation is not confirmed). Our experts will contact you to finalize.',
+        'warning' => 'Please complete the form to request a reservation. Our experts will contact you to finalize bookings.',
         'email_label' => 'Email:',
         'email_placeholder' => 'e.g., example@email.com',
         'phone_label' => 'Phone Number:',
@@ -21,7 +21,7 @@ return [
     ],
     'mobile' => [
         'title' => 'Reservation Request',
-        'warning' => 'Please complete the form below to request a reservation at Moraco Palace (reservation is not confirmed). Our experts will contact you to finalize.',
+        'warning' => 'Kindly fill out the form below to submit your reservation request for Moraco Palace. This is not a confirmed booking. Our experts will get in touch with you to finalize your reservation.',
         'name_label' => 'Full Name:',
         'name_placeholder' => 'e.g., Ali Rezaei',
         'phone_label' => 'Phone Number:',

@@ -62,8 +62,10 @@ input:-webkit-autofill:focus {
             <div class="flex flex-col gap-1 md:gap-2">
                 <div class="absolute inset-0 w-full h-full pointer-events-none"></div>
                 
+                <!-- حذف left ثابت و استفاده از کلاس‌های منطقی -->
                 <div class="absolute hidden md:flex animate-pulse border-2 border-red-600/50 bg-red-50/10 px-4 py-2 rounded-full items-center justify-center translate-y-2 overflow-hidden" 
-                    style="left: 44.7%; top: -9.5%; width: 55%;">
+                    style="top: -9.5%; width: 55%;"
+                    class="rtl:right-[44.7%] ltr:left-[44.7%]"> 
                     
                     <p class="text-red-600 font-bold leading-tight whitespace-nowrap text-[8px] sm:text-[13px] md:text-[12px] lg:text-[14.5px]"
                     style="text-shadow: 0 0 5px rgba(220, 38, 38, 0.3);">
