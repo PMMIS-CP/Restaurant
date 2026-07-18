@@ -7,13 +7,21 @@ use App\Models\Comments;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware; // این کلاس بسیار مهم است
 
-class CommentController extends Controller
+class CommentController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    /**
+     * Get the middleware that should be assigned to the controller.
+     */
+    public static function middleware(): array
     {
-        $this->middleware('auth')->only('store');
-        $this->middleware('throttle:5,1')->only('store'); // اضافه کردن rate limit
+        return [
+            // استفاده از شیء Middleware برای تعریف صحیح
+            new Middleware('auth', only: ['store']),
+            new Middleware('throttle:5,1', only: ['store']),
+        ];
     }
 
     public function index()
@@ -35,7 +43,7 @@ class CommentController extends Controller
                     'name'    => e($comment->name),
                     'comment' => e($comment->comment),
                     'tags'    => array_map(function($tag) {
-                        return e($tag); // Escape کردن تگ‌ها
+                        return e($tag);
                     }, $comment->tags ?? []),
                 ];
             });
@@ -45,7 +53,6 @@ class CommentController extends Controller
 
     public function store(Request $request)
     {
-        // Rate limiting بررسی - اضافه
         $dailyCount = Comments::where('user_id', Auth::id())
             ->where('created_at', '>=', now()->subHours(24))
             ->count();
@@ -64,7 +71,6 @@ class CommentController extends Controller
 
         $cleanComment = trim(strip_tags($validated['comment']));
         
-        // بررسی خالی نبودن نظر بعد از پاکسازی
         if (empty($cleanComment)) {
             return redirect()->back()
                 ->with('error', 'متن نظر نمی‌تواند خالی باشد.')
