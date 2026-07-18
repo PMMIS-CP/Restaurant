@@ -132,7 +132,7 @@
                    disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:shadow-[0_0_30px_rgba(220,38,38,0.6)]
                    border border-yellow-400/60 tracking-widest uppercase relative overflow-hidden group">
         <span class="relative z-10 flex items-center gap-2">
-            <span x-text="spinning ? 'در حال چرخش...' : 'چرخش شانس'"></span>
+            <span x-text="spinning ? '{{ __("spin.spinning") }}' : '{{ __("spin.spin_button") }}'"></span>
             <svg x-show="!spinning" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 animate-pulse-fast" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
