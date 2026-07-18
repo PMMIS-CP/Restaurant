@@ -96,7 +96,7 @@
 <div class="min-h-screen pb-20 bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
 
     <div class="relative overflow-hidden py-16 text-center border-b-2 border-[#FFD700]/20 bg-linear-to-b from-[#1a0a0a] to-[#0a0a0a]">
-        <a href="{{ url('/') }}" class="hidden lg:block absolute right-35 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
+        <a href="{{ url('/') }}" class="hidden lg:block absolute right-25 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
             <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
         </a>
         <a href="{{ url('/') }}" class="lg:hidden absolute right-1/2 top-15 -translate-y-1/2 translate-x-1/2 h-20 w-20 z-20">
