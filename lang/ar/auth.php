@@ -4,17 +4,113 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Authentication Language Lines
+    | خطوط زبانی احراز هویت
     |--------------------------------------------------------------------------
-    |
-    | The following language lines are used during authentication for various
-    | messages that we need to display to the user. You are free to modify
-    | these language lines according to your application's requirements.
-    |
     */
 
-    'failed' => 'بيانات الاعتماد هذه غير متطابقة مع سجلاتنا.',
-    'password' => 'كلمة المرور المقدمة غير صحيحة.',
-    'throttle' => 'محاولات تسجيل دخول كثيرة جدًا. يرجى المحاولة مرة أخرى بعد :seconds ثانية.',
+    'failed' => 'بيانات الاعتماد هذه لا تتطابق مع سجلاتنا.',
+    'password' => 'كلمة المرور المدخلة غير صحيحة.',
+    'throttle' => 'عدد محاولات تسجيل الدخول تجاوز الحد المسموح. يرجى المحاولة بعد :seconds ثوانٍ.',
 
+    'confirm_password' => [
+        'title' => 'تأكيد كلمة المرور',
+        'page_title' => 'تأكيد الهوية',
+        'message' => 'هذا القسم يتطلب تحقق أمني. يرجى إدخال كلمة المرور للمتابعة.',
+        'label' => 'كلمة المرور',
+        'placeholder' => 'أدخل كلمة المرور الخاصة بك',
+        'button' => 'تأكيد كلمة المرور',
+        'back_link' => '← العودة للصفحة السابقة',
+    ],
+
+    'forgot_password' => [
+        'title' => 'نسيان كلمة المرور',
+        'page_title' => 'استعادة كلمة المرور',
+        'message' => 'أدخل بريدك الإلكتروني ليصلك رابط الاستعادة.',
+        'email_label' => 'البريد الإلكتروني',
+        'send_link' => 'إرسال الرابط',
+        'back_to_login' => 'العودة لتسجيل الدخول',
+    ],
+
+    'reset_password' => [
+        'title' => 'إعادة تعيين كلمة المرور',
+        'page_title' => 'ضبط كلمة مرور جديدة',
+        'email_label' => 'البريد الإلكتروني',
+        'new_password_label' => 'كلمة المرور الجديدة',
+        'confirm_password_label' => 'تأكيد كلمة المرور',
+        'button' => 'إعادة تعيين كلمة المرور',
+    ],
+
+    'verify_email' => [
+        'title' => 'تأكيد البريد الإلكتروني',
+        'page_title' => 'تأكيد عنوان البريد الإلكتروني',
+        'link_sent' => 'تم إرسال رابط التحقق إلى بريدك الإلكتروني.',
+        'not_received' => 'إذا لم تستلم البريد الإلكتروني، اضغط على الزر أدناه لإعادة إرساله.',
+        'new_link_sent' => 'تم إرسال رابط جديد.',
+        'resend_link' => 'إعادة إرسال رابط التحقق',
+        'logout' => 'تسجيل الخروج',
+    ],
+    'login' => [
+
+        'page_title' => 'تسجيل الدخول',
+        'phone_label' => 'رقم الجوال',
+        'phone_placeholder' => '09xxxxxxxxx',
+        'phone_title' => 'يجب أن يتكون رقم الجوال من 11 رقمًا ويبدأ بـ 09',
+        'continue_button' => 'متابعة',
+        'verified_phone_label' => 'رقم الجوال:',
+        'edit_phone' => 'تعديل الرقم',
+        'name_label' => 'الاسم',
+        'family_label' => 'اسم العائلة',
+        'email_label_optional' => 'البريد الإلكتروني (اختياري)',
+        'password_label' => 'كلمة المرور',
+        'password_confirmation_label' => 'تأكيد كلمة المرور',
+        'get_verification_code' => 'الحصول على رمز التحقق',
+        'code_4_digit_label' => 'رمز من 4 أرقام',
+        'code_4_digit_placeholder' => 'رمز من 4 أرقام',
+        'verify_and_register' => 'تأكيد وتسجيل',
+        'resend_code' => 'إعادة إرسال الرمز',
+        'login_button' => 'تسجيل الدخول',
+        'forgot_password' => 'نسيت كلمة المرور',
+        'reset_code_sent' => 'تم إرسال رمز التحقق إلى رقمك.',
+        'verify_code' => 'تأكيد الرمز',
+        'new_password_label' => 'كلمة المرور الجديدة',
+        'new_password_confirmation_label' => 'تأكيد كلمة المرور الجديدة',
+        'set_new_password' => 'حفظ كلمة المرور الجديدة',
+
+        'js_invalid_phone' => 'رقم الجوال غير صالح.',
+        'js_checking' => 'جاري التحقق...',
+        'js_server_error' => 'خطأ في الاتصال بالخادم.',
+        'js_continue' => 'متابعة',
+        'js_name_family_required' => 'الاسم واسم العائلة مطلوبان.',
+        'js_password_required' => 'كلمة المرور مطلوبة.',
+        'js_password_min' => 'يجب أن تكون كلمة المرور 6 أحرف على الأقل.',
+        'js_password_mismatch' => 'كلمة المرور وتأكيدها غير متطابقتين.',
+        'js_invalid_email' => 'تنسيق البريد الإلكتروني غير صالح.',
+        'js_validating' => 'جاري التحقق...',
+        'js_get_code' => 'الحصول على رمز التحقق',
+        'js_sending_code' => 'جاري إرسال الرمز...',
+        'js_code_sent' => 'تم إرسال رمز التحقق إلى الرقم :phone.',
+        'js_wait' => 'يرجى الانتظار قليلاً.',
+        'js_send_code_error' => 'خطأ في إرسال رمز التحقق.',
+        'js_code_required' => 'يرجى إدخال الرمز المكون من 4 أرقام.',
+        'js_verifying' => 'جاري التأكيد...',
+        'js_invalid_code' => 'الرمز غير صالح.',
+        'js_network_error' => 'خطأ في الشبكة. يرجى المحاولة مرة أخرى.',
+        'js_verify_register' => 'تأكيد وتسجيل',
+        'js_enter_password' => 'يرجى إدخال كلمة المرور.',
+        'js_logging_in' => 'جاري تسجيل الدخول...',
+        'js_wrong_credentials' => 'بيانات الدخول غير صحيحة.',
+        'js_login' => 'تسجيل الدخول',
+        'js_send_reset_code_error' => 'خطأ في إرسال الرمز.',
+        'js_fill_both_fields' => 'يرجى ملء كلا الحقلين.',
+        'js_saving' => 'جاري الحفظ...',
+        'js_password_change_error' => 'خطأ في تغيير كلمة المرور.',
+        'js_set_password' => 'حفظ كلمة المرور الجديدة',
+        'js_invalid_data' => 'البيانات المدخلة غير صالحة.',
+        'js_email' => 'البريد الإلكتروني',
+        'js_password' => 'كلمة المرور',
+        'js_name' => 'الاسم',
+        'js_family' => 'العائلة',
+        'js_code' => 'الرمز',
+        'js_expired' => 'منتهي الصلاحية',
+    ],
 ];
