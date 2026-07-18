@@ -4,7 +4,7 @@
         <h1 class="text-white text-3xl font-bold">
             {{ __('reserve.desktop.title') }}
         </h1>
-        <a href="{{ url('/') }}" class="absolute top-1/2 -translate-y-1/2 h-20 w-20 z-20 end-25 rtl:-translate-x-1/4 ltr:translate-x-1/4">
+        <a href="{{ url('/') }}" class="absolute top-1/2 -translate-y-1/2 h-20 w-20 z-20 inset-e-25 rtl:-translate-x-1/4 ltr:translate-x-1/4">
             <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
         </a>
     </div>
