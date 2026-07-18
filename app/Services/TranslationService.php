@@ -142,8 +142,41 @@ class TranslationService
 
     private function writeTranslationFile(string $path, array $data): void
     {
-        $content = "<?php\n\nreturn " . var_export($data, true) . ";\n";
+        $content = "<?php\n\nreturn " . $this->arrayToPhpCode($data) . ";\n";
         File::ensureDirectoryExists(dirname($path));
         File::put($path, $content);
+    }
+
+    private function arrayToPhpCode(array $data, int $indentLevel = 0): string
+    {
+        $indent = str_repeat('    ', $indentLevel);
+        $nextIndent = str_repeat('    ', $indentLevel + 1);
+        
+        if (empty($data)) {
+            return '[]';
+        }
+        
+        $lines = [];
+        $lines[] = '[';
+        
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $nestedValue = $this->arrayToPhpCode($value, $indentLevel + 1);
+                $lines[] = "{$nextIndent}'{$key}' => {$nestedValue},";
+            } elseif (is_null($value)) {
+                $lines[] = "{$nextIndent}'{$key}' => null,";
+            } elseif (is_bool($value)) {
+                $lines[] = "{$nextIndent}'{$key}' => " . ($value ? 'true' : 'false') . ",";
+            } elseif (is_numeric($value)) {
+                $lines[] = "{$nextIndent}'{$key}' => {$value},";
+            } else {
+                $escapedValue = var_export($value, true);
+                $lines[] = "{$nextIndent}'{$key}' => {$escapedValue},";
+            }
+        }
+        
+        $lines[] = "{$indent}]";
+        
+        return implode("\n", $lines);
     }
 }

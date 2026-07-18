@@ -1,21 +1,18 @@
 <?php
 
-return array (
-  'nav' => 
-  array (
-    'home' => 'خانه',
-    'menu' => 'منو',
-    'reserve' => 'رزرو میز',
-    'contact' => 'تماس',
-  ),
-  'auth' => 
-  array (
-    'login' => 'ورود',
-    'dashboard' => 'داشبورد',
-    'logout' => 'خروج',
-  ),
-  'cta' => 
-  array (
-    'book_online' => 'رزرو آنلاین',
-  ),
-);
+return [
+    'nav' => [
+        'home' => 'خانه',
+        'menu' => 'منو',
+        'reserve' => 'رزرو میز',
+        'contact' => 'تماس',
+    ],
+    'auth' => [
+        'login' => 'ورود',
+        'dashboard' => 'داشبورد',
+        'logout' => 'خروج',
+    ],
+    'cta' => [
+        'book_online' => 'رزرو آنلاین',
+    ],
+];
