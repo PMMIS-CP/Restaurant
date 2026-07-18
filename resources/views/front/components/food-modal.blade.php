@@ -48,7 +48,7 @@
                 <h3 id="modal-food-name" class="text-xl sm:text-2xl font-bold text-[#ffd700] leading-tight">---</h3>
                 <div class="shrink-0 bg-[#2a050a]/80 px-4 py-2 rounded-lg border border-[#ffd700]/40 shadow-[0_0_15px_rgba(255,215,0,0.15)]">
                     <span id="modal-food-price" class="text-lg font-black text-[#ffd700]">---</span>
-                    <span class="text-[10px] font-normal text-gray-400 mr-1">تومان</span>
+                    <span class="text-[10px] font-normal text-gray-400 mr-1">{{ __('food-modal.toman') }}</span>
                 </div>
             </div>
 
@@ -60,7 +60,7 @@
 
             {{-- دکمه افزودن به سبد خرید --}}
             <button id="modal-add-to-cart-btn" class="w-full py-3 mt-4 bg-linear-to-r from-[#ffd700]/20 to-[#ffd700]/10 border border-[#ffd700]/40 rounded-xl text-[#ffd700] font-bold text-lg hover:from-[#ffd700]/30 hover:to-[#ffd700]/20 hover:shadow-[0_0_20px_rgba(255,215,0,0.2)] transition-all duration-300">
-                افزودن به سبد خرید
+                {{ __('food-modal.add_to_cart') }}
                 <span class="text-sm font-normal text-gray-400 mr-2">+</span>
             </button>
         </div>
@@ -127,7 +127,7 @@
                 // نمایش placeholder اگر تصویری نبود
                 const placeholder = document.createElement('div');
                 placeholder.className = 'absolute inset-0 flex items-center justify-center text-gray-500 text-sm';
-                placeholder.textContent = 'بدون تصویر';
+                placeholder.textContent = '{{ __("food-modal.no_image") }}';
                 galleryContainer.appendChild(placeholder);
                 prevBtn.classList.add('hidden');
                 nextBtn.classList.add('hidden');
@@ -187,7 +187,7 @@
             overlay.classList.add('flex');
             document.body.classList.add('overflow-hidden');
             
-            modalName.textContent = 'در حال بارگذاری...';
+            modalName.textContent = '{{ __("food-modal.loading") }}';
             modalPrice.textContent = '---';
             modalDetails.textContent = '---';
             loadingSpinner?.classList.remove('hidden');
@@ -208,7 +208,7 @@
                 });
 
                 if (!response.ok) {
-                    throw new Error('خطا در دریافت اطلاعات');
+                    throw new Error('{{ __("food-modal.error_fetch") }}');
                 }
 
                 const data = await response.json();
@@ -216,7 +216,7 @@
                 // پر کردن اطلاعات
                 modalName.textContent = data.name;
                 modalPrice.textContent = Number(data.price).toLocaleString('fa-IR');
-                modalDetails.textContent = data.description || 'بدون توضیحات';
+                modalDetails.textContent = data.description || '{{ __("food-modal.no_description") }}';
 
                 // ✅ ذخیره برای سبد خرید با product_type صحیح (فرمت کوتاه)
                 currentProduct = {
@@ -235,9 +235,9 @@
 
             } catch (error) {
                 console.error('FoodModal Error:', error);
-                modalName.textContent = 'خطا در بارگذاری';
+                modalName.textContent = '{{ __("food-modal.error_loading") }}';
                 modalPrice.textContent = '---';
-                modalDetails.textContent = 'لطفاً دوباره تلاش کنید.';
+                modalDetails.textContent = '{{ __("food-modal.error_retry") }}';
                 loadingSpinner?.classList.add('hidden');
                 buildGallery([]);
             }
@@ -309,7 +309,7 @@
         // ========== افزودن به سبد خرید ==========
         addToCartBtn?.addEventListener('click', async function () {
             if (!currentProduct.id || !currentProduct.type) {
-                alert('اطلاعات محصول ناقص است.');
+                alert('{{ __("food-modal.incomplete_product") }}');
                 return;
             }
 
@@ -317,7 +317,6 @@
             const originalHTML = addToCartBtn.innerHTML;
 
             try {
-                // ✅ حالا currentProduct.type مستقیماً مقدار صحیح دارد (Menu, MenuTakeout, MenuOrganizational)
                 const response = await fetch('/cart/add', {
                     method: 'POST',
                     headers: {
@@ -326,7 +325,7 @@
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
                     },
                     body: JSON.stringify({
-                        product_type: currentProduct.type,  // ✅ فرمت کوتاه صحیح
+                        product_type: currentProduct.type,
                         product_id: currentProduct.id,
                         quantity: 1
                     })
@@ -334,12 +333,12 @@
 
                 if (!response.ok) {
                     const errorData = await response.json().catch(() => null);
-                    throw new Error(errorData?.message || 'خطا در افزودن به سبد خرید');
+                    throw new Error(errorData?.message || '{{ __("food-modal.error_add_failed") }}');
                 }
 
                 const data = await response.json();
 
-                addToCartBtn.innerHTML = '<span class="inline-flex items-center gap-1">✓ به سبد اضافه شد</span>';
+                addToCartBtn.innerHTML = '<span class="inline-flex items-center gap-1">{{ __("food-modal.added_to_cart") }}</span>';
                 addToCartBtn.classList.add('bg-green-500/20', 'border-green-500/40', 'text-green-400');
 
                 if (typeof updateCartCount === 'function') {
@@ -347,7 +346,7 @@
                 }
             } catch (error) {
                 console.error(error);
-                addToCartBtn.innerHTML = '<span class="text-red-400">خطا! دوباره تلاش کنید</span>';
+                addToCartBtn.innerHTML = '<span class="text-red-400">{{ __("food-modal.error_add_to_cart") }}</span>';
                 addToCartBtn.classList.add('bg-red-500/20', 'border-red-500/40');
             } finally {
                 setTimeout(() => {
