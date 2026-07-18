@@ -1,11 +1,11 @@
 @extends('front.layouts.app')
 
-@section('title', 'سبد خرید')
+@section('title', __('cart.page_title'))
 
 @section('content')
 <div class="min-h-screen bg-[#0a0203] text-white px-4 py-8 pb-30 pt-30">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-black text-[#ffd700] mb-8">سبد خرید</h1>
+        <h1 class="text-3xl font-black text-[#ffd700] mb-8">{{ __('cart.title') }}</h1>
 
         {{-- لیست آیتم‌ها --}}
         <div id="cart-items-container" class="space-y-4">
@@ -15,15 +15,15 @@
         {{-- خلاصه سبد --}}
         <div id="cart-summary" class="hidden mt-8 bg-[#130d0f] border border-[#ffd700]/20 rounded-2xl p-6">
             <div class="flex justify-between items-center mb-4">
-                <span class="text-gray-400">مجموع</span>
+                <span class="text-gray-400">{{ __('cart.total_label') }}</span>
                 <span id="cart-total-price" class="text-2xl font-bold text-[#ffd700]">0</span>
             </div>
             <div class="flex gap-4">
                 <button id="clear-cart-btn" class="flex-1 py-3 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 hover:bg-red-500/20 transition">
-                    خالی کردن سبد
+                    {{ __('cart.clear_cart') }}
                 </button>
                 <button class="flex-1 py-3 bg-[#ffd700]/10 border border-[#ffd700]/40 rounded-xl text-[#ffd700] font-bold hover:bg-[#ffd700]/20 transition">
-                    ادامه ثبت سفارش
+                    {{ __('cart.continue_order') }}
                 </button>
             </div>
         </div>
@@ -33,8 +33,8 @@
             <svg class="w-24 h-24 mx-auto text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m5-9v9m4-9v9m2-9l2 9m-9-9h4"/>
             </svg>
-            <p class="text-xl text-gray-500">سبد خرید شما خالی است</p>
-            <a href="{{ route('menu') }}" class="inline-block mt-4 text-[#ffd700] hover:underline">مشاهده منو</a>
+            <p class="text-xl text-gray-500">{{ __('cart.empty_title') }}</p>
+             <a href="{{ route('menu') }}" class="inline-block mt-4 text-[#ffd700] hover:underline">{{ __('cart.view_menu') }}</a>
         </div>
     </div>
 </div>
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'X-CSRF-TOKEN': csrfToken
                 }
             });
-            if (!res.ok) throw new Error('خطا در دریافت سبد');
+            if (!res.ok) throw new Error('{{ __("cart.error_fetch_cart") }}');
             return await res.json();
         } catch (error) {
             console.error(error);
@@ -80,14 +80,14 @@ document.addEventListener('DOMContentLoaded', async function() {
         empty.classList.add('hidden');
         summary.classList.remove('hidden');
 
-        totalPriceEl.textContent = Number(data.total).toLocaleString() + ' تومان';
+        totalPriceEl.textContent = Number(data.total).toLocaleString() + ' {{ __("cart.currency") }}';
 
         container.innerHTML = data.items.map(item => `
             <div class="flex items-center gap-4 bg-[#130d0f] border border-[#ffd700]/10 rounded-xl p-4" data-item-id="${item.id}">
                 <img src="${item.image || '/images/placeholder.jpg'}" alt="${item.name}" class="w-20 h-20 rounded-lg object-cover border border-[#ffd700]/20">
                 <div class="flex-1">
                     <h3 class="text-lg font-bold text-white">${item.name}</h3>
-                    <p class="text-sm text-gray-400">${Number(item.price).toLocaleString()} تومان</p>
+                    <p class="text-sm text-gray-400">${Number(item.price).toLocaleString()} {{ __('cart.currency') }}</p>
                 </div>
                 <div class="flex items-center gap-2">
                     <button class="quantity-btn decrease w-8 h-8 rounded-full bg-[#2a050a] border border-[#ffd700]/30 text-[#ffd700] hover:bg-[#ffd700]/20 transition" data-id="${item.id}">−</button>
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     },
                     body: JSON.stringify({ quantity: newQty })
                 });
-                if (!res.ok) throw new Error('خطا در بروزرسانی');
+                if (!res.ok) throw new Error('{{ __("cart.error_update") }}');
                 const data = await res.json();
                 // Update the item count locally
                 if (newQty === 0) {
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.error(error);
             }
         } else if (btn.classList.contains('remove-item')) {
-            if (!confirm('آیا مطمئن هستید؟')) return;
+            if (!confirm('{{ __("cart.confirm_delete") }}')) return;
             try {
                 const res = await fetch(`/cart/remove/${itemId}`, {
                     method: 'DELETE',
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         'X-CSRF-TOKEN': csrfToken
                     }
                 });
-                if (!res.ok) throw new Error('خطا در حذف');
+                if (!res.ok) throw new Error('{{ __("cart.error_delete") }}');
                 const data = await res.json();
                 if (data.count === 0) {
                     updateCartDisplay();
@@ -164,7 +164,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     clearBtn?.addEventListener('click', async () => {
-        if (!confirm('همه آیتم‌ها حذف شوند؟')) return;
+        if (!confirm('{{ __("cart.confirm_clear_all") }}')) return;
         try {
             const res = await fetch(`/cart/clear`, {
                 method: 'DELETE',
@@ -173,7 +173,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'X-CSRF-TOKEN': csrfToken
                 }
             });
-            if (!res.ok) throw new Error('خطا');
+            if (!res.ok) throw new Error('{{ __("cart.error_general") }}');
             updateCartDisplay();
         } catch (error) {
             console.error(error);

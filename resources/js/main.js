@@ -933,12 +933,13 @@ document.addEventListener('alpine:init', () => {
         },
 
         get displayText() {
-            if (this.confirmedDate && this.confirmedEntryTime && this.confirmedExitTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} الی ${this.confirmedExitTime}`;
-            if (this.confirmedDate && this.confirmedEntryTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} الی ---`;
-            if (this.confirmedDate && this.confirmedExitTime) return `${this.confirmedDate} - --- الی ${this.confirmedExitTime}`;
-            if (this.confirmedDate) return `${this.confirmedDate} - ورودی و خروجی ساعت را ثبت کنید`;
-            if (this.confirmedEntryTime || this.confirmedExitTime) return `تاریخ را ثبت کنید - ${this.confirmedEntryTime || '---'} الی ${this.confirmedExitTime || '---'}`;
-            return 'تاریخ را ثبت کنید';
+            const t = window.translations;
+            if (this.confirmedDate && this.confirmedEntryTime && this.confirmedExitTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} ${t.date_separator} ${this.confirmedExitTime}`;
+            if (this.confirmedDate && this.confirmedEntryTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} ${t.date_separator} ${t.time_format}`;
+            if (this.confirmedDate && this.confirmedExitTime) return `${this.confirmedDate} - ${t.time_format} ${t.date_separator} ${this.confirmedExitTime}`;
+            if (this.confirmedDate) return `${this.confirmedDate} - ${t.date_register_time}`;
+            if (this.confirmedEntryTime || this.confirmedExitTime) return `${t.date_placeholder} - ${this.confirmedEntryTime || t.time_format} ${t.date_separator} ${this.confirmedExitTime || t.time_format}`;
+            return t.date_placeholder;
         }
     }));
 

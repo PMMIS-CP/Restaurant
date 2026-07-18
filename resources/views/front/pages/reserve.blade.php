@@ -1,5 +1,5 @@
 @extends('front.layouts.app')
-@section('title', 'رزرو')
+@section('title', __('reserve.page_title'))
 @section('content')
 @include('front.components.reserveheader')
 {{-- استایل‌ها و اسکریپت‌ها --}}
@@ -67,7 +67,7 @@ input:-webkit-autofill:focus {
                     
                     <p class="text-red-600 font-bold leading-tight whitespace-nowrap text-[8px] sm:text-[13px] md:text-[12px] lg:text-[14.5px]"
                     style="text-shadow: 0 0 5px rgba(220, 38, 38, 0.3);">
-                        فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
+                        {{ __('reserve.desktop.warning') }}
                     </p>
                 </div>
             </div>
@@ -81,14 +81,14 @@ input:-webkit-autofill:focus {
                             <div class="flex flex-col flex-1 min-w-0">
                                 <label for="email" class="absolute text-right font-bold" 
                                        style="left: 48.65%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                                    ایمیل:
+                                    {{ __('reserve.desktop.email_label') }}
                                 </label>
                                 <div class="absolute" style="left: 48.65%; top: 7.32%; width: 16.58%; height: 57px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="email" id="email" placeholder="مثال: example@email.com" 
+                                    <input type="email" id="email" placeholder="{{ __('reserve.desktop.email_placeholder') }}" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -100,14 +100,14 @@ input:-webkit-autofill:focus {
                             <div class="flex flex-col flex-1 min-w-0">
                                 <label for="phone" class="absolute text-right font-bold" 
                                        style="left: 66.02%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                                    شماره تماس:
+                                    {{ __('reserve.desktop.phone_label') }}
                                 </label>
                                 <div class="absolute" style="left: 66.02%; top: 7.32%; width: 16.58%; height: 57px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="tel" id="phone" placeholder="مثال: 09123456789" 
+                                    <input type="tel" id="phone" placeholder="{{ __('reserve.desktop.phone_placeholder') }}" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -119,14 +119,14 @@ input:-webkit-autofill:focus {
                             <div class="flex flex-col flex-1 min-w-0">
                                 <label for="name" class="absolute text-right font-bold" 
                                        style="left: 83.39%; top: calc(7.32% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                                    نام و نام خانوادگی:
+                                    {{ __('reserve.desktop.name_label') }}
                                 </label>
                                 <div class="absolute" style="left: 83.39%; top: 7.32%; width: 16.58%; height: 57px;">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute">
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="text" id="name" placeholder="مثال: علی رضایی" 
+                                    <input type="text" id="name" placeholder="{{ __('reserve.desktop.name_placeholder') }}" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -151,7 +151,7 @@ input:-webkit-autofill:focus {
 
                             <label class="absolute text-right font-bold" 
                                 style="left: 48.65%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                                تاریخ و ساعت ثبت شده:
+                                {{ __('reserve.desktop.confirmed_datetime_label') }}
                             </label>
 
                             <div class="absolute cursor-pointer" 
@@ -171,21 +171,21 @@ input:-webkit-autofill:focus {
                         <div class="flex flex-col flex-1 min-w-0 custom-dropdown-container" data-type="guest">
                             <label class="absolute text-right font-bold" 
                                    style="left: 66.02%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                                تعداد مهمان:
+                                {{ __('reserve.desktop.guest_label') }}
                             </label>
                             <div class="absolute" style="left: 66.02%; top: 21.18%; width: 16.58%; height: 57px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute z-10">
                                     <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                 </svg>
                                 <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right cursor-pointer flex items-center justify-between text-[10px] sm:text-xs md:text-sm text-gray-400 z-20">
-                                    <span class="selected-text">تعداد را وارد کنید</span>
+                                    <span class="selected-text">{{ __('reserve.desktop.guest_placeholder') }}</span>
                                     <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
-                                    <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">۱ تا ۴ نفر</li>
-                                    <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">۵ تا ۱۰ نفر</li>
-                                    <li data-value="25-50" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">۲۵ تا ۵۰ نفر</li>
-                                    <li data-value="50-100" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">۵۰ تا ۱۰۰ نفر</li>
+                                    <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">{{ __('reserve.dropdowns.guest_options.1-4') }}</li>
+                                    <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.guest_options.5-10') }}</li>
+                                    <li data-value="25-50" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.guest_options.25-50') }}</li>
+                                    <li data-value="50-100" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.guest_options.50-100') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -194,27 +194,27 @@ input:-webkit-autofill:focus {
                         <div class="flex flex-col flex-1 min-w-0 custom-dropdown-container" data-type="event">
                             <label class="absolute text-right font-bold" 
                                    style="left: 83.39%; top: calc(21.18% - 14px); width: 16.58%; font-size: clamp(8px, 1.2vw, 14px); color: #B8860B; text-shadow: 0 0 8px rgba(184, 134, 11, 0.3);">
-                                نوع مراسم:
+                                {{ __('reserve.desktop.event_type_label') }}
                             </label>
                             <div class="absolute" style="left: 83.39%; top: 21.18%; width: 16.58%; height: 57px;">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 305.61 57.14" class="w-full h-full pointer-events-none absolute z-10">
                                     <rect class="fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                 </svg>
                                 <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right cursor-pointer flex items-center justify-between text-[10px] sm:text-xs md:text-sm text-gray-400 z-20">
-                                    <span class="selected-text">نوع مراسم را انتخاب کنید</span>
+                                    <span class="selected-text">{{ __('reserve.desktop.event_type_placeholder') }}</span>
                                     <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
-                                    <li data-value="ولیمه" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">ولیمه، افطار و نذری</li>
-                                    <li data-value="روزهای-خاص" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">روزهای خاص (روز مادر، روز پدر، دختر و …)</li>
-                                    <li data-value="خواستگاری" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">خواستگاری و پاگشا</li>
-                                    <li data-value="شب-یلدا" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شب یلدا</li>
-                                    <li data-value="سازمانی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سازمانی (جلسات، ایونت‌ها، جشن پایان سال و …)</li>
-                                    <li data-value="تعیین-جنسیت" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تعیین جنسیت</li>
-                                    <li data-value="ترحیم" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">ترحیم (هفتم، چهلم، سالگرد)</li>
-                                    <li data-value="عقد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مراسم عقد و بله برون</li>
-                                    <li data-value="تولد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
-                                    <li data-value="شخصی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شخصی</li>
+                                    <li data-value="ولیمه" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">{{ __('reserve.dropdowns.event_options.walimeh') }}</li>
+                                    <li data-value="روزهای-خاص" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.special-days') }}</li>
+                                    <li data-value="خواستگاری" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.khastgari') }}</li>
+                                    <li data-value="شب-یلدا" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.yalda') }}</li>
+                                    <li data-value="سازمانی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.organizational') }}</li>
+                                    <li data-value="تعیین-جنسیت" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.gender-reveal') }}</li>
+                                    <li data-value="ترحیم" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.tahrim') }}</li>
+                                    <li data-value="عقد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.aghd') }}</li>
+                                    <li data-value="تولد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.birthday') }}</li>
+                                    <li data-value="شخصی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.personal') }}</li>
                                 </ul>
                             </div>
                         </div>
@@ -227,7 +227,7 @@ input:-webkit-autofill:focus {
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 945.89 309.84" class="w-full h-full pointer-events-none absolute">
                                     <rect class="light-rect-textarea fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="0" y="0" width="945.89" height="309.84" rx="15" ry="15"/>
                                 </svg>
-                                <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
+                                <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="{{ __('reserve.desktop.description_placeholder') }}" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -244,7 +244,7 @@ input:-webkit-autofill:focus {
                             </svg>
                             <div class="w-full h-full flex flex-col p-1 sm:p-1.5 md:p-2 z-20 relative">
                                 <div class="text-[8px] sm:text-[10px] md:text-xs font-semibold mb-0.5 md:mb-1 border-b pb-0.5 md:pb-1 text-right" style="color: #B8860B; border-color: rgba(220, 38, 38, 0.2);">
-                                    تاریخ انتخاب‌شده: <span x-text="selectedDate ? selectedDate : '---'" style="color: #DC2626;"></span>
+                                    {{ __('reserve.calendar.selected_date') }} <span x-text="selectedDate ? selectedDate : '---'" style="color: #DC2626;"></span>
                                 </div>
                                 <div class="flex justify-between items-center mb-1 md:mb-2" x-data="{ isRTL: document.documentElement.dir === 'rtl' || getComputedStyle(document.documentElement).direction === 'rtl' }">
                                     {{-- <!-- دکمه ماه قبل --> --}}
@@ -283,7 +283,7 @@ input:-webkit-autofill:focus {
                                     </button>
                                 </div>
                                 <div class="grid grid-cols-7 text-center text-[7px] sm:text-[8px] md:text-[10px] mb-0.5 md:mb-1" style="color: #DC2626;">
-                                    <span>شنبه</span><span>یک‌شنبه</span><span>دوشنبه</span><span>سه‌شنبه</span><span>چهارشنبه</span><span>پنج‌شنبه</span><span>چهارشنبه</span>
+                                    @foreach(__('reserve.calendar.weekdays_full') as $day)<span>{{ $day }}</span>@endforeach
                                 </div>
                                 <div class="grid grid-cols-7 gap-0.5 text-center grow">
                                     <template x-for="empty in startDayOffset"><div></div></template>
@@ -292,7 +292,7 @@ input:-webkit-autofill:focus {
                                     </template>
                                 </div>
                                 <div class="flex justify-center mt-1 md:mt-2">
-                                    <button type="button" @click="confirmDate()" :disabled="!selectedDate" class="px-2 py-0.5 md:px-3 md:py-1 rounded-lg text-white text-[10px] sm:text-xs md:text-sm font-medium transition-all duration-200 disabled:opacity-50" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تأیید</button>
+                                    <button type="button" @click="confirmDate()" :disabled="!selectedDate" class="px-2 py-0.5 md:px-3 md:py-1 rounded-lg text-white text-[10px] sm:text-xs md:text-sm font-medium transition-all duration-200 disabled:opacity-50" style="background: linear-gradient(135deg, #DC2626, #B8860B);">{{ __('reserve.calendar.confirm') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -307,19 +307,19 @@ input:-webkit-autofill:focus {
                                 <div x-show="mode === 'split'" class="h-full flex flex-col">
                                     <div @click="openPicker('entry')" class="flex-1 flex items-center justify-center cursor-pointer transition-all duration-200" style="border-bottom: 1px solid rgba(220, 38, 38, 0.2);">
                                         <span class="text-sm sm:text-base flex items-center gap-2" style="color: #B8860B;">
-                                            ساعت ورودی:
+                                            {{ __('reserve.time.entry_label') }}
                                             <span x-text="entryTime || '--:--'" class="font-mono" style="color: #DC2626;"></span>
                                         </span>
                                     </div>
                                     <div @click="openPicker('exit')" class="flex-1 flex items-center justify-center cursor-pointer transition-all duration-200">
                                         <span class="text-sm sm:text-base flex items-center gap-2" style="color: #B8860B;">
-                                            ساعت خروجی:
+                                            {{ __('reserve.time.exit_label') }}
                                             <span x-text="exitTime || '--:--'" class="font-mono" style="color: #DC2626;"></span>
                                         </span>
                                     </div>
                                 </div>
                                 <div x-show="mode === 'entry-edit' || mode === 'exit-edit'" class="h-full flex flex-col items-center justify-center p-2" dir="ltr">
-                                    <p class="text-center font-medium mb-3 text-sm sm:text-base" x-text="mode === 'entry-edit' ? 'ساعت ورودی' : 'ساعت خروجی'" style="color: #B8860B;"></p>
+                                    <p class="text-center font-medium mb-3 text-sm sm:text-base" x-text="mode === 'entry-edit' ? '{{ __("reserve.time.entry_edit_title") }}' : '{{ __("reserve.time.exit_edit_title") }}'" style="color: #B8860B;"></p>
                                     <div class="flex items-center justify-center gap-2 w-full" style="height: 160px;">
                                         {{-- ستون ساعت و دقیقه (کدهای اسکرول) مانند قبل --}}
                                         <div class="relative w-[45%] h-30 overflow-hidden rounded-xl bg-[rgba(248,250,252,0.5)] shadow-[inset_0_0_10px_rgba(220,38,38,0.1)] outline-none" tabindex="0" @mousedown.right="startDrag($event, 'hour')" @keydown="onKeydown($event, 'hour')" x-ref="hourColumn">
@@ -338,7 +338,7 @@ input:-webkit-autofill:focus {
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" @click="confirmTime" class="mt-4 px-4 py-1.5 text-white rounded-lg shadow transition-all duration-200 text-sm sm:text-base hover:scale-105" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تایید</button>
+                                    <button type="button" @click="confirmTime" class="mt-4 px-4 py-1.5 text-white rounded-lg shadow transition-all duration-200 text-sm sm:text-base hover:scale-105" style="background: linear-gradient(135deg, #DC2626, #B8860B);">{{ __('reserve.time.confirm') }}</button>
                                 </div>
                             </div>
                         </div>
@@ -361,7 +361,7 @@ input:-webkit-autofill:focus {
                                     :class="!isValid ? 'opacity-50 cursor-not-allowed' : 'hover:scale-[1.02] active:scale-[0.98]'"
                                     class="absolute inset-0 w-full h-full bg-transparent border-none outline-none font-bold transition-all duration-300 text-[10px] sm:text-sm md:text-base lg:text-lg"
                                     style="color: #FFFFFF; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                                ارسال درخواست رزرو
+                                {{ __('reserve.desktop.submit_button') }}
                             </button>
                         </div>
                     </div>
@@ -382,7 +382,7 @@ input:-webkit-autofill:focus {
         {{-- ۱. متن هشدار --}}
         <div class="w-full bg-white/40 backdrop-blur-md border border-red-600/30 rounded-xl p-3 shadow-sm text-center">
             <p class="text-red-600 font-bold leading-relaxed text-xs animate-pulse">
-               فرم زیر را برای درخواست رزرو در کاخ موراکو تکمیل کنید (رزرو قطعی نیست). کارشناسان ما برای نهایی‌سازی تماس می‌گیرند.
+               {{ __('reserve.mobile.warning') }}
             </p>
         </div>
 
@@ -392,35 +392,35 @@ input:-webkit-autofill:focus {
             <div class="flex gap-4" x-data="formAnimation">
                 {{-- نام --}}
                 <div class="flex-1 flex flex-col relative">
-                    <label for="mobile_name" class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">نام و نام خانوادگی:</label>
+                    <label for="mobile_name" class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">{{ __('reserve.mobile.name_label') }}</label>
                     <div class="relative w-full h-13.75">
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="text" id="mobile_name" placeholder="مثال: علی رضایی" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name">
+                        <input type="text" id="mobile_name" placeholder="{{ __('reserve.mobile.name_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name">
                     </div>
                 </div>
 
                 {{-- تماس --}}
                 <div class="flex-1 flex flex-col relative">
-                    <label for="mobile_phone" class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">شماره تماس:</label>
+                    <label for="mobile_phone" class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">{{ __('reserve.mobile.phone_label') }}</label>
                     <div class="relative w-full h-13.75">
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="tel" id="mobile_phone" placeholder="مثال: 09123456789" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone">
+                        <input type="tel" id="mobile_phone" placeholder="{{ __('reserve.mobile.phone_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone">
                     </div>
                 </div>
             </div>
 
             {{-- ردیف دوم: ایمیل (تکی) --}}
             <div class="flex flex-col relative" x-data="formAnimation">
-                <label for="mobile_email" class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">ایمیل:</label>
+                <label for="mobile_email" class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">{{ __('reserve.mobile.email_label') }}</label>
                 <div class="relative w-full h-13.75">
                     <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                         <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                     </svg>
-                    <input type="email" id="mobile_email" placeholder="مثال: example@email.com" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.email">
+                    <input type="email" id="mobile_email" placeholder="{{ __('reserve.mobile.email_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.email">
                 </div>
             </div>
 
@@ -428,46 +428,46 @@ input:-webkit-autofill:focus {
             <div class="flex gap-4">
                 {{-- نوع مراسم --}}
                 <div class="flex-1 flex flex-col relative custom-dropdown-container">
-                    <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">نوع مراسم:</label>
+                    <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">{{ __('reserve.mobile.event_type_label') }}</label>
                     <div class="relative w-full h-13.75">
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                             <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
                         <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right flex items-center justify-between text-sm text-gray-500 z-20">
-                            <span class="selected-text">نوع مراسم چیست؟</span>
+                            <span class="selected-text">{{ __('reserve.mobile.event_type_placeholder') }}</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <ul class="dropdown-menu hidden absolute top-[110%] right-0 w-full bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-xl shadow-lg overflow-hidden transition-all duration-300 z-50 text-right text-sm max-h-52 overflow-y-auto">
-                            <li data-value="ولیمه" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">ولیمه، افطار و نذری</li>
-                            <li data-value="روزهای-خاص" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">روزهای خاص (روز مادر، روز پدر، دختر و …)</li>
-                            <li data-value="خواستگاری" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">خواستگاری و پاگشا</li>
-                            <li data-value="شب-یلدا" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شب یلدا</li>
-                            <li data-value="سازمانی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">سازمانی (جلسات، ایونت‌ها، جشن پایان سال و …)</li>
-                            <li data-value="تعیین-جنسیت" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تعیین جنسیت</li>
-                            <li data-value="ترحیم" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">ترحیم (هفتم، چهلم، سالگرد)</li>
-                            <li data-value="عقد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">مراسم عقد و بله برون</li>
-                            <li data-value="تولد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">تولد</li>
-                            <li data-value="شخصی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">شخصی</li>
+                            <li data-value="ولیمه" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">{{ __('reserve.dropdowns.event_options.walimeh') }}</li>
+                            <li data-value="روزهای-خاص" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.special-days') }}</li>
+                            <li data-value="خواستگاری" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.khastgari') }}</li>
+                            <li data-value="شب-یلدا" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.yalda') }}</li>
+                            <li data-value="سازمانی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.organizational') }}</li>
+                            <li data-value="تعیین-جنسیت" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.gender-reveal') }}</li>
+                            <li data-value="ترحیم" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.tahrim') }}</li>
+                            <li data-value="عقد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.aghd') }}</li>
+                            <li data-value="تولد" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.birthday') }}</li>
+                            <li data-value="شخصی" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.personal') }}</li>
                         </ul>
                     </div>
                 </div>
 
                 {{-- تعداد مهمان --}}
                 <div class="flex-1 flex flex-col relative custom-dropdown-container">
-                    <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">تعداد مهمان:</label>
+                    <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">{{ __('reserve.mobile.guest_label') }}</label>
                     <div class="relative w-full h-13.75">
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                             <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
                         <button type="button" class="dropdown-trigger absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right flex items-center justify-between text-sm text-gray-500 z-20">
-                            <span class="selected-text">تعداد را وارد کنید</span>
+                            <span class="selected-text">{{ __('reserve.mobile.guest_placeholder') }}</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
                         <ul class="dropdown-menu hidden absolute top-[110%] right-0 w-full bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-xl shadow-lg overflow-hidden transition-all duration-300 z-50 text-right text-sm max-h-52 overflow-y-auto">
-                            <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">۱ تا ۴ نفر</li>
-                            <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">۵ تا ۱۰ نفر</li>
-                            <li data-value="25-50" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">۲۵ تا ۵۰ نفر</li>
-                            <li data-value="50-100" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer">۵۰ تا ۱۰۰ نفر</li>
+                            <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">{{ __('reserve.dropdowns.guest_options.1-4') }}</li>
+                            <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">{{ __('reserve.dropdowns.guest_options.5-10') }}</li>
+                            <li data-value="25-50" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">{{ __('reserve.dropdowns.guest_options.25-50') }}</li>
+                            <li data-value="50-100" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer">{{ __('reserve.dropdowns.guest_options.50-100') }}</li>
                         </ul>
                     </div>
                 </div>
@@ -480,7 +480,7 @@ input:-webkit-autofill:focus {
                 x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
                 x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
                 
-                <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">تاریخ ثبت شده:</label>
+                <label class="text-right font-bold text-sm mb-1.5" style="color: #B8860B;">{{ __('reserve.mobile.confirmed_date_label') }}</label>
                 <div class="relative w-full h-13.75 cursor-pointer" x-on:click="triggerAnimation($el)">
                     <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="w-full h-full absolute overflow-visible z-10">
                         <rect class="fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
@@ -502,7 +502,7 @@ input:-webkit-autofill:focus {
                 
                 <div class="relative w-full h-full flex flex-col z-10">
                     <div class="text-[10px] font-semibold mb-2 border-b pb-1 text-center" style="color: #B8860B; border-color: rgba(220, 38, 38, 0.2);">
-                        تاریخ: <span x-text="selectedDate ? selectedDate : '---'" style="color: #DC2626;"></span>
+                        {{ __('reserve.calendar.selected_date') }} <span x-text="selectedDate ? selectedDate : '---'" style="color: #DC2626;"></span>
                     </div>
                     <div class="flex justify-between items-center mb-2" 
                         x-data="{ isRTL: document.documentElement.dir === 'rtl' || getComputedStyle(document.documentElement).direction === 'rtl' }">
@@ -540,7 +540,7 @@ input:-webkit-autofill:focus {
                         </button>
                     </div>
                     <div class="grid grid-cols-7 text-center text-[9px] mb-1 font-bold" style="color: #DC2626;">
-                        <span>ش</span><span>ی</span><span>د</span><span>س</span><span>چ</span><span>پ</span><span>ج</span>
+                        @foreach(__('reserve.calendar.weekdays_short') as $day)<span>{{ $day }}</span>@endforeach
                     </div>
                     <div class="grid grid-cols-7 gap-1 text-center grow">
                         <template x-for="empty in startDayOffset"><div></div></template>
@@ -552,7 +552,7 @@ input:-webkit-autofill:focus {
                                     style="color: #B8860B;"><span x-text="day"></span></button>
                         </template>
                     </div>
-                    <button type="button" @click="confirmDate()" :disabled="!selectedDate" class="w-full mt-2 py-1.5 rounded-lg text-white text-xs font-medium transition-all duration-200 disabled:opacity-50" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تأیید</button>
+                    <button type="button" @click="confirmDate()" :disabled="!selectedDate" class="w-full mt-2 py-1.5 rounded-lg text-white text-xs font-medium transition-all duration-200 disabled:opacity-50" style="background: linear-gradient(135deg, #DC2626, #B8860B);">{{ __('reserve.calendar.confirm') }}</button>
                 </div>
             </div>
 
@@ -565,11 +565,11 @@ input:-webkit-autofill:focus {
                 <div class="relative w-full h-full z-10 p-2">
                     <div x-show="mode === 'split'" class="h-full flex flex-col justify-center gap-4">
                         <div @click="openPicker('entry')" class="flex-1 flex flex-col items-center justify-center bg-white/30 rounded-xl cursor-pointer shadow-sm border border-red-600/10">
-                            <span class="text-[10px] mb-1 font-bold" style="color: #B8860B;">ساعت ورودی</span>
+                            <span class="text-[10px] mb-1 font-bold" style="color: #B8860B;">{{ __('reserve.time.entry_time') }}</span>
                             <span x-text="entryTime || '--:--'" class="font-mono text-sm font-bold" style="color: #DC2626;"></span>
                         </div>
                         <div @click="openPicker('exit')" class="flex-1 flex flex-col items-center justify-center bg-white/30 rounded-xl cursor-pointer shadow-sm border border-red-600/10">
-                            <span class="text-[10px] mb-1 font-bold" style="color: #B8860B;">ساعت خروجی</span>
+                            <span class="text-[10px] mb-1 font-bold" style="color: #B8860B;">{{ __('reserve.time.exit_time') }}</span>
                             <span x-text="exitTime || '--:--'" class="font-mono text-sm font-bold" style="color: #DC2626;"></span>
                         </div>
                     </div>
@@ -593,7 +593,7 @@ input:-webkit-autofill:focus {
                                 </div>
                             </div>
                         </div>
-                        <button type="button" @click="confirmTime" class="mt-2 w-full py-1 text-white rounded-lg shadow text-[10px] font-bold" style="background: linear-gradient(135deg, #DC2626, #B8860B);">تایید</button>
+                        <button type="button" @click="confirmTime" class="mt-2 w-full py-1 text-white rounded-lg shadow text-[10px] font-bold" style="background: linear-gradient(135deg, #DC2626, #B8860B);">{{ __('reserve.time.confirm') }}</button>
                     </div>
                 </div>
             </div>
@@ -604,7 +604,7 @@ input:-webkit-autofill:focus {
             <svg viewBox="0 0 945.89 309.84" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                 <rect class="light-rect-textarea fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="2" y="2" width="941.89" height="305.84" rx="15" ry="15"/>
             </svg>
-            <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="توضیحات خود را اینجا بنویسید..." class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
+            <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="{{ __('reserve.mobile.description_placeholder') }}" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
         </div>
 
         {{-- ۶. دکمه ثبت نهایی --}}
@@ -622,7 +622,7 @@ input:-webkit-autofill:focus {
                     :class="!isValid ? 'opacity-50 cursor-not-allowed' : ''"
                     class="absolute inset-0 w-full h-full bg-transparent border-none outline-none font-bold transition-all duration-300 text-white text-base z-20"
                     style="text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-                ارسال درخواست رزرو
+                {{ __('reserve.mobile.submit_button') }}
             </button>
         </div>
 
@@ -630,34 +630,46 @@ input:-webkit-autofill:focus {
 </div>
 </form>
 <script>
-    window.authUser = @json(auth()->check() ? ['id' => auth()->id(), 'phone' => auth()->user()->phone] : null);
+    window.translations = {!! json_encode([
+        'date_selected' => __('reserve.calendar.selected_date'),
+        'date_confirm' => __('reserve.calendar.confirm'),
+        'date_placeholder' => __('reserve.calendar.date_placeholder'),
+        'date_register_time' => __('reserve.calendar.date_register_time'),
+        'date_separator' => __('reserve.calendar.date_separator'),
+        'time_entry_title' => __('reserve.time.entry_time'),
+        'time_exit_title' => __('reserve.time.exit_time'),
+        'time_confirm' => __('reserve.time.confirm'),
+        'time_format' => __('reserve.time.time_format'),
+    ]) !!};
+    
+    window.authUser = {!! json_encode(auth()->check() ? ['id' => auth()->id(), 'phone' => auth()->user()->phone] : null) !!};
 </script>
 {{-- مودال تأیید OTP --}}
 <div x-data="otpModal()" x-show="show" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 z-100 flex items-center justify-center bg-black/50 backdrop-blur-sm" style="display: none;" x-init="()=>{ $watch('show', val => $el.style.display = val ? 'flex' : 'none') }">
     <div class="bg-white/95 rounded-2xl shadow-2xl p-6 w-80 max-w-[90vw] text-right" @click.outside="if(step==='send') show=false">
         {{-- مرحله ارسال کد --}}
         <div x-show="step === 'send'">
-            <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">تأیید شماره موبایل</h2>
-            <p class="text-sm mb-4 text-gray-600">کد تأیید به شماره <span x-text="phone" class="font-bold text-gray-800"></span> ارسال می‌شود.</p>
+            <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">{{ __('reserve.otp.title') }}</h2>
+            <p class="text-sm mb-4 text-gray-600">{{ __('reserve.otp.description') }} <span x-text="phone" class="font-bold text-gray-800"></span> ارسال می‌شود.</p>
             <div class="flex gap-2">
                 <button @click="sendOtp" :disabled="sending" class="flex-1 py-2 rounded-lg text-white font-bold transition-all duration-200" :class="sending ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'" style="background: linear-gradient(135deg, #DC2626, #B8860B);">
-                    <span x-show="!sending">ارسال کد تأیید</span>
-                    <span x-show="sending" class="inline-block">در حال ارسال...</span>
+                    <span x-show="!sending">{{ __('reserve.otp.send_code') }}</span>
+                    <span x-show="sending" class="inline-block">{{ __('reserve.otp.sending') }}</span>
                 </button>
-                <button @click="cancel" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100">بازگشت</button>
+                <button @click="cancel" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100">{{ __('reserve.otp.back') }}</button>
             </div>
         </div>
 
         {{-- مرحله ورود کد --}}
         <div x-show="step === 'verify'">
-            <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">کد تأیید را وارد کنید</h2>
-            <input type="text" x-model="code" maxlength="4" placeholder="کد ۴ رقمی" class="w-full text-center text-2xl tracking-widest border-2 border-red-600/50 rounded-lg p-2 mb-4 outline-none focus:border-red-600" autofocus @keyup.enter="verifyOtp">
+            <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">{{ __('reserve.otp.enter_code') }}</h2>
+            <input type="text" x-model="code" maxlength="4" placeholder="{{ __('reserve.otp.code_placeholder') }}" class="w-full text-center text-2xl tracking-widest border-2 border-red-600/50 rounded-lg p-2 mb-4 outline-none focus:border-red-600" autofocus @keyup.enter="verifyOtp">
             <div class="flex gap-2">
                 <button @click="verifyOtp" :disabled="verifying" class="flex-1 py-2 rounded-lg text-white font-bold transition-all duration-200" :class="verifying ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'" style="background: linear-gradient(135deg, #DC2626, #B8860B);">
-                    <span x-show="!verifying">تأیید</span>
-                    <span x-show="verifying" class="inline-block">در حال تایید کد...</span>
+                    <span x-show="!verifying">{{ __('reserve.otp.verify') }}</span>
+                    <span x-show="verifying" class="inline-block">{{ __('reserve.otp.verifying') }}</span>
                 </button>
-                <button @click="resendOtp" :disabled="resendCooldown > 0" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100" x-text="resendCooldown > 0 ? 'ارسال مجدد (' + resendCooldown + ')' : 'ارسال مجدد'"></button>
+                <button @click="resendOtp" :disabled="resendCooldown > 0" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-100" x-text="resendCooldown > 0 ? '{{ __("reserve.otp.resend_cooldown") }} (' + resendCooldown + ')' : '{{ __("reserve.otp.resend") }}'"></button>
             </div>
         </div>
     </div>
