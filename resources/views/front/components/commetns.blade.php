@@ -139,7 +139,7 @@
                             </svg>
                             <p class="text-gray-800 font-semibold mb-2">{{ __('home.comments.guest_overlay_title') }}</p>
                             <p class="text-sm text-gray-600 mb-4">{{ __('home.comments.guest_overlay_description') }}</p>
-                            <a href="/login" class="inline-block px-6 py-2 bg-[#8B0000] text-white rounded-full hover:bg-[#6b0000] transition text-sm font-medium">
+                            <a href="{{ route('login') }}" class="inline-block px-6 py-2 bg-[#8B0000] text-white rounded-full hover:bg-[#6b0000] transition text-sm font-medium">
                                 {{ __('home.comments.guest_login_button') }}
                             </a>
                         </div>
