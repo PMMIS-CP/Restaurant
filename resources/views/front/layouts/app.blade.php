@@ -127,8 +127,8 @@
             </div>
         </div>
         <div style="text-align: center; max-width: 28rem;">
-            <p style="font-size: 1.875rem; font-weight: 700; color: #111827; margin: 0;">خوش آمدید به <span style="color: #b45309;">کاخ موراکو</span></p>
-            <p style="font-size: 1.125rem; color: #374151; margin-top: 0.75rem; font-weight: 500;">در حال آماده‌سازی میز شاهانه شما هستیم...</p>
+            <p style="font-size: 1.875rem; font-weight: 700; color: #111827; margin: 0;">{!! __('loading.welcome') !!}</p>
+            <p style="font-size: 1.125rem; color: #374151; margin-top: 0.75rem; font-weight: 500;">{!! __('loading.preparing') !!}</p>
         </div>
     </div>
     <style>
