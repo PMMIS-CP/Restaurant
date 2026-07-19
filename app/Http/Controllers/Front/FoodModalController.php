@@ -55,7 +55,7 @@ class FoodModalController extends Controller
     }
 
     /**
-     * دریافت تصاویر آیتم (حداکثر ۶ عدد)
+     * دریافت تصاویر آیتم
      * اگر آیتم تصویر نداشت، آرایه خالی برمی‌گردونه
      */
     private function getItemImages($item): array
