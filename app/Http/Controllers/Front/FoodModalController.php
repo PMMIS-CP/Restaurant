@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/Front/FoodModalController.php
 
 namespace App\Http\Controllers\Front;
 
