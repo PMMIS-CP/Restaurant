@@ -15,4 +15,16 @@ return [
     'error_update' => 'خطا در بروزرسانی',
     'error_delete' => 'خطا در حذف',
     'error_general' => 'خطا',
+    
+    'product_unavailable' => 'این محصول در حال حاضر در دسترس نیست.',
+    'item_added' => 'محصول با موفقیت به سبد خرید اضافه شد.',
+    'product_deleted' => 'محصول حذف شده',
+    'unauthorized_access' => 'دسترسی غیرمجاز.',
+    'item_removed' => 'آیتم از سبد خرید حذف شد.',
+    'item_updated' => 'تعداد آیتم بروزرسانی شد.',
+    'item_deleted' => 'آیتم با موفقیت از سبد خرید حذف شد.',
+    'cart_cleared' => 'سبد خرید با موفقیت خالی شد.',
+    'no_cart_to_merge' => 'سبدی برای ادغام وجود ندارد.',
+    'cart_merged' => 'سبد خرید با موفقیت ادغام شد.',
+    'invalid_product_type' => 'نوع محصول نامعتبر است.',
 ];

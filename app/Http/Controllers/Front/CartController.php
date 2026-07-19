@@ -80,7 +80,7 @@ class CartController extends Controller
                     'id'           => $item->id,
                     'product_id'   => $item->product_id,
                     'product_type' => class_basename($item->product_type),
-                    'name'         => $product?->getNameInLocale() ?? $product?->name ?? 'محصول حذف شده',
+                    'name'         => $product?->getNameInLocale() ?? $product?->name ?? __('cart.product_deleted'),
                     'price'        => (int) $item->price,
                     'quantity'     => $item->quantity,
                     'subtotal'     => (int) ($item->price * $item->quantity),
@@ -115,7 +115,7 @@ class CartController extends Controller
         $product = $productClass::findOrFail($request->product_id);
 
         if (isset($product->is_active) && !$product->is_active) {
-            return response()->json(['message' => 'این محصول در حال حاضر در دسترس نیست.'], 400);
+            return response()->json(['message' => __('cart.product_unavailable')], 400);
         }
 
         $cart = $this->getOrCreateCart();
@@ -145,7 +145,7 @@ class CartController extends Controller
         $cart->load('items.product');
 
         $response = response()->json([
-            'message' => 'محصول با موفقیت به سبد خرید اضافه شد.',
+            'message' => __('cart.item_added'),
             'item'    => [
                 'id'       => $cartItem->id,
                 'name'     => $product->getNameInLocale() ?? $product->name,
@@ -175,15 +175,15 @@ class CartController extends Controller
         $cart = $this->getOrCreateCart();
 
         if ($cartItem->cart_id !== $cart->id) {
-            return response()->json(['message' => 'دسترسی غیرمجاز.'], 403);
+            return response()->json(['message' => __('cart.unauthorized_access')], 403);
         }
 
         if ($request->quantity == 0) {
             $cartItem->delete();
-            $message = 'آیتم از سبد خرید حذف شد.';
+            $message = __('cart.item_removed');
         } else {
             $cartItem->update(['quantity' => $request->quantity]);
-            $message = 'تعداد آیتم بروزرسانی شد.';
+            $message = __('cart.item_updated');
         }
 
         $cart->load('items.product');
@@ -203,14 +203,14 @@ class CartController extends Controller
         $cart = $this->getOrCreateCart();
 
         if ($cartItem->cart_id !== $cart->id) {
-            return response()->json(['message' => 'دسترسی غیرمجاز.'], 403);
+            return response()->json(['message' => __('cart.unauthorized_access')], 403);
         }
 
         $cartItem->delete();
         $cart->load('items.product');
 
         return response()->json([
-            'message' => 'آیتم با موفقیت از سبد خرید حذف شد.',
+            'message' => __('cart.item_deleted'),
             'total'   => (int) $cart->items->sum(fn($i) => $i->price * $i->quantity),
             'count'   => $cart->items->sum('quantity'),
         ]);
@@ -225,7 +225,7 @@ class CartController extends Controller
         $cart->items()->delete();
 
         return response()->json([
-            'message' => 'سبد خرید با موفقیت خالی شد.',
+            'message' => __('cart.cart_cleared'),
             'total'   => 0,
             'count'   => 0,
         ]);
@@ -239,14 +239,14 @@ class CartController extends Controller
         $sessionId = $request->cookie('cart_session_id');
 
         if (!$sessionId || !auth()->check()) {
-            return response()->json(['message' => 'سبدی برای ادغام وجود ندارد.'], 400);
+            return response()->json(['message' => __('cart.no_cart_to_merge')], 400);
         }
 
         $userCart = $this->cartService->mergeGuestCart($sessionId, auth()->id());
         $userCart->load('items.product');
 
         $response = response()->json([
-            'message' => 'سبد خرید با موفقیت ادغام شد.',
+            'message' => __('cart.cart_merged'),
             'total'   => (int) $userCart->items->sum(fn($i) => $i->price * $i->quantity),
             'count'   => $userCart->items->sum('quantity'),
         ]);
@@ -265,7 +265,7 @@ class CartController extends Controller
             'Menu'              => \App\Models\Menu::class,
             'MenuTakeout'       => \App\Models\MenuTakeout::class,
             'MenuOrganizational' => \App\Models\MenuOrganizational::class,
-            default             => throw new \InvalidArgumentException('نوع محصول نامعتبر است.'),
+            default             => throw new \InvalidArgumentException(__('cart.invalid_product_type')),
         };
     }
 }
