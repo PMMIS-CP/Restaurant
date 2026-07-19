@@ -107,4 +107,41 @@ return [
         'register' => 'ثبت‌نام',
         'back' => 'بازگشت',
     ],
+    'controller_messages' => [
+        // directSubmit / store / verifyOtp
+        'login_required_direct'       => 'برای ثبت مستقیم باید وارد حساب کاربری خود شده باشید.',
+        'reservation_success'         => 'درخواست رزرو با موفقیت ثبت شد.',
+        'reservation_success_linked'  => 'درخواست رزرو با موفقیت ثبت شد و برای هر دو حساب قابل مشاهده است.',
+
+        // sendOtp
+        'otp_sms_template'            => "کاخ موراکو\nکد تأیید رزرو: :code\nلغو11",
+        'otp_wait_60_seconds'         => 'لطفاً ۶۰ ثانیه دیگر مجدداً درخواست دهید.',
+        'otp_sent'                    => 'کد تأیید به شماره شما ارسال شد.',
+
+        // verifyOtp
+        'invalid_or_expired_code'     => 'کد نامعتبر یا منقضی شده است.',
+        'reserve_data_not_found'      => 'اطلاعات رزرو یافت نشد. لطفاً دوباره فرم را پر کنید.',
+        'user_not_found_with_phone'   => 'کاربری با این شماره یافت نشد.',
+        'target_user_not_found'       => 'کاربر مقصد یافت نشد.',
+
+        // خطاهای پنل پیامک
+        'sms_error_0'  => 'نام کاربری یا رمز عبور اشتباه است.',
+        'sms_error_2'  => 'اعتبار کافی نیست.',
+        'sms_error_4'  => 'محدودیت در حجم ارسال.',
+        'sms_error_5'  => 'شماره فرستنده معتبر نیست.',
+        'sms_error_7'  => 'متن حاوی کلمات فیلتر شده است.',
+        'sms_error_9'  => 'ارسال از خطوط عمومی امکان‌پذیر نیست.',
+        'sms_error_14' => 'متن حاوی لینک است.',
+        'sms_error_15' => 'عدم وجود لغو11 در انتهای پیامک.',
+        'sms_error_unknown'           => 'خطای :code',
+        'sms_connection_error'        => 'خطا در ارتباط با سرور پیامک.',
+        'sms_send_error'              => 'خطا در ارسال پیامک.',
+
+        // متن‌های پیامک وضعیت (sendStatusSms)
+        'sms_reservation_registered'  => "رزرو شما ثبت شد.\nنام: :name\nتاریخ: :date\nساعت: :entry_time تا :exit_time\n:status_text\nلغو11",
+        'status_pending'              => "وضعیت: در انتظار تأیید\nبا شما تماس گرفته خواهد شد.",
+        'status_confirmed'            => "وضعیت: تأیید نهایی\nدر اسرع وقت حضور یابید.",
+        'status_other'                => 'وضعیت: :status',
+        'unknown_code'                => 'نامشخص',
+    ],
 ];

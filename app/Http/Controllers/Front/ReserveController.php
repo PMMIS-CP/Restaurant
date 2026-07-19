@@ -62,7 +62,7 @@ class ReserveController extends Controller
         // رزرو فقط برای کاربر لاگین
         if (!auth()->check()) {
             return response()->json([
-                'message' => 'برای ثبت مستقیم باید وارد حساب کاربری خود شده باشید.',
+                'message' => __('reserve.controller_messages.login_required_direct'),
             ], 403);
         }
 
@@ -81,7 +81,7 @@ class ReserveController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'درخواست رزرو با موفقیت ثبت شد.',
+            'message' => __('reserve.controller_messages.reservation_success'),
         ]);
     }
 
@@ -123,7 +123,7 @@ class ReserveController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'درخواست رزرو با موفقیت ثبت شد.',
+            'message' => __('reserve.controller_messages.reservation_success'),
         ]);
     }
 
@@ -157,7 +157,7 @@ class ReserveController extends Controller
 
         if ($recent) {
             return response()->json([
-                'message' => 'لطفاً ۶۰ ثانیه دیگر مجدداً درخواست دهید.',
+                'message' => __('reserve.controller_messages.otp_wait_60_seconds'),
             ], 429);
         }
 
@@ -181,7 +181,7 @@ class ReserveController extends Controller
 
         // ارسال پیامک
         $phoneForAPI = ltrim($phone, '0');
-        $message     = "کاخ موراکو\nکد تأیید رزرو: {$code}\nلغو11";
+        $message = __('reserve.controller_messages.otp_sms_template', ['code' => $code]);
 
         try {
             $response = Http::timeout(10)->post(config('services.sms.api_url'), [
@@ -196,22 +196,22 @@ class ReserveController extends Controller
                 $data = $response->json();
                 if (($data['RetStatus'] ?? null) == 1) {
                     Log::info("OTP رزرو به {$phone} ارسال شد.");
-                    return response()->json(['message' => 'کد تأیید به شماره شما ارسال شد.']);
+                    return response()->json(['message' => __('reserve.controller_messages.otp_sent')]);
                 }
 
                 $errors = [
-                    0  => 'نام کاربری یا رمز عبور اشتباه است.',
-                    2  => 'اعتبار کافی نیست.',
-                    4  => 'محدودیت در حجم ارسال.',
-                    5  => 'شماره فرستنده معتبر نیست.',
-                    7  => 'متن حاوی کلمات فیلتر شده است.',
-                    9  => 'ارسال از خطوط عمومی امکان‌پذیر نیست.',
-                    14 => 'متن حاوی لینک است.',
-                    15 => 'عدم وجود لغو11 در انتهای پیامک.',
+                    0  => __('reserve.controller_messages.sms_error_0'),
+                    2  => __('reserve.controller_messages.sms_error_2'),
+                    4  => __('reserve.controller_messages.sms_error_4'),
+                    5  => __('reserve.controller_messages.sms_error_5'),
+                    7  => __('reserve.controller_messages.sms_error_7'),
+                    9  => __('reserve.controller_messages.sms_error_9'),
+                    14 => __('reserve.controller_messages.sms_error_14'),
+                    15 => __('reserve.controller_messages.sms_error_15'),
                 ];
 
-                $errCode = $data['RetStatus'] ?? 'نامشخص';
-                $msg     = $errors[$errCode] ?? "خطای {$errCode}";
+                $errCode = $data['RetStatus'] ?? __('reserve.controller_messages.unknown_code');
+                $msg     = $errors[$errCode] ?? __('reserve.controller_messages.sms_error_unknown', ['code' => $errCode]);
                 Log::error("خطای پنل پیامک: {$msg}", $data);
 
                 return response()->json(['message' => $msg], 500);
@@ -219,11 +219,11 @@ class ReserveController extends Controller
 
             Log::error('خطای HTTP از API پیامک', ['status' => $response->status()]);
 
-            return response()->json(['message' => 'خطا در ارتباط با سرور پیامک.'], 500);
+            return response()->json(['message' => __('reserve.controller_messages.sms_connection_error')], 500);
         } catch (\Exception $e) {
             Log::error('خطای ارسال پیامک: ' . $e->getMessage());
 
-            return response()->json(['message' => 'خطا در ارسال پیامک.'], 500);
+            return response()->json(['message' => __('reserve.controller_messages.sms_send_error')], 500);
         }
     }
 
@@ -249,7 +249,7 @@ class ReserveController extends Controller
             ->first();
 
         if (!$verification) {
-            return response()->json(['message' => 'کد نامعتبر یا منقضی شده است.'], 422);
+            return response()->json(['message' => __('reserve.controller_messages.invalid_or_expired_code')], 422);
         }
 
         $verification->update(['used' => true]);
@@ -259,7 +259,7 @@ class ReserveController extends Controller
         $options     = session('reserve_options', []);
 
         if (!$reserveData) {
-            return response()->json(['message' => 'اطلاعات رزرو یافت نشد. لطفاً دوباره فرم را پر کنید.'], 400);
+            return response()->json(['message' => __('reserve.controller_messages.reserve_data_not_found')], 400);
         }
 
         // حذف فیلدهای اضافه از دیتای رزرو
@@ -286,7 +286,7 @@ class ReserveController extends Controller
                 Log::info("کاربر با شماره {$request->phone} به‌طور خودکار وارد شد.");
             } else {
                 // این حالت نباید رخ دهد چون قبلاً وجود شماره بررسی شده
-                return response()->json(['message' => 'کاربری با این شماره یافت نشد.'], 404);
+                return response()->json(['message' => __('reserve.controller_messages.user_not_found_with_phone')], 404);
             }
         }
         // سناریوی لینک کردن دو اکانت (کاربر لاگین + شماره متعلق به کاربر دیگر)
@@ -294,7 +294,7 @@ class ReserveController extends Controller
             $otherUser = User::where('phone', $request->phone)->first();
 
             if (!$otherUser) {
-                return response()->json(['message' => 'کاربر مقصد یافت نشد.'], 404);
+                return response()->json(['message' => __('reserve.controller_messages.target_user_not_found')], 404);
             }
 
             // ایجاد دو رزرو جداگانه برای هر دو کاربر
@@ -314,7 +314,7 @@ class ReserveController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'درخواست رزرو با موفقیت ثبت شد و برای هر دو حساب قابل مشاهده است.',
+                'message' => __('reserve.controller_messages.reservation_success_linked'),
             ]);
         }
         // سناریوی کاربر لاگین شده که شماره خودش را زده (یا سایر موارد)
@@ -341,7 +341,7 @@ class ReserveController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'درخواست رزرو با موفقیت ثبت شد.',
+            'message' => __('reserve.controller_messages.reservation_success'),
         ]);
     }
 
@@ -377,22 +377,20 @@ class ReserveController extends Controller
         $trackingUrl = url('/dashboard');
 
         // تعیین متن متناسب با وضعیت
-        $statusText = '';
-        if ($reserve->status === 'pending') {
-            $statusText = "وضعیت: در انتظار تأیید\nبا شما تماس گرفته خواهد شد.";
-        } elseif ($reserve->status === 'confirmed') {
-            $statusText = "وضعیت: تأیید نهایی\nدر اسرع وقت حضور یابید.";
-        } else {
-            $statusText = "وضعیت: {$reserve->status}";
-        }
+        $statusText = match ($reserve->status) {
+            'pending'   => __('reserve.controller_messages.status_pending'),
+            'confirmed' => __('reserve.controller_messages.status_confirmed'),
+            default     => __('reserve.controller_messages.status_other', ['status' => $reserve->status]),
+        };
 
         // ساخت پیام نهایی
-        $message = "رزرو شما ثبت شد.\n"
-                 . "نام: {$reserve->name}\n"
-                 . "تاریخ: {$reserve->reservation_date}\n"
-                 . "ساعت: {$reserve->entry_time} تا {$reserve->exit_time}\n"
-                 . $statusText . "\n"
-                 . "لغو11";
+        $message = __('reserve.controller_messages.sms_reservation_registered', [
+            'name'        => $reserve->name,
+            'date'        => $reserve->reservation_date,
+            'entry_time'  => $reserve->entry_time,
+            'exit_time'   => $reserve->exit_time,
+            'status_text' => $statusText,
+        ]);
 
         // ارسال به هر شماره
         foreach ($phones as $phone) {
