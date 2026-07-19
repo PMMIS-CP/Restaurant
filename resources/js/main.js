@@ -1120,8 +1120,6 @@ window.timePickerInline = function() {
             window.addEventListener('pointermove', this._boundPointerMove);
             window.addEventListener('pointerup', this._boundPointerUp);
             window.addEventListener('pointercancel', this._boundPointerUp);
-            
-            console.log("Picker Initialized"); 
         },
 
         openPicker(type) {
@@ -1467,7 +1465,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'X-CSRF-TOKEN': csrfToken()
                 }
             });
-            if (!res.ok) throw new Error(translations.errorFetchCart || 'Error fetching cart');
+            if (!res.ok) throw new Error(translations.errorFetchCart);
             return await res.json();
         } catch (error) {
             console.error(error);
@@ -1489,7 +1487,7 @@ document.addEventListener('DOMContentLoaded', async function() {
         empty.classList.add('hidden');
         summary.classList.remove('hidden');
 
-        const currency = translations.currency || 'تومان';
+        const currency = translations.currency;
         totalPriceEl.textContent = Number(data.total).toLocaleString() + ' ' + currency;
 
         container.innerHTML = data.items.map(item => `
@@ -1533,7 +1531,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     },
                     body: JSON.stringify({ quantity: newQty })
                 });
-                if (!res.ok) throw new Error(translations.errorUpdate || 'Error updating cart');
+                if (!res.ok) throw new Error(translations.errorUpdate);
                 const data = await res.json();
                 
                 if (newQty === 0) {
@@ -1551,7 +1549,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 console.error(error);
             }
         } else if (btn.classList.contains('remove-item')) {
-            if (!confirm(translations.confirmDelete || 'آیا از حذف این آیتم مطمئن هستید؟')) return;
+            if (!confirm(translations.confirmDelete)) return;
             try {
                 const res = await fetch(`/cart/remove/${itemId}`, {
                     method: 'DELETE',
@@ -1560,7 +1558,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                         'X-CSRF-TOKEN': csrfToken()
                     }
                 });
-                if (!res.ok) throw new Error(translations.errorDelete || 'Error deleting item');
+                if (!res.ok) throw new Error(translations.errorDelete);
                 const data = await res.json();
                 
                 if (data.count === 0) {
@@ -1576,7 +1574,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
 
     clearBtn?.addEventListener('click', async () => {
-        if (!confirm(translations.confirmClearAll || 'آیا از خالی کردن سبد خرید مطمئن هستید؟')) return;
+        if (!confirm(translations.confirmClearAll)) return;
         try {
             const res = await fetch(`/cart/clear`, {
                 method: 'DELETE',
@@ -1585,7 +1583,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     'X-CSRF-TOKEN': csrfToken()
                 }
             });
-            if (!res.ok) throw new Error(translations.errorGeneral || 'An error occurred');
+            if (!res.ok) throw new Error(translations.errorGeneral);
             updateCartDisplay();
         } catch (error) {
             console.error(error);
