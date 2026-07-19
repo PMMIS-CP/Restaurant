@@ -28,7 +28,6 @@ class FoodModalController extends Controller
             return response()->json(['message' => 'آیتم مورد نظر یافت نشد'], 404);
         }
 
-        // استخراج تصاویر (حداکثر ۶ عدد)
         $images = $this->getItemImages($item);
 
         return response()->json([
@@ -66,7 +65,7 @@ class FoodModalController extends Controller
         }
 
         return collect($item->images)
-            ->take(6)  // حداکثر ۶ تصویر
+            ->take(6)
             ->map(fn(string $path) => asset('storage/' . $path))
             ->values()
             ->toArray();
