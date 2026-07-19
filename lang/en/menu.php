@@ -2,7 +2,7 @@
 
 return [
     'page_title' => 'Menu',
-    'title' => 'Dine-in Menu',
+    'title' => 'Salon Menu',
     'subtitle' => 'Enjoy our restaurant menu!',
     'select_category' => 'Please select a category',
     'search_placeholder' => 'Search by dish name, ingredients, or details...',

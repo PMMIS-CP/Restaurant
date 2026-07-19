@@ -2,13 +2,6 @@
 {{-- <!-- پس‌زمینه اختصاصی کاخ موراکو --> --}}
 <div class="relative w-full bg-linear-to-br from-red-900 to-amber-900 overflow-hidden py-16">
     <svg class="absolute inset-0 w-full h-full opacity-30 pointer-events-none" viewBox="0 0 1000 1000" preserveAspectRatio="none">
-        <g class="stars">
-            <polygon points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill="#fbbf24" class="star" />
-            <use href="#star-template" x="200" y="100" />
-            <use href="#star-template" x="500" y="600" />
-            <use href="#star-template" x="800" y="200" />
-            <use href="#star-template" x="100" y="700" />
-        </g>
         
         <g class="circles">
             <circle cx="150" cy="300" r="30" fill="#fbbf24" class="pulse-circle" />
@@ -18,18 +11,6 @@
             <circle cx="300" cy="800" r="20" fill="#fbbf24" class="pulse-circle" />
         </g>
 
-        <g class="triangles">
-            <polygon points="50,0 100,87 0,87" fill="#fbbf24" class="rotate-triangle" />
-            <use href="#tri-template" x="600" y="300" />
-            <use href="#tri-template" x="200" y="500" />
-            <use href="#tri-template" x="850" y="700" />
-            <use href="#tri-template" x="50" y="400" />
-        </g>
-
-        <defs>
-            <polygon id="star-template" points="50,0 61,35 98,35 68,57 79,91 50,70 21,91 32,57 2,35 39,35" fill="#fbbf24" class="star" />
-            <polygon id="tri-template" points="50,0 100,87 0,87" fill="#fbbf24" class="rotate-triangle" />
-        </defs>
     </svg>
 
     <div class="relative z-10">
