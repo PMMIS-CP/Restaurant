@@ -11,4 +11,5 @@ return [
     'empty_description' => 'يرجى تغيير الفلاتر أو عبارة البحث الخاصة بك.',
     'takeout_badge' => 'طلبات خارجية',
     'currency' => 'تومان',
+    'without_category' => 'بدون فئة',
 ];

@@ -96,7 +96,7 @@
 <div class="min-h-screen pb-20 bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
 
     <div class="relative overflow-hidden py-16 text-center border-b-2 border-[#FFD700]/20 bg-linear-to-b from-[#1a0a0a] to-[#0a0a0a]">
-        <a href="{{ url('/') }}" class="hidden lg:block absolute right-25 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
+        <a href="{{ url('/') }}" class="hidden lg:block absolute inset-e-35 top-1/2 -translate-y-1/2 -translate-x-1/4 h-50 w-50 z-20">
             <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-full w-full object-contain brightness-200">
         </a>
         <a href="{{ url('/') }}" class="lg:hidden absolute right-1/2 top-15 -translate-y-1/2 translate-x-1/2 h-20 w-20 z-20">
@@ -155,7 +155,7 @@
                 <div class="text-left md:text-left text-sm text-gray-400 flex justify-end items-center gap-3">
                     <span>{{ __('organizational.items_found_label') }}</span>
                     <span id="items-count" class="text-lg font-black text-[#070203] bg-linear-to-r from-[#ffd700] to-[#dfb15b] px-4 py-1 rounded-xl shadow-[0_0_10px_rgba(255,215,0,0.3)]">
-                        {{ $initialCountPersian }}
+                        {{ $initialCountFormatted }}
                     </span>
                 </div>
             </div>
@@ -212,23 +212,22 @@
                                 $imagePath = $item['main_image'] ?? asset('assets/images/default-food.webp');
                             @endphp
                             <div class="menu-item-mobile snap-center shrink-0 w-70 bg-linear-to-br from-[#1c0408] to-[#0a0203] border border-[#ffd700]/20 rounded-2xl overflow-hidden shadow-lg relative flex flex-col"
-                                data-price="{{ $item['قیمت'] }}"
+                                data-price="{{ $item['price'] }}"
                                 data-modal-type="organizational"
                                 data-modal-id="{{ $item['id'] }}"
                                 data-product-id="{{ $item['id'] }}"
                                 data-product-type="MenuOrganizational"
-                                data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
+                                data-search-keys="{{ mb_strtolower($item['name'] . ' ' . $item['description']) }}">
                                 
                                 <div class="relative h-40 w-full overflow-hidden">
-                                    <img src="{{ $imagePath }}" alt="{{ $item['اسم_غذا_فارسی'] }}" class="w-full h-full object-cover">
+                                    <img src="{{ $imagePath }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-linear-to-t from-[#0a0203] via-transparent to-transparent"></div>
                                 </div>
                                 
                                 <div class="p-5 pt-3 flex-1 flex flex-col">
-                                    <h3 class="text-lg font-bold text-[#ffd700] mb-1">{{ $item['اسم_غذا_فارسی'] }}</h3>
-                                    <p class="text-xs text-gray-500 mb-2 font-mono uppercase tracking-wider">{{ $item['اسم_غذا_لاتین'] }}</p>
+                                    <h3 class="text-lg font-bold text-[#ffd700] mb-1">{{ $item['name'] }}</h3>
                                     <p class="text-xs text-gray-400 leading-relaxed text-justify opacity-90 flex-1">
-                                        {{ $item['جزئیات'] }}
+                                        {{ $item['description'] }}
                                     </p>
                                     
                                     <div class="mt-4 pt-4 border-t border-[#ffd700]/10 flex justify-between items-center">
@@ -243,23 +242,21 @@
                     {{-- حالت دسکتاپ --}}
                     <div class="hidden md:block relative transition-all duration-500 perspective-[1000px] transform-3d hover:transform-[translateZ(8px)_rotateX(0.5deg)] bg-linear-to-br from-[#140507] to-[#050102] border border-[#ffd700]/30 rounded-3xl p-8 lg:p-10 shadow-[0_20px_50px_rgba(0,0,0,0.7),inset_0_0_20px_rgba(255,215,0,0.02)] hover:shadow-[0_25px_60px_rgba(255,215,0,0.1)]">
                         
-                        <div class="absolute -right-20 -top-20 w-80 h-80 bg-[#ffd700]/5 rounded-full blur-3xl pointer-events-none transition-opacity duration-500 group-hover/section:opacity-100"></div>
-                        
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6 relative z-10">
                             @foreach($items as $item)
                                 @php
                                     $imagePath = $item['main_image'] ?? asset('assets/images/default-food.webp');
                                 @endphp
                                 <div class="menu-item-desktop group flex gap-6 p-4 rounded-2xl bg-[#0a0203]/40 border border-[#ffd700]/10 hover:border-[#ffd700]/40 transition-all duration-300 hover:shadow-[0_10px_25px_rgba(0,0,0,0.5),0_0_15px_rgba(255,215,0,0.05)] cursor-pointer"
-                                    data-price="{{ $item['قیمت'] }}"
+                                    data-price="{{ $item['price'] }}"
                                     data-modal-type="organizational"
                                     data-modal-id="{{ $item['id'] }}"
                                     data-product-id="{{ $item['id'] }}"
                                     data-product-type="MenuOrganizational"
-                                    data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}">
+                                    data-search-keys="{{ mb_strtolower($item['name'] . ' ' . $item['description']) }}">
                                     
                                     <div class="shrink-0 w-32 h-32 lg:w-36 lg:h-36 rounded-xl overflow-hidden border border-[#ffd700]/20 shadow-[0_5px_15px_rgba(0,0,0,0.4)] relative">
-                                        <img src="{{ $imagePath }}" alt="{{ $item['اسم_غذا_فارسی'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                        <img src="{{ $imagePath }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         <div class="absolute inset-0 bg-linear-to-t from-[#0a0203]/40 to-transparent"></div>
                                     </div>
                                     
@@ -267,7 +264,7 @@
                                         <div>
                                             <div class="flex items-start justify-between gap-4">
                                                 <h3 class="text-lg lg:text-xl font-bold text-gray-100 group-hover:text-[#ffd700] transition-colors duration-300 truncate">
-                                                    {{ $item['اسم_غذا_فارسی'] }}
+                                                    {{ $item['name'] }}
                                                 </h3>
                                                 <div class="shrink-0 bg-[#2a050a]/60 px-3 py-1 rounded-lg border border-[#ffd700]/30 shadow-[0_0_10px_rgba(255,215,0,0.1)]">
                                                     <span class="text-base font-black text-[#ffd700]">
@@ -279,7 +276,7 @@
                                         </div>
 
                                         <p class="text-xs lg:text-sm text-gray-400/90 leading-relaxed text-justify line-clamp-2 mt-2 group-hover:text-gray-300 transition-colors">
-                                            {{ $item['جزئیات'] }}
+                                            {{ $item['description'] }}
                                         </p>
 
                                         <div class="flex justify-between items-center mt-2 pt-2 border-t border-[#ffd700]/5">
@@ -298,5 +295,7 @@
     </main>
     @include('front.components.food-modal')
 </div>
-
+<script>
+    window.translations = @json(__('organizational'));
+</script>
 @endsection

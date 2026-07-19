@@ -83,7 +83,7 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($categories as $cat)
                 <button data-category-select="{{ $cat }}" class="category-select-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900/80 rounded-2xl p-6 text-center transition-all duration-300 hover:border-[#dfb15b]/40 hover:shadow-[0_10px_25px_rgba(220,20,60,0.15)] cursor-pointer flex flex-col items-center gap-4">
-                    <img src="{{ $categoryImages[$cat] ?? asset('/assets/images/menu/مخصوص.webp') }}" alt="{{ $cat }}" class="w-24 h-24 rounded-full object-cover border-2 border-neutral-700 group-hover:border-[#ffd700] transition-colors duration-300">
+                    <img src="{{ $categoryImages[$cat] ?? '' }}" alt="{{ $cat }}" class="w-24 h-24 rounded-full object-cover border-2 border-neutral-700 group-hover:border-[#ffd700] transition-colors duration-300">
                     <span class="block text-base font-bold text-gray-200 group-hover:text-[#ffd700] transition-colors duration-300">
                         {{ $cat }}
                     </span>
@@ -110,7 +110,7 @@
                         <div class="flex justify-between items-center text-sm text-gray-400">
                             <span class="flex items-center gap-1">
                                 <span class="w-1.5 h-1.5 rounded-full bg-[#bc1c24]"></span> {{ __('menu.max_price_label') }}
-                            </span>                            </span>
+                            </span>
                             <span id="price-val" class="font-bold text-[#ffd700] text-sm bg-[#1c1416] px-2 py-0.5 rounded border border-[#dfb15b]/10">
                                 {{ $maxPriceFormatted }}
                             </span>
@@ -169,26 +169,26 @@
             <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($menu as $item)
                 <div class="menu-item-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900 rounded-2xl transition-all duration-300 hover:border-[#dfb15b]/30 hover:shadow-[0_15px_30px_rgba(0,0,0,0.6)] relative overflow-hidden flex flex-col h-full"
-                    data-category="{{ $item['نوع'] ?? 'سایر' }}"
-                    data-price="{{ $item['قیمت'] }}"
+                    data-category="{{ $item['category'] ?? '' }}"
+                    data-price="{{ $item['price'] }}"
                     data-modal-type="menu"
                     data-modal-id="{{ $item['id'] }}"
                     data-product-id="{{ $item['id'] }}"
                     data-product-type="Menu"
-                    data-search-keys="{{ mb_strtolower($item['اسم_غذا_فارسی'] . ' ' . $item['اسم_غذا_لاتین'] . ' ' . $item['جزئیات']) }}"
+                    data-search-keys="{{ mb_strtolower($item['name'] . ' ' . $item['description']) }}"
                     style="opacity: 1; visibility: visible; display: flex;">
 
                     <div class="absolute inset-0 bg-[#bc1c24]/1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
 
                     <div class="relative">
-                        <img src="{{ $item['image_path'] }}" alt="{{ $item['اسم_غذا_فارسی'] }}" class="w-full h-48 object-cover">
+                        <img src="{{ $item['image_path'] }}" alt="{{ $item['name'] }}" class="w-full h-48 object-cover">
                         <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/50 to-transparent p-4 pt-8">
                             <div class="flex justify-between items-end gap-4">
                                 <h3 class="text-lg font-bold text-gray-100 group-hover:text-[#ffd700] transition-colors duration-300">
-                                    {{ $item['اسم_غذا_فارسی'] }}
+                                    {{ $item['name'] }}
                                 </h3>
                                 <span class="text-[10px] px-2 py-1 bg-[#1c1416] text-[#dfb15b]/80 border border-[#dfb15b]/10 rounded whitespace-nowrap">
-                                    {{ $item['نوع'] ?? 'سایر' }}
+                                    {{ $item['category'] ?? '' }}
                                 </span>
                             </div>
                         </div>
@@ -197,7 +197,7 @@
                     <div class="flex-1 flex flex-col p-6 pt-4 relative z-10">
                         <div class="my-4 h-px bg-linear-to-r from-transparent via-[#dfb15b]/10 to-transparent"></div>
                         <p class="text-xs text-gray-400 leading-relaxed text-justify opacity-80 flex-1 min-h-9">
-                            {{ $item['جزئیات'] }}
+                            {{ $item['description'] }}
                         </p>
                         <div class="mt-6 flex justify-between items-center bg-[#181113] p-3 rounded-xl border border-neutral-900/50">
                             <span class="text-xs text-gray-500">{{ __('menu.price_per_serving') }}</span>
@@ -213,4 +213,7 @@
     @include('front.components.food-modal')
     </div>
 </div>
+<script>
+    window.translations = @json(__('menu'));
+</script>
 @endsection

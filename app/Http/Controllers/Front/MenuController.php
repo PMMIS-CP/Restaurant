@@ -11,47 +11,52 @@ class MenuController extends Controller
 {
     public function index()
     {
-        // دریافت آیتم‌های فعال منو با رابطه دسته‌بندی
+        $locale = app()->getLocale(); // fa, en, ar
+
         $menuItems = Menu::with('category')
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get();
 
-        // آماده‌سازی داده‌ها برای ویو
-        $menu = $menuItems->map(function ($item, $index) {
+        $menu = $menuItems->map(function ($item, $index) use ($locale) {
+            $itemName        = $item->getNameInLocale($locale);
+            $itemDescription = $item->getDescriptionInLocale($locale);
+            $categoryName    = $item->category
+                ? $this->getCategoryNameInLocale($item->category, $locale)
+                : __('menu.without_category');
+
             return [
-                'id'               => $item->id,
-                'ردیف'              => $index + 1,
-                'اسم_غذا_فارسی'     => $item->getNameInLocale('fa'),
-                'اسم_غذا_لاتین'     => $item->getNameInLocale('en'),
-                'نوع'               => $item->category ? $item->category->name_fa : 'بدون دسته‌بندی',
-                'قیمت'             => (int) $item->price,
-                'جزئیات'           => $item->getDescriptionInLocale('fa'),
-                'image_path'       => $this->getItemImage($item, $index),
-                'formatted_price'      => self::formatPrice($item->price),
-                'formatted_price_full' => self::formatPriceFull($item->price),
+                'id'                => $item->id,
+                'row'               => $index + 1,
+                'name'              => $itemName,
+                'description'       => $itemDescription,
+                'category'          => $categoryName,
+                'price'             => (int) $item->price,
+                'image_path'        => $this->getItemImage($item),
+                'formatted_price'       => self::formatPrice($item->price),
+                'formatted_price_full'  => self::formatPriceFull($item->price),
             ];
         })->toArray();
 
-        // دریافت دسته‌بندی‌های فعال که حداقل یک آیتم منو دارند
+        // دسته‌بندی‌های فعال با نام چندزبانه
         $categories = MenuCategory::whereHas('menus', function ($query) {
             $query->where('is_active', true);
-        })->pluck('name_fa')->toArray();
+        })->get()->map(function ($category) use ($locale) {
+            return $this->getCategoryNameInLocale($category, $locale);
+        })->unique()->values()->toArray();
 
-        // اگر دسته‌بندی از آیتم‌ها استخراج نشد، از دیتابیس بگیر
         if (empty($categories)) {
-            $categories = array_values(array_unique(array_column($menu, 'نوع')));
+            $categories = array_values(array_unique(array_column($menu, 'category')));
         }
 
-        // محاسبه حداقل و حداکثر قیمت
+        // قیمت‌ها
         $prices = Menu::where('is_active', true)->pluck('price')->toArray();
         $maxPrice = !empty($prices) ? max($prices) : 0;
         $minPrice = !empty($prices) ? min($prices) : 0;
         $maxPriceFormatted = self::formatPriceFull($maxPrice);
 
-        // تصاویر متناظر با هر دسته‌بندی
-        $categoryImages = $this->getCategoryImages();
+        $categoryImages = $this->getCategoryImages($locale);
 
         return view('front.pages.menu', [
             'hideHeader'       => true,
@@ -66,80 +71,90 @@ class MenuController extends Controller
     }
 
     /**
-     * دریافت تصویر برای هر آیتم منو
+     * دریافت نام دسته‌بندی بر اساس زبان جاری
      */
-    private function getItemImage($item, $index): string
+    private function getCategoryNameInLocale($category, string $locale): string
     {
-        // اگر آیتم تصویر دارد، از تصویر خودش استفاده کن
-        if (!empty($item->images) && isset($item->images[0])) {
-            return asset('storage/' . $item->images[0]);
-        }
-        
-        // در غیر این صورت از تصویر پیش‌فرض بر اساس شماره ردیف
-        $imageNumber = fmod($index, 12) + 1;
-        return asset("assets/images/menu/" . $imageNumber . ".webp");
+        $column = 'name_' . $locale;
+        return $category->{$column} ?? $category->name_fa ?? '';
     }
 
     /**
-     * دریافت تصاویر دسته‌بندی‌ها از دیتابیس
+     * دریافت تصویر برای هر آیتم منو
      */
-    private function getCategoryImages(): array
+    private function getItemImage($item): string
+    {
+        if (!empty($item->images) && isset($item->images[0])) {
+            return asset('storage/' . $item->images[0]);
+        }
+        return '';
+    }
+
+    /**
+     * دریافت تصاویر دسته‌بندی‌ها از دیتابیس با کلید متناسب با زبان جاری
+     */
+    private function getCategoryImages(string $locale): array
     {
         $categoryImages = [];
         $categories = MenuCategory::all();
-        
+
         foreach ($categories as $category) {
-            if ($category->getImageUrlAttribute()) {
-                $categoryImages[$category->name_fa] = $category->getImageUrlAttribute();
+            $imageUrl = $category->getImageUrlAttribute();
+            if ($imageUrl) {
+                // کلید رو متناسب با زبان جاری می‌ذاریم تا با $categories تطابق داشته باشه
+                $key = $this->getCategoryNameInLocale($category, $locale);
+                $categoryImages[$key] = $imageUrl;
             }
         }
-        
-        // اگر دسته‌بندی تصویر نداشت، از تصاویر پیش‌فرض استفاده کن
-        if (empty($categoryImages)) {
-            $allCategories = MenuCategory::pluck('name_fa')->toArray();
-            foreach ($allCategories as $cat) {
-                $image = '/assets/images/menu/مخصوص.webp'; // پیش‌فرض
-                if (str_contains($cat, 'ایرانی')) {
-                    $image = '/assets/images/menu/ایرانی.webp';
-                } elseif (str_contains($cat, 'سالاد')) {
-                    $image = '/assets/images/menu/سالاد.webp';
-                }
-                $categoryImages[$cat] = asset($image);
-            }
-        }
-        
+
         return $categoryImages;
     }
 
-    // توابع کمکی فرمت قیمت
-    private static function toPersianNum($num)
+    /**
+     * تبدیل اعداد بر اساس زبان فعلی
+     */
+    private static function formatNumber($num): string
     {
-        $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        if (app()->getLocale() !== 'fa') {
+            return (string) $num;
+        }
+
+        $persian = __('menu.digits');
         $english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
         return str_replace($english, $persian, (string) $num);
     }
 
-    private static function formatPriceFull($price)
+    /**
+     * جداکننده اعشار بر اساس زبان
+     */
+    private static function getDecimalSeparator(): string
     {
-        return self::toPersianNum(number_format($price)) . ' تومان';
+        return app()->getLocale() === 'fa' ? '٫' : '.';
     }
 
-    private static function formatPrice($price)
+    private static function formatPriceFull($price): string
     {
+        return self::formatNumber(number_format($price)) . ' ' . __('menu.currency');
+    }
+
+    private static function formatPrice($price): string
+    {
+        $currency = ' ' . __('menu.currency');
+
         if ($price >= 1000000) {
             $millions = $price / 1000000;
             if ($price % 1000000 == 0) {
-                return self::toPersianNum((int)$millions) . ' میلیون تومان';
+                return self::formatNumber((int)$millions) . ' ' . __('menu.million') . $currency;
             } else {
                 $formatted = number_format($millions, 1, '.', '');
                 $parts = explode('.', $formatted);
-                return self::toPersianNum($parts[0]) . '٫' . self::toPersianNum($parts[1]) . ' میلیون تومان';
+                return self::formatNumber($parts[0]) . self::getDecimalSeparator() . self::formatNumber($parts[1]) . ' ' . __('menu.million') . $currency;
             }
         } elseif ($price >= 1000) {
             $thousands = round($price / 1000);
-            return self::toPersianNum($thousands) . ' هزار تومان';
+            return self::formatNumber($thousands) . ' ' . __('menu.thousand') . $currency;
         } else {
-            return self::toPersianNum($price) . ' تومان';
+            return self::formatNumber($price) . $currency;
         }
     }
 }

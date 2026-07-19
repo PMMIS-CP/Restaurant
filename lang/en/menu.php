@@ -13,4 +13,9 @@ return [
     'back_button' => 'Back',
     'all_menu' => 'All Menu',
     'price_per_serving' => 'Price per serving',
+    'without_category' => 'Without Category',
+    'currency' => 'Toman',
+    'digits' => ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    'million' => 'Million',
+    'thousand' => 'Thousand',
 ];

@@ -11,4 +11,8 @@ return [
     'empty_description' => 'Please adjust your filters or search query.',
     'takeout_badge' => 'Takeout',
     'currency' => 'Toman',
+    'without_category' => 'Without Category',
+    'digits' => ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+    'million' => 'Million',
+    'thousand' => 'Thousand',
 ];

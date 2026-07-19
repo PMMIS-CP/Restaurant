@@ -10,33 +10,39 @@ class MenuTakeoutController extends Controller
 {
     public function index()
     {
-        // توابع کمکی برای فرمت قیمت (بدون تغییر)
-        $toPersianNum = function ($num) {
-            $persian = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+        $locale = app()->getLocale(); // fa, en, ar
+        
+        $digits = __('takeout.digits');
+        $currency = __('takeout.currency');
+        $million = __('takeout.million');
+        $thousand = __('takeout.thousand');
+        
+        $toLocaleNum = function ($num) use ($digits) {
             $english = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-            return str_replace($english, $persian, (string) $num);
+            return str_replace($english, $digits, (string) $num);
         };
 
-        $formatPrice = function ($price) use ($toPersianNum) {
+        $formatPrice = function ($price) use ($toLocaleNum, $million, $thousand, $digits) {
             if ($price >= 1000000) {
                 $millions = $price / 1000000;
                 if ($price % 1000000 == 0) {
-                    return $toPersianNum((int)$millions) . ' میلیون';
+                    return $toLocaleNum((int)$millions) . ' ' . $million;
                 } else {
                     $formatted = number_format($millions, 1, '.', '');
                     $parts = explode('.', $formatted);
-                    return $toPersianNum($parts[0]) . '٫' . $toPersianNum($parts[1]) . ' میلیون';
+                    $decimalSeparator = ($digits[0] === '۰') ? '٫' : '.';
+                    return $toLocaleNum($parts[0]) . $decimalSeparator . $toLocaleNum($parts[1]) . ' ' . $million;
                 }
             } elseif ($price >= 1000) {
                 $thousands = round($price / 1000);
-                return $toPersianNum($thousands) . ' هزار';
+                return $toLocaleNum($thousands) . ' ' . $thousand;
             } else {
-                return $toPersianNum($price);
+                return $toLocaleNum($price);
             }
         };
 
-        $formatPriceFull = function ($price) use ($toPersianNum) {
-            return $toPersianNum(number_format($price)) . ' تومان';
+        $formatPriceFull = function ($price) use ($toLocaleNum, $currency) {
+            return $toLocaleNum(number_format($price)) . ' ' . $currency;
         };
 
         // دریافت آیتم‌های فعال به‌همراه دسته‌بندی
@@ -48,52 +54,51 @@ class MenuTakeoutController extends Controller
 
         $menu = [];
         $row = 1;
-        $currentLocale = app()->getLocale();
 
         foreach ($takeouts as $item) {
-            $nameFa = $item->getNameInLocale('fa');
-            $nameEn = $item->getNameInLocale('en');
-            $descFa = $item->getDescriptionInLocale('fa');
+            // دریافت نام و توضیحات به زبان جاری
+            $itemName        = $item->getNameInLocale($locale);
+            $itemDescription = $item->getDescriptionInLocale($locale);
 
             // نام دسته‌بندی با توجه به زبان جاری (با fallback به نام فارسی)
             if ($item->category) {
-                $categoryName = $item->category->{'name_' . $currentLocale}
+                $categoryName = $item->category->{'name_' . $locale}
                     ?? $item->category->name_fa
-                    ?? 'سایر';
+                    ?? __('takeout.without_category');
             } else {
-                $categoryName = 'سایر';
+                $categoryName = __('takeout.without_category');
             }
 
             $price = (float) $item->price;
             $images = $item->getImagesUrls();
 
             $menu[] = [
-                'id'               => $item->id,
-                'ردیف'             => $row++,
-                'اسم_غذا_فارسی'    => $nameFa,
-                'اسم_غذا_لاتین'    => $nameEn,
-                'نوع'              => $categoryName,
-                'قیمت'             => $price,
-                'جزئیات'           => $descFa,
-                'formatted_price'  => $formatPrice($price),
-                'images'           => $images,
-                'main_image'       => $images[0] ?? null,
+                'id'                  => $item->id,
+                'row'                 => $row++,
+                'name'                => $itemName,
+                'description'         => $itemDescription,
+                'category'            => $categoryName,
+                'price'               => $price,
+                'formatted_price'     => $formatPrice($price),
+                'formatted_price_full' => $formatPriceFull($price),
+                'images'              => $images,
+                'main_image'          => $images[0] ?? null,
             ];
         }
 
-        // گروه‌بندی بر اساس نوع
+        // گروه‌بندی بر اساس category
         $grouped = [];
         foreach ($menu as $item) {
-            $category = $item['نوع'];
+            $category = $item['category'];
             $grouped[$category][] = $item;
         }
 
-        $prices = array_column($menu, 'قیمت');
+        $prices = array_column($menu, 'price');
         $maxPrice = !empty($prices) ? max($prices) : 0;
         $minPrice = !empty($prices) ? min($prices) : 0;
         $maxPriceFormatted = $formatPriceFull($maxPrice);
         $totalItems = count($menu);
-        $initialCountPersian = $toPersianNum($totalItems);
+        $initialCountFormatted = $toLocaleNum($totalItems);
         $categories = array_keys($grouped);
 
         return view('front.pages.takeout', array_merge(
@@ -103,7 +108,7 @@ class MenuTakeoutController extends Controller
                 'maxPrice',
                 'minPrice',
                 'maxPriceFormatted',
-                'initialCountPersian'
+                'initialCountFormatted'
             ),
             [
                 'hideHeader' => true,

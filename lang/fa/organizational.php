@@ -11,4 +11,8 @@ return [
     'empty_description' => 'لطفاً فیلترها یا عبارت جستجوی خود را تغییر دهید.',
     'organizational_badge' => 'سازمانی',
     'currency' => 'تومان',
+    'digits' => ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
+    'million' => 'میلیون',
+    'thousand' => 'هزار',
+    'without_category' => 'بدون دسته‌بندی',
 ];

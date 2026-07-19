@@ -10,5 +10,8 @@ return [
     'empty_title' => 'لم يتم العثور على عناصر',
     'empty_description' => 'يرجى تغيير الفلاتر أو عبارة البحث الخاصة بك.',
     'organizational_badge' => 'مؤسساتي',
+    'without_category' => 'بدون تصنيف',
     'currency' => 'تومان',
+    'million' => 'مليون',
+    'thousand' => 'ألف',
 ];

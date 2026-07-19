@@ -13,4 +13,9 @@ return [
     'back_button' => 'بازگشت',
     'all_menu' => 'همه منو',
     'price_per_serving' => 'بهای هر سهم',
+    'without_category' => 'بدون دسته‌بندی',
+    'currency' => 'تومان',
+    'digits' => ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'],
+    'million' => 'میلیون',
+    'thousand' => 'هزار',
 ];

@@ -8,10 +8,17 @@ function csrfToken() {
 // کنترل مودال OTP با Alpine.js
 // در این بخش، یک کامپوننت Alpine.js برای مدیریت مودال OTP ایجاد شده است. این کامپوننت شامل متغیرها و توابعی برای باز کردن مودال، ارسال OTP، تأیید OTP، مدیریت زمان‌بندی مجدد ارسال و نمایش پیام‌ها است. همچنین، این کامپوننت از SweetAlert2 برای نمایش پیام‌های موفقیت و خطا استفاده می‌کند. 
 // در فایل resources\views\front\pages\reserve.blade.php استفاده می‌شود و با استفاده از Alpine.js، تعاملات کاربر با مودال OTP را مدیریت می‌کند.
+
+/**
+ * مدیریت پنجره تأیید شماره (OTP) و فرآیند ارسال رزرو.
+ * بسته به وضعیت لاگین کاربر و وجود شماره در سیستم، مسیر مناسب (ثبت مستقیم، OTP یا ثبت‌نام) انتخاب می‌شود.
+ */
+
 document.addEventListener('alpine:init', () => {
+    // تعریف کامپوننت Alpine برای مدیریت مودال کد تأیید
     Alpine.data('otpModal', () => ({
         show: false,
-        step: 'send',
+        step: 'send',         // مراحل: 'send' (ارسال کد) یا 'verify' (تأیید کد)
         phone: '',
         code: '',
         sending: false,
@@ -19,12 +26,16 @@ document.addEventListener('alpine:init', () => {
         message: '',
         resendCooldown: 0,
         intervalId: null,
-        // گزینه‌های اضافه برای سناریوهای مختلف
-        options: {},
+        options: {},          // گزینه‌های اضافی برای سناریوهای مختلف (auto_login, link_to_both و ...)
 
+        /**
+         * باز کردن مودال و مقداردهی اولیه.
+         * @param {string} phone - شماره تلفنی که باید تأیید شود.
+         * @param {object} options - گزینه‌های اختیاری برای کنترل رفتار سرور (مثلاً auto_login, link_to_both).
+         */
         open(phone, options = {}) {
             this.phone = phone;
-            this.options = options; // ذخیره برای استفاده در sendOtp و verifyOtp
+            this.options = options;
             this.step = 'send';
             this.code = '';
             this.show = true;
@@ -34,12 +45,16 @@ document.addEventListener('alpine:init', () => {
             this.clearCooldown();
         },
 
+        // بستن مودال و پاکسازی تایمر ارسال مجدد
         cancel() {
             this.show = false;
             this.clearCooldown();
         },
 
-        // ارسال OTP با پارامترهای اضافه
+        /**
+         * ارسال درخواست OTP به سرور.
+         * اطلاعات کامل فرم رزرو از store خوانده و همراه با گزینه‌های خاص (auto_login, link_to_both) ارسال می‌شود.
+         */
         async sendOtp() {
             this.sending = true;
             try {
@@ -56,7 +71,7 @@ document.addEventListener('alpine:init', () => {
                 formData.append('exit_time', store.exit_time);
                 formData.append('description', store.description);
 
-                // اضافه کردن گزینه‌های سناریو
+                // اضافه کردن پرچم‌های سناریو در صورت وجود
                 if (this.options.auto_login) {
                     formData.append('auto_login', '1');
                 }
@@ -76,6 +91,7 @@ document.addEventListener('alpine:init', () => {
                 });
                 const data = await res.json();
                 if (res.ok) {
+                    // انتقال به مرحله تأیید و شروع تایمر ۶۰ ثانیه‌ای برای ارسال مجدد
                     this.step = 'verify';
                     this.startCooldown(60);
                 } else {
@@ -85,7 +101,7 @@ document.addEventListener('alpine:init', () => {
                         text: data.message || window.translations.send_code_error,
                         confirmButtonText: window.translations.ok
                     });
-                    if (res.status !== 429) this.show = false;
+                    if (res.status !== 429) this.show = false; // در صورت محدودیت نرخ، مودال بسته نشود
                 }
             } catch (err) {
                 Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.connection_failed, confirmButtonText: window.translations.ok });
@@ -95,7 +111,10 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
-        // تأیید OTP با پارامترهای اضافه
+        /**
+         * تأیید کد ۴ رقمی وارد شده و نهایی‌سازی رزرو.
+         * در صورت موفقیت، صفحه رفرش می‌شود.
+         */
         async verifyOtp() {
             if (this.code.length !== 4) {
                 Swal.fire({ icon: 'warning', title: window.translations.enter_4_digit_code, confirmButtonText: window.translations.ok });
@@ -107,7 +126,7 @@ document.addEventListener('alpine:init', () => {
                     phone: this.phone,
                     code: this.code
                 };
-                // اضافه کردن گزینه‌ها
+                // ارسال گزینه‌های سناریو به صورت آبجکت JSON
                 if (this.options.auto_login) {
                     payload.auto_login = true;
                 }
@@ -154,12 +173,13 @@ document.addEventListener('alpine:init', () => {
             }
         },
 
+        // ارسال مجدد کد (در صورت پایان یافتن تایمر)
         async resendOtp() {
             if (this.resendCooldown > 0) return;
-            // فراخوانی sendOtp با همان اطلاعات
             await this.sendOtp();
         },
 
+        // شروع تایمر شمارش معکوس برای امکان ارسال مجدد کد
         startCooldown(seconds) {
             this.clearCooldown();
             this.resendCooldown = seconds;
@@ -171,6 +191,7 @@ document.addEventListener('alpine:init', () => {
             }, 1000);
         },
 
+        // متوقف کردن تایمر و پاکسازی آن
         clearCooldown() {
             if (this.intervalId) {
                 clearInterval(this.intervalId);
@@ -181,7 +202,10 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
-// ارسال مستقیم رزرو برای کاربران لاگین
+/**
+ * ارسال مستقیم رزرو برای کاربران لاگین‌شده (بدون نیاز به تأیید شماره).
+ * اطلاعات فرم از استور Alpine خوانده و به سرور ارسال می‌شود.
+ */
 async function submitDirectReservation() {
     const store = Alpine.store('reserveForm');
     const formData = new FormData();
@@ -222,7 +246,11 @@ async function submitDirectReservation() {
     }
 }
 
-// بررسی وجود شماره در دیتابیس
+/**
+ * بررسی وجود شماره تلفن در پایگاه داده.
+ * @param {string} phone - شماره تلفن برای بررسی
+ * @returns {boolean} - true اگر شماره قبلاً ثبت شده باشد
+ */
 async function checkPhoneExists(phone) {
     try {
         const res = await fetch(`/check-phone?phone=${encodeURIComponent(phone)}`, {
@@ -240,7 +268,14 @@ async function checkPhoneExists(phone) {
     }
 }
 
-// هندلر اصلی ارسال فرم
+/**
+ * هندلر اصلی ثبت فرم رزرو.
+ * بر اساس وضعیت لاگین کاربر و وجود شماره، یکی از مسیرهای زیر طی می‌شود:
+ * ۱. کاربر لاگین با شماره خود → ثبت مستقیم
+ * ۲. کاربر لاگین با شماره جدید → ثبت مستقیم (در صورت نبود شماره) یا OTP با گزینه link_to_both
+ * ۳. مهمان با شماره موجود → OTP با گزینه auto_login
+ * ۴. مهمان با شماره جدید → هدایت به صفحه ثبت‌نام
+ */
 window.handleSubmit = async function(event) {
     event.preventDefault();
     const store = Alpine.store('reserveForm');
@@ -254,23 +289,22 @@ window.handleSubmit = async function(event) {
         return;
     }
 
-    const loggedIn = window.authUser; // شیء کاربر لاگین یا null
+    const loggedIn = window.authUser; // اطلاعات کاربر لاگین (null در صورت مهمان بودن)
     const formPhone = store.phone;
 
-    // سناریو ۱: کاربر لاگین کرده
+    // سناریو ۱: کاربر لاگین کرده است
     if (loggedIn) {
         if (formPhone === loggedIn.phone) {
-            // شماره خودش → ثبت مستقیم
+            // شماره متعلق به خود کاربر است → ثبت مستقیم رزرو
             await submitDirectReservation();
         } else {
-            // شماره متفاوت
+            // شماره وارد شده با شماره کاربر فرق دارد
             const phoneExists = await checkPhoneExists(formPhone);
             if (!phoneExists) {
-                // شماره در دیتابیس نیست → رزرو فقط برای کاربر لاگین ثبت شود (بدون OTP)
-                // می‌توانیم همچنان از direct-submit استفاده کنیم (بک‌اند فقط برای کاربر لاگین ثبت می‌کند)
+                // شماره جدید و در سیستم نیست → ثبت مستقیم (رزرو فقط برای کاربر لاگین)
                 await submitDirectReservation();
             } else {
-                // شماره در دیتابیس وجود دارد → باز کردن مودال OTP با گزینه link_to_both
+                // شماره در سیستم وجود دارد اما متعلق به کاربر دیگری است → OTP برای پیوند دو کاربر
                 const modalEl = document.querySelector('[x-data="otpModal()"]');
                 if (!modalEl) {
                     Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.modal_not_found, confirmButtonText: window.translations.ok });
@@ -284,11 +318,11 @@ window.handleSubmit = async function(event) {
             }
         }
     }
-    // سناریو ۲: کاربر مهمان
+    // سناریو ۲: کاربر مهمان (لاگین نکرده)
     else {
         const phoneExists = await checkPhoneExists(formPhone);
         if (phoneExists) {
-            // شماره قبلاً ثبت‌نام کرده → OTP برای لاگین خودکار
+            // شماره قبلاً ثبت‌نام کرده → OTP برای لاگین خودکار و ادامه رزرو
             const modalEl = document.querySelector('[x-data="otpModal()"]');
             if (!modalEl) {
                 Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.modal_not_found, confirmButtonText: window.translations.ok });
@@ -299,7 +333,7 @@ window.handleSubmit = async function(event) {
                 auto_login: true
             });
         } else {
-            // شماره جدید → هدایت به صفحه ثبت‌نام
+            // شماره جدید → درخواست ثبت‌نام
             Swal.fire({
                 icon: 'warning',
                 title: window.translations.registration_required_title,
@@ -491,194 +525,7 @@ document.addEventListener('alpine:init', () => {
 // ==========================================
 // کدهای صفحه منو (resources\views\front\pages\menu.blade.php)
 // ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    // فقط اگر در صفحه منو هستیم اجرا کن
-    const menuGrid = document.getElementById('menu-grid');
-    if (!menuGrid) return;
 
-    // المان‌های کنترل صفحات
-    const categoryPage = document.getElementById('category-page');
-    const menuPage = document.getElementById('menu-page');
-    const backToCategoriesBtn = document.getElementById('back-to-categories');
-    const categorySelectCards = document.querySelectorAll('[data-category-select]');
-
-    // کنترلرهای فیلتر
-    const searchInput = document.getElementById('search-input');
-    const priceSlider = document.getElementById('price-slider');
-    const priceVal = document.getElementById('price-val');
-    const itemsCountBadge = document.getElementById('items-count');
-    const emptyState = document.getElementById('empty-state');
-    const menuCards = document.querySelectorAll('.menu-item-card');
-    const categoryButtons = document.querySelectorAll('.cat-btn');
-
-    let currentCategory = 'all';
-
-    // راه اندازی Swiper دسته‌بندی‌ها
-    const categorySwiper = new window.Swiper('.categories-swiper', {
-        slidesPerView: 'auto',
-        spaceBetween: 12,
-        freeMode: true,
-        slidesOffsetBefore: 0,
-        slidesOffsetAfter: 0,
-        watchOverflow: true
-    });
-
-    function toPersianNumber(num) {
-        const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-        return num.toString().replace(/\d/g, x => persianDigits[x]);
-    }
-
-    function formatSliderPrice(price) {
-        return new Intl.NumberFormat('fa-IR').format(price) + ' تومان';
-    }
-
-    // موتور اصلی فیلتر محصولات منو
-    function filterEngine() {
-        const query = searchInput.value.toLowerCase().trim();
-        const maxPrice = parseInt(priceSlider.value);
-        
-        priceVal.textContent = formatSliderPrice(maxPrice);
-
-        const showTargets = [];
-        const hideTargets = [];
-
-        menuCards.forEach(card => {
-            const itemCategory = card.dataset.category;
-            const itemPrice = parseInt(card.dataset.price);
-            const searchKeys = card.dataset.searchKeys;
-
-            const matchCategory = (currentCategory === 'all' || itemCategory === currentCategory);
-            const matchPrice = itemPrice <= maxPrice;
-            const matchSearch = !query || searchKeys.includes(query);
-
-            if (matchCategory && matchPrice && matchSearch) {
-                showTargets.push(card);
-            } else {
-                hideTargets.push(card);
-            }
-        });
-
-        itemsCountBadge.textContent = toPersianNumber(showTargets.length);
-
-        if (showTargets.length === 0) {
-            emptyState.classList.remove('hidden');
-            menuGrid.classList.add('hidden');
-        } else {
-            emptyState.classList.add('hidden');
-            menuGrid.classList.remove('hidden');
-        }
-
-        if (hideTargets.length > 0) {
-            window.gsap.to(hideTargets, {
-                opacity: 0,
-                scale: 0.92,
-                y: 15,
-                duration: 0.25,
-                overwrite: 'auto',
-                display: 'none',
-                ease: 'power2.in'
-            });
-        }
-
-        if (showTargets.length > 0) {
-            window.gsap.killTweensOf(showTargets);
-            window.gsap.set(showTargets, { display: 'flex' });
-            window.gsap.fromTo(showTargets, 
-                { opacity: 0, scale: 0.95, y: -10 },
-                { 
-                    opacity: 1, 
-                    scale: 1, 
-                    y: 0,
-                    duration: 0.35, 
-                    stagger: 0.03, 
-                    overwrite: 'auto',
-                    ease: 'power3.out'
-                }
-            );
-        }
-    }
-
-    // انیمیشن کارت‌ها موقع فعال شدن صفحه اصلی منو
-    function animateCardsOnLoad() {
-        const visibleCards = document.querySelectorAll('.menu-item-card[style*="display: flex"]');
-        if (visibleCards.length === 0) return;
-
-        window.gsap.fromTo(visibleCards, 
-            { opacity: 0, scale: 0.95, y: 30 },
-            {
-                opacity: 1,
-                scale: 1,
-                y: 0,
-                duration: 0.6,
-                stagger: 0.04,
-                ease: 'power4.out'
-            }
-        );
-    }
-
-    // عملکرد کلیک روی کارت‌های دسته‌بندی اولیه صفحه اول
-    categorySelectCards.forEach(card => {
-        card.addEventListener('click', () => {
-            const selectedCategory = card.dataset.categorySelect;
-            currentCategory = selectedCategory;
-
-            // سوئیچ بصری دکمه‌های اسلایدر ناوبری چسبان بالای صفحه
-            categoryButtons.forEach(b => {
-                if (b.dataset.categoryTarget === selectedCategory) {
-                    b.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-                    b.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-sm', 'shadow-[#bc1c24]/20');
-                    
-                    // اسکرول اسلایدر به سمت دکمه فعال شده
-                    const btnIndex = Array.from(categoryButtons).indexOf(b);
-                    setTimeout(() => { categorySwiper.slideTo(btnIndex); }, 100);
-                } else {
-                    b.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-[#bc1c24]/20');
-                    b.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-                }
-            });
-
-            // پنهان کردن صفحه دسته‌بندی و بالا آوردن صفحه منو
-            categoryPage.classList.add('hidden');
-            menuPage.classList.remove('hidden');
-
-            // بروزرسانی محاسبات Swiper به دلیل تغییر وضعیت نمایش
-            categorySwiper.update();
-
-            // اجرای فیلتر و اعمال انیمیشن ورود
-            filterEngine();
-            setTimeout(() => { animateCardsOnLoad(); }, 50);
-        });
-    });
-
-    // بازگشت به صفحه دسته‌بندی‌ها
-    if (backToCategoriesBtn) {
-        backToCategoriesBtn.addEventListener('click', () => {
-            menuPage.classList.add('hidden');
-            categoryPage.classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    }
-
-    // رویدادهای فیلتر قیمت و جستجو
-    if (priceSlider) priceSlider.addEventListener('input', filterEngine);
-    if (searchInput) searchInput.addEventListener('input', filterEngine);
-
-    // رویداد تغییر دسته‌بندی از داخل اسلایدر چسبان بالای صفحه (Nav)
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            categoryButtons.forEach(b => {
-                b.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-[#bc1c24]/20');
-                b.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-            });
-
-            btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-            btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-sm', 'shadow-[#bc1c24]/20');
-
-            currentCategory = btn.dataset.categoryTarget;
-            filterEngine();
-        });
-    });
-});
 
 // ==========================================
 // اسکرول ناوبری چسبان (sticky nav)
@@ -697,167 +544,334 @@ window.addEventListener('scroll', () => {
 // ==========================================
 // کدهای صفحه سازمانی (resources\views\front\pages\organizational.blade.php)
 // ==========================================
+// 
+// 
+// 
+// ==========================================
+// کد مشترک برای صفحات Menu و Organizational
+// قابل استفاده در هر دو فایل blade
+// ==========================================
+// ==========================================
+// کد مشترک برای صفحات Menu و Organizational
+// قابل استفاده در هر دو فایل blade
+// ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // فقط اگر در صفحه سازمانی هستیم اجرا کن
-    const menuContainer = document.getElementById('menu-container');
-    if (!menuContainer) return;
+    const menuContainer = document.getElementById('menu-container'); // مخصوص صفحه سازمانی
+    const menuGrid = document.getElementById('menu-grid');          // مخصوص صفحه منو
 
-    // ==========================================
-    // بخش اول: اسلایدر دسته‌بندی و ناوبری
-    // ==========================================
-    const categorySwiper = new window.Swiper('.categories-swiper', {
-        slidesPerView: 'auto',
-        spaceBetween: 12,
-        freeMode: true,
-        watchOverflow: true
-    });
+    // اگر هیچ‌کدام از المان‌های صفحه وجود نداشت، اجرا نشود
+    if (!menuContainer && !menuGrid) return;
 
-    const categoryButtons = document.querySelectorAll('.cat-btn');
-    const categorySections = document.querySelectorAll('.category-section');
+    // تشخیص locale بر اساس ارقام ترجمه
+    const isPersian = window.translations.digits && window.translations.digits[0] === '۰';
+    const numberLocale = isPersian ? 'fa-IR' : 'en-US';
 
-    let isAutoScrolling = false;
-    let autoScrollTimeout = null;
-
-    function activateCategoryButton(targetCategory) {
-        categoryButtons.forEach(btn => {
-            btn.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
-            btn.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-            
-            if (btn.dataset.categoryTarget === targetCategory) {
-                btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
-                btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
-                categorySwiper.slideTo(Array.from(categoryButtons).indexOf(btn), 300);
-            }
-        });
-    }
-
-    categoryButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const targetCategory = btn.dataset.categoryTarget;
-            isAutoScrolling = true;
-            
-            if (autoScrollTimeout) {
-                clearTimeout(autoScrollTimeout);
-            }
-            
-            activateCategoryButton(targetCategory);
-            
-            const targetSection = document.querySelector(`.category-section[data-category="${targetCategory}"]`);
-            if (targetSection) {
-                targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-            
-            autoScrollTimeout = setTimeout(() => {
-                isAutoScrolling = false;
-                autoScrollTimeout = null;
-            }, 1000);
-        });
-    });
-
-    // Intersection Observer برای تشخیص بخش فعال
-    const observerOptions = {
-        root: null,
-        rootMargin: '-30% 0px -60% 0px',
-        threshold: 0
-    };
-
-    const observerCallback = (entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !isAutoScrolling) {
-                const category = entry.target.dataset.category;
-                if (category) {
-                    activateCategoryButton(category);
-                }
-            }
-        });
-    };
-
-    const observer = new IntersectionObserver(observerCallback, observerOptions);
-    categorySections.forEach(section => observer.observe(section));
-
-    // ==========================================
-    // بخش دوم: فیلتر و جستجوی منو
-    // ==========================================
-    const searchInput = document.getElementById('search-input');
-    const priceSlider = document.getElementById('price-slider');
-    const priceVal = document.getElementById('price-val');
-    const itemsCountBadge = document.getElementById('items-count');
-    const emptyState = document.getElementById('empty-state');
-
-    function toPersianNumber(num) {
-        const persianDigits = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
-        return num.toString().replace(/\d/g, x => persianDigits[x]);
+    // توابع تبدیل اعداد
+    function toLocaleNumber(num) {
+        const persianDigits = window.translations.digits;
+        const formatted = new Intl.NumberFormat(numberLocale).format(num);
+        return formatted.replace(/\d/g, x => persianDigits[x]);
     }
 
     function formatSliderPrice(price) {
-        return new Intl.NumberFormat('fa-IR').format(price) + ' تومان';
+        const formattedNumber = toLocaleNumber(price);
+        const currency = window.translations.currency;
+        return formattedNumber + ' ' + currency;
     }
 
-    function filterEngine() {
-        const query = searchInput.value.toLowerCase().trim();
-        const maxPrice = parseInt(priceSlider.value);
-        
-        priceVal.textContent = formatSliderPrice(maxPrice);
-        let totalVisibleItems = 0;
-
-        categorySections.forEach(section => {
-            const mobileItems = section.querySelectorAll('.menu-item-mobile');
-            const desktopItems = section.querySelectorAll('.menu-item-desktop');
-            let sectionHasVisibleItem = false;
-
-            const processItems = (items) => {
-                items.forEach(item => {
-                    const itemPrice = parseInt(item.dataset.price);
-                    const searchKeys = item.dataset.searchKeys;
-
-                    const matchPrice = itemPrice <= maxPrice;
-                    const matchSearch = !query || searchKeys.includes(query);
-
-                    if (matchPrice && matchSearch) {
-                        item.style.display = '';
-                        sectionHasVisibleItem = true;
-                        totalVisibleItems++;
-                    } else {
-                        item.style.display = 'none';
-                    }
-                });
-            };
-
-            processItems(mobileItems);
-            processItems(desktopItems);
-
-            if (sectionHasVisibleItem) {
-                section.style.display = 'block';
-                section.style.opacity = '1';
-            } else {
-                section.style.display = 'none';
-                section.style.opacity = '0';
-            }
+    // ==========================================
+    // کدهای اختصاصی صفحه سازمانی
+    // ==========================================
+    if (menuContainer) {
+        // Swiper ناوبری دسته‌بندی‌ها
+        const categorySwiper = new window.Swiper('.categories-swiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 12,
+            freeMode: true,
+            watchOverflow: true
         });
 
-        const actualVisibleCount = totalVisibleItems / 2;
-        itemsCountBadge.textContent = toPersianNumber(actualVisibleCount);
+        const categoryButtons = document.querySelectorAll('.cat-btn');
+        const categorySections = document.querySelectorAll('.category-section');
 
-        if (actualVisibleCount === 0) {
-            emptyState.classList.remove('hidden');
-            menuContainer.classList.add('hidden');
-        } else {
-            emptyState.classList.add('hidden');
-            menuContainer.classList.remove('hidden');
+        let isAutoScrolling = false;
+        let autoScrollTimeout = null;
+
+        function activateCategoryButton(targetCategory) {
+            categoryButtons.forEach(btn => {
+                btn.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                btn.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                
+                if (btn.dataset.categoryTarget === targetCategory) {
+                    btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white');
+                    btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                    categorySwiper.slideTo(Array.from(categoryButtons).indexOf(btn), 300);
+                }
+            });
+        }
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetCategory = btn.dataset.categoryTarget;
+                isAutoScrolling = true;
+                
+                if (autoScrollTimeout) clearTimeout(autoScrollTimeout);
+                
+                activateCategoryButton(targetCategory);
+                
+                const targetSection = document.querySelector(`.category-section[data-category="${targetCategory}"]`);
+                if (targetSection) {
+                    targetSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+                
+                autoScrollTimeout = setTimeout(() => {
+                    isAutoScrolling = false;
+                    autoScrollTimeout = null;
+                }, 1000);
+            });
+        });
+
+        // تشخیص بخش فعال با Intersection Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '-30% 0px -60% 0px',
+            threshold: 0
+        };
+
+        const observerCallback = (entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !isAutoScrolling) {
+                    const category = entry.target.dataset.category;
+                    if (category) activateCategoryButton(category);
+                }
+            });
+        };
+
+        const observer = new IntersectionObserver(observerCallback, observerOptions);
+        categorySections.forEach(section => observer.observe(section));
+
+        // فیلتر و جستجوی آیتم‌های سازمانی
+        const searchInput = document.getElementById('search-input');
+        const priceSlider = document.getElementById('price-slider');
+        const priceVal = document.getElementById('price-val');
+        const itemsCountBadge = document.getElementById('items-count');
+        const emptyState = document.getElementById('empty-state');
+
+        function filterEngine() {
+            const query = searchInput.value.toLowerCase().trim();
+            const maxPrice = parseInt(priceSlider.value);
+            
+            priceVal.textContent = formatSliderPrice(maxPrice);
+            let totalVisibleItems = 0;
+
+            categorySections.forEach(section => {
+                const mobileItems = section.querySelectorAll('.menu-item-mobile');
+                const desktopItems = section.querySelectorAll('.menu-item-desktop');
+                let sectionHasVisibleItem = false;
+
+                const processItems = (items) => {
+                    items.forEach(item => {
+                        const itemPrice = parseInt(item.dataset.price);
+                        const searchKeys = item.dataset.searchKeys;
+
+                        const matchPrice = itemPrice <= maxPrice;
+                        const matchSearch = !query || searchKeys.includes(query);
+
+                        if (matchPrice && matchSearch) {
+                            item.style.display = '';
+                            sectionHasVisibleItem = true;
+                            totalVisibleItems++;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                };
+
+                processItems(mobileItems);
+                processItems(desktopItems);
+
+                section.style.display = sectionHasVisibleItem ? 'block' : 'none';
+                section.style.opacity = sectionHasVisibleItem ? '1' : '0';
+            });
+
+            const actualVisibleCount = totalVisibleItems / 2;
+            itemsCountBadge.textContent = toLocaleNumber(actualVisibleCount);
+
+            emptyState.classList.toggle('hidden', actualVisibleCount !== 0);
+            menuContainer.classList.toggle('hidden', actualVisibleCount === 0);
+        }
+
+        if (priceSlider) priceSlider.addEventListener('input', filterEngine);
+        if (searchInput) searchInput.addEventListener('input', filterEngine);
+
+        // انیمیشن اولیه بخش‌ها
+        if (typeof window.gsap !== 'undefined') {
+            window.gsap.from('.category-section', {
+                opacity: 0,
+                y: 40,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out'
+            });
         }
     }
 
-    if (priceSlider) priceSlider.addEventListener('input', filterEngine);
-    if (searchInput) searchInput.addEventListener('input', filterEngine);
+    // ==========================================
+    // کدهای اختصاصی صفحه منو
+    // ==========================================
+    if (menuGrid) {
+        const categoryPage = document.getElementById('category-page');
+        const menuPage = document.getElementById('menu-page');
+        const backToCategoriesBtn = document.getElementById('back-to-categories');
+        const categorySelectCards = document.querySelectorAll('[data-category-select]');
 
-    // انیمیشن اولیه بخش‌ها
-    if (typeof window.gsap !== 'undefined') {
-        window.gsap.from('.category-section', {
-            opacity: 0,
-            y: 40,
-            duration: 0.8,
-            stagger: 0.15,
-            ease: 'power3.out'
+        const searchInput = document.getElementById('search-input');
+        const priceSlider = document.getElementById('price-slider');
+        const priceVal = document.getElementById('price-val');
+        const itemsCountBadge = document.getElementById('items-count');
+        const emptyState = document.getElementById('empty-state');
+        const menuCards = document.querySelectorAll('.menu-item-card');
+        const categoryButtons = document.querySelectorAll('.cat-btn');
+
+        let currentCategory = 'all';
+
+        const categorySwiper = new window.Swiper('.categories-swiper', {
+            slidesPerView: 'auto',
+            spaceBetween: 12,
+            freeMode: true,
+            slidesOffsetBefore: 0,
+            slidesOffsetAfter: 0,
+            watchOverflow: true
+        });
+
+        function filterEngine() {
+            const query = searchInput.value.toLowerCase().trim();
+            const maxPrice = parseInt(priceSlider.value);
+            
+            priceVal.textContent = formatSliderPrice(maxPrice);
+
+            const showTargets = [];
+            const hideTargets = [];
+
+            menuCards.forEach(card => {
+                const itemCategory = card.dataset.category;
+                const itemPrice = parseInt(card.dataset.price);
+                const searchKeys = card.dataset.searchKeys;
+
+                const matchCategory = (currentCategory === 'all' || itemCategory === currentCategory);
+                const matchPrice = itemPrice <= maxPrice;
+                const matchSearch = !query || searchKeys.includes(query);
+
+                if (matchCategory && matchPrice && matchSearch) {
+                    showTargets.push(card);
+                } else {
+                    hideTargets.push(card);
+                }
+            });
+
+            itemsCountBadge.textContent = toLocaleNumber(showTargets.length);
+
+            emptyState.classList.toggle('hidden', showTargets.length !== 0);
+            menuGrid.classList.toggle('hidden', showTargets.length === 0);
+
+            if (hideTargets.length > 0) {
+                window.gsap.to(hideTargets, {
+                    opacity: 0,
+                    scale: 0.92,
+                    y: 15,
+                    duration: 0.25,
+                    overwrite: 'auto',
+                    display: 'none',
+                    ease: 'power2.in'
+                });
+            }
+
+            if (showTargets.length > 0) {
+                window.gsap.killTweensOf(showTargets);
+                window.gsap.set(showTargets, { display: 'flex' });
+                window.gsap.fromTo(showTargets, 
+                    { opacity: 0, scale: 0.95, y: -10 },
+                    { 
+                        opacity: 1, 
+                        scale: 1, 
+                        y: 0,
+                        duration: 0.35, 
+                        stagger: 0.03, 
+                        overwrite: 'auto',
+                        ease: 'power3.out'
+                    }
+                );
+            }
+        }
+
+        function animateCardsOnLoad() {
+            const visibleCards = document.querySelectorAll('.menu-item-card[style*="display: flex"]');
+            if (visibleCards.length === 0) return;
+
+            window.gsap.fromTo(visibleCards, 
+                { opacity: 0, scale: 0.95, y: 30 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.6,
+                    stagger: 0.04,
+                    ease: 'power4.out'
+                }
+            );
+        }
+
+        categorySelectCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const selectedCategory = card.dataset.categorySelect;
+                currentCategory = selectedCategory;
+
+                categoryButtons.forEach(b => {
+                    if (b.dataset.categoryTarget === selectedCategory) {
+                        b.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                        b.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-sm', 'shadow-[#bc1c24]/20');
+                        
+                        const btnIndex = Array.from(categoryButtons).indexOf(b);
+                        setTimeout(() => { categorySwiper.slideTo(btnIndex); }, 100);
+                    } else {
+                        b.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-[#bc1c24]/20');
+                        b.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                    }
+                });
+
+                categoryPage.classList.add('hidden');
+                menuPage.classList.remove('hidden');
+                categorySwiper.update();
+
+                filterEngine();
+                setTimeout(() => { animateCardsOnLoad(); }, 50);
+            });
+        });
+
+        if (backToCategoriesBtn) {
+            backToCategoriesBtn.addEventListener('click', () => {
+                menuPage.classList.add('hidden');
+                categoryPage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+
+        if (priceSlider) priceSlider.addEventListener('input', filterEngine);
+        if (searchInput) searchInput.addEventListener('input', filterEngine);
+
+        categoryButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                categoryButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-[#bc1c24]/20');
+                    b.classList.add('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                });
+
+                btn.classList.remove('bg-[#140e10]', 'border-[#dfb15b]/10', 'text-gray-400');
+                btn.classList.add('active', 'bg-[#bc1c24]', 'border-[#bc1c24]', 'text-white', 'shadow-sm', 'shadow-[#bc1c24]/20');
+
+                currentCategory = btn.dataset.categoryTarget;
+                filterEngine();
+            });
         });
     }
 });
