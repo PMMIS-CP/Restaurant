@@ -6,7 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#450a0a">
 
-    <title>{{ config('app.name') }} | @yield('title', 'خانه')</title>
+    <title>{{ __('app.name') }} | @yield('title', 'خانه')</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/logo.webp') }}">
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}"> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])

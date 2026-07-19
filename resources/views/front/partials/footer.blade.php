@@ -5,8 +5,8 @@
             {{-- ستون ۱: برند --}}
             <div class="flex flex-col items-center md:items-start gap-3">
                 <a href="{{ url('/') }}" class="flex items-center gap-2 text-white text-xl font-bold">
-                    <img src="{{ asset('assets/logo/logo.webp') }}" alt="{{ config('app.name') }}" class="h-8 w-8">
-                    {{ config('app.name', 'رستوران') }}
+                    <img src="{{ asset('assets/logo/logo.webp') }}" alt="{{ __('app.name') }}" class="h-8 w-8">
+                    {{ __('app.name') }}
                 </a>
                 <p class="text-sm text-[#E8C88A] leading-relaxed">
                     {{ __('footer.brand_description') }}
