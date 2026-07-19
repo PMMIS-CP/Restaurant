@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Routing\Controllers\Middleware; // این کلاس بسیار مهم است
+use Illuminate\Routing\Controllers\Middleware;
 
 class CommentController extends Controller implements HasMiddleware
 {
@@ -59,21 +59,21 @@ class CommentController extends Controller implements HasMiddleware
 
         if ($dailyCount >= 10) {
             return redirect()->back()
-                ->with('error', 'شما به حداکثر تعداد مجاز نظرات روزانه رسیده‌اید.');
+                ->with('error', __('home.comments.max_daily_reached'));
         }
 
         $validated = $request->validate([
             'name'    => 'required|string|max:255|regex:/^[a-zA-Z0-9\s\p{Arabic}]+$/u',
             'comment' => 'required|string|max:1000',
         ], [
-            'name.regex' => 'نام فقط می‌تواند شامل حروف و اعداد باشد.',
+            'name.regex' => __('home.comments.name_regex'),
         ]);
 
         $cleanComment = trim(strip_tags($validated['comment']));
         
         if (empty($cleanComment)) {
             return redirect()->back()
-                ->with('error', 'متن نظر نمی‌تواند خالی باشد.')
+                ->with('error', __('home.comments.comment_empty'))
                 ->withInput();
         }
         
@@ -84,7 +84,7 @@ class CommentController extends Controller implements HasMiddleware
 
         if ($duplicate) {
             return redirect()->back()
-                ->with('error', 'نظر تکراری شناسایی شد. لطفاً چند دقیقه صبر کنید.')
+                ->with('error', __('home.comments.duplicate_detected'))
                 ->withInput();
         }
 
@@ -97,6 +97,6 @@ class CommentController extends Controller implements HasMiddleware
         $comment->save();
 
         return redirect()->back()
-            ->with('success', 'نظر شما با موفقیت ثبت شد و پس از تأیید مدیر منتشر خواهد شد.');
+            ->with('success', __('home.comments.submitted_successfully'));
     }
 }
