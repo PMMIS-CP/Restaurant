@@ -642,8 +642,24 @@ input:-webkit-autofill:focus {
         'time_exit_title' => __('reserve.time.exit_time'),
         'time_confirm' => __('reserve.time.confirm'),
         'time_format' => __('reserve.time.time_format'),
+        'error' => __('reserve.js_messages.error'),
+        'connection_failed' => __('reserve.js_messages.connection_failed'),
+        'ok' => __('reserve.js_messages.ok'),
+        'send_code_error' => __('reserve.js_messages.send_code_error'),
+        'modal_not_found' => __('reserve.js_messages.modal_not_found'),
+        'enter_4_digit_code' => __('reserve.js_messages.enter_4_digit_code'),
+        'reservation_success_title' => __('reserve.js_messages.reservation_success_title'),
+        'reservation_success_message' => __('reserve.js_messages.reservation_success_message'),
+        'understood' => __('reserve.js_messages.understood'),
+        'incorrect_code' => __('reserve.js_messages.incorrect_code'),
+        'reservation_error' => __('reserve.js_messages.reservation_error'),
+        'fill_required_fields' => __('reserve.js_messages.fill_required_fields'),
+        'registration_required_title' => __('reserve.js_messages.registration_required_title'),
+        'phone_not_registered_message' => __('reserve.js_messages.phone_not_registered_message'),
+        'register' => __('reserve.js_messages.register'),
+        'back' => __('reserve.js_messages.back'),
     ]) !!};
-    
+
     window.authUser = {!! json_encode(auth()->check() ? ['id' => auth()->id(), 'phone' => auth()->user()->phone] : null) !!};
 </script>
 {{-- مودال تأیید OTP --}}

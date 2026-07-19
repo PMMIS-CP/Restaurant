@@ -88,4 +88,23 @@ return [
             'personal' => 'شخصی',
         ],
     ],
+
+    'js_messages' => [
+        'error' => 'خطا',
+        'connection_failed' => 'ارتباط با سرور برقرار نشد.',
+        'ok' => 'باشه',
+        'send_code_error' => 'خطا در ارسال کد',
+        'modal_not_found' => 'مودال یافت نشد.',
+        'enter_4_digit_code' => 'کد ۴ رقمی را وارد کنید',
+        'reservation_success_title' => 'رزرو با موفقیت ثبت شد',
+        'reservation_success_message' => 'رزرو شما با موفقیت ثبت شد.',
+        'understood' => 'متوجه شدم',
+        'incorrect_code' => 'کد نادرست است.',
+        'reservation_error' => 'خطا در ثبت رزرو',
+        'fill_required_fields' => 'اطلاعات ضروری را تکمیل کنید.',
+        'registration_required_title' => 'ثبت‌نام الزامی است',
+        'phone_not_registered_message' => 'شماره‌ای که شما ثبت کردید در سایت ما ثبت‌نام نشده. لطفا با این شماره ثبت‌‌‌نام کنید یا از شماره‌ای که قبلا ثبت شده استفاده کنید.',
+        'register' => 'ثبت‌نام',
+        'back' => 'بازگشت',
+    ],
 ];

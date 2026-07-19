@@ -1,9 +1,13 @@
 // تابع کمکی برای CSRF
+// این تابع برای دریافت توکن CSRF از متا تگ استفاده می‌شود و در درخواست‌های AJAX مورد نیاز است.
+// که در فایل های resources\views\front\pages\reserve.blade.php و resources\views\front\pages\cart-page.blade.php استفاده می‌شود.
 function csrfToken() {
     return document.querySelector('meta[name="csrf-token"]').content;
 }
 
-// کامپوننت Alpine برای کنترل مودال
+// کنترل مودال OTP با Alpine.js
+// در این بخش، یک کامپوننت Alpine.js برای مدیریت مودال OTP ایجاد شده است. این کامپوننت شامل متغیرها و توابعی برای باز کردن مودال، ارسال OTP، تأیید OTP، مدیریت زمان‌بندی مجدد ارسال و نمایش پیام‌ها است. همچنین، این کامپوننت از SweetAlert2 برای نمایش پیام‌های موفقیت و خطا استفاده می‌کند. 
+// در فایل resources\views\front\pages\reserve.blade.php استفاده می‌شود و با استفاده از Alpine.js، تعاملات کاربر با مودال OTP را مدیریت می‌کند.
 document.addEventListener('alpine:init', () => {
     Alpine.data('otpModal', () => ({
         show: false,
@@ -77,14 +81,14 @@ document.addEventListener('alpine:init', () => {
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'خطا',
-                        text: data.message || 'خطا در ارسال کد',
-                        confirmButtonText: 'باشه'
+                        title: window.translations.error,
+                        text: data.message || window.translations.send_code_error,
+                        confirmButtonText: window.translations.ok
                     });
                     if (res.status !== 429) this.show = false;
                 }
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'خطا', text: 'ارتباط با سرور برقرار نشد.', confirmButtonText: 'باشه' });
+                Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.connection_failed, confirmButtonText: window.translations.ok });
                 this.show = false;
             } finally {
                 this.sending = false;
@@ -94,7 +98,7 @@ document.addEventListener('alpine:init', () => {
         // تأیید OTP با پارامترهای اضافه
         async verifyOtp() {
             if (this.code.length !== 4) {
-                Swal.fire({ icon: 'warning', title: 'کد ۴ رقمی را وارد کنید', confirmButtonText: 'باشه' });
+                Swal.fire({ icon: 'warning', title: window.translations.enter_4_digit_code, confirmButtonText: window.translations.ok });
                 return;
             }
             this.verifying = true;
@@ -129,22 +133,22 @@ document.addEventListener('alpine:init', () => {
                     
                     Swal.fire({
                         icon: 'success',
-                        title: 'رزرو با موفقیت ثبت شد',
-                        text: data.message || 'رزرو شما با موفقیت ثبت شد.',
-                        confirmButtonText: 'متوجه شدم'
+                        title: window.translations.reservation_success_title,
+                        text: data.message || window.translations.reservation_success_message,
+                        confirmButtonText: window.translations.understood
                     }).then(() => {
                         location.reload();
                     });
                 } else {
                     Swal.fire({
                         icon: 'error',
-                        title: 'خطا',
-                        text: data.message || 'کد نادرست است.',
-                        confirmButtonText: 'باشه'
+                        title: window.translations.error,
+                        text: data.message || window.translations.incorrect_code,
+                        confirmButtonText: window.translations.ok
                     });
                 }
             } catch (err) {
-                Swal.fire({ icon: 'error', title: 'خطا', text: 'ارتباط با سرور برقرار نشد.', confirmButtonText: 'باشه' });
+                Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.connection_failed, confirmButtonText: window.translations.ok });
             } finally {
                 this.verifying = false;
             }
@@ -206,15 +210,15 @@ async function submitDirectReservation() {
         if (res.ok) {
             Swal.fire({
                 icon: 'success',
-                title: 'رزرو با موفقیت ثبت شد',
-                text: data.message || 'رزرو شما ثبت شد.',
-                confirmButtonText: 'متوجه شدم'
+                title: window.translations.reservation_success_title,
+                text: data.message || window.translations.reservation_success_message,
+                confirmButtonText: window.translations.understood
             }).then(() => location.reload());
         } else {
-            Swal.fire({ icon: 'error', title: 'خطا', text: data.message || 'خطا در ثبت رزرو', confirmButtonText: 'باشه' });
+            Swal.fire({ icon: 'error', title: window.translations.error, text: data.message || window.translations.reservation_error, confirmButtonText: window.translations.ok });
         }
     } catch (err) {
-        Swal.fire({ icon: 'error', title: 'خطا', text: 'ارتباط با سرور برقرار نشد.', confirmButtonText: 'باشه' });
+        Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.connection_failed, confirmButtonText: window.translations.ok });
     }
 }
 
@@ -244,8 +248,8 @@ window.handleSubmit = async function(event) {
     if (!store.phone || !store.name) {
         Swal.fire({ 
             icon: 'warning', 
-            title: 'اطلاعات ضروری را تکمیل کنید.', 
-            confirmButtonText: 'باشه' 
+            title: window.translations.fill_required_fields, 
+            confirmButtonText: window.translations.ok 
         });
         return;
     }
@@ -269,7 +273,7 @@ window.handleSubmit = async function(event) {
                 // شماره در دیتابیس وجود دارد → باز کردن مودال OTP با گزینه link_to_both
                 const modalEl = document.querySelector('[x-data="otpModal()"]');
                 if (!modalEl) {
-                    Swal.fire({ icon: 'error', title: 'خطا', text: 'مودال یافت نشد.', confirmButtonText: 'باشه' });
+                    Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.modal_not_found, confirmButtonText: window.translations.ok });
                     return;
                 }
                 const modalData = Alpine.$data(modalEl) || modalEl.__x.$data;
@@ -287,7 +291,7 @@ window.handleSubmit = async function(event) {
             // شماره قبلاً ثبت‌نام کرده → OTP برای لاگین خودکار
             const modalEl = document.querySelector('[x-data="otpModal()"]');
             if (!modalEl) {
-                Swal.fire({ icon: 'error', title: 'خطا', text: 'مودال یافت نشد.', confirmButtonText: 'باشه' });
+                Swal.fire({ icon: 'error', title: window.translations.error, text: window.translations.modal_not_found, confirmButtonText: window.translations.ok });
                 return;
             }
             const modalData = Alpine.$data(modalEl) || modalEl.__x.$data;
@@ -298,11 +302,11 @@ window.handleSubmit = async function(event) {
             // شماره جدید → هدایت به صفحه ثبت‌نام
             Swal.fire({
                 icon: 'warning',
-                title: 'ثبت‌نام الزامی است',
-                text: 'شماره‌ای که شما ثبت کردید در سایت ما ثبت‌نام نشده. لطفا با این شماره ثبت‌‌‌نام کنید یا از شماره‌ای که قبلا ثبت شده استفاده کنید.',
-                confirmButtonText: 'ثبت‌نام',
+                title: window.translations.registration_required_title,
+                text: window.translations.phone_not_registered_message,
+                confirmButtonText: window.translations.register,
                 showCancelButton: true,
-                cancelButtonText: 'بازگشت'
+                cancelButtonText: window.translations.back
             }).then((result) => {
                 if (result.isConfirmed) {
                     window.location.href = '/login';
@@ -311,6 +315,7 @@ window.handleSubmit = async function(event) {
         }
     }
 };
+// اتمام کدهای مربوط به مودال OTP و مدیریت ارسال و تأیید کد
 
 // resources\views\front\components\gallery.blade.php
 document.addEventListener('DOMContentLoaded', () => {

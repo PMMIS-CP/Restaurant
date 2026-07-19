@@ -48,14 +48,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     const empty = document.getElementById('cart-empty');
     const totalPriceEl = document.getElementById('cart-total-price');
     const clearBtn = document.getElementById('clear-cart-btn');
-    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
     async function fetchCart() {
         try {
             const res = await fetch('/cart/data', {
                 headers: {
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
+                    'X-CSRF-TOKEN': csrfToken()
                 }
             });
             if (!res.ok) throw new Error('{{ __("cart.error_fetch_cart") }}');
@@ -119,7 +118,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
+                        'X-CSRF-TOKEN': csrfToken()
                     },
                     body: JSON.stringify({ quantity: newQty })
                 });
@@ -146,7 +145,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     method: 'DELETE',
                     headers: {
                         'Accept': 'application/json',
-                        'X-CSRF-TOKEN': csrfToken
+                        'X-CSRF-TOKEN': csrfToken()
                     }
                 });
                 if (!res.ok) throw new Error('{{ __("cart.error_delete") }}');
@@ -170,7 +169,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                 method: 'DELETE',
                 headers: {
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
+                    'X-CSRF-TOKEN': csrfToken()
                 }
             });
             if (!res.ok) throw new Error('{{ __("cart.error_general") }}');
