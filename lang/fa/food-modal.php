@@ -13,4 +13,5 @@ return [
     'error_add_to_cart' => 'خطا! دوباره تلاش کنید',
     'error_add_failed' => 'خطا در افزودن به سبد خرید',
     'incomplete_product' => 'اطلاعات محصول ناقص است.',
+    'item_not_found' => 'آیتم مورد نظر یافت نشد',
 ];

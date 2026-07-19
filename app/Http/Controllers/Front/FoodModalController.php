@@ -24,7 +24,7 @@ class FoodModalController extends Controller
         $item = $this->findItem($request->type, $request->id);
 
         if (!$item) {
-            return response()->json(['message' => 'آیتم مورد نظر یافت نشد'], 404);
+            return response()->json(['message' => __('food-modal.item_not_found')], 404);
         }
 
         $images = $this->getItemImages($item);
