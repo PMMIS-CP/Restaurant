@@ -1454,3 +1454,160 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
+// resources\views\front\pages\cart-page.blade.php
+// Cart Management
+document.addEventListener('DOMContentLoaded', async function() {
+    const container = document.getElementById('cart-items-container');
+    if (!container) return; // اگر در صفحه سبد خرید نیستیم، اجرا نشود
+
+    const summary = document.getElementById('cart-summary');
+    const empty = document.getElementById('cart-empty');
+    const totalPriceEl = document.getElementById('cart-total-price');
+    const clearBtn = document.getElementById('clear-cart-btn');
+
+    // استفاده از ترجمه‌های پاس داده شده
+    const translations = window.cartTranslations || {};
+
+    async function fetchCart() {
+        try {
+            const res = await fetch('/cart/data', {
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken()
+                }
+            });
+            if (!res.ok) throw new Error(translations.errorFetchCart || 'Error fetching cart');
+            return await res.json();
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    }
+
+    async function updateCartDisplay() {
+        const data = await fetchCart();
+        if (!data) return;
+
+        if (data.count === 0) {
+            container.innerHTML = '';
+            summary.classList.add('hidden');
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        empty.classList.add('hidden');
+        summary.classList.remove('hidden');
+
+        const currency = translations.currency || 'تومان';
+        totalPriceEl.textContent = Number(data.total).toLocaleString() + ' ' + currency;
+
+        container.innerHTML = data.items.map(item => `
+            <div class="flex items-center gap-4 bg-[#130d0f] border border-[#ffd700]/10 rounded-xl p-4" data-item-id="${item.id}">
+                <img src="${item.image || '/images/placeholder.jpg'}" alt="${item.name}" class="w-20 h-20 rounded-lg object-cover border border-[#ffd700]/20">
+                <div class="flex-1">
+                    <h3 class="text-lg font-bold text-white">${item.name}</h3>
+                    <p class="text-sm text-gray-400">${Number(item.price).toLocaleString()} ${currency}</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="quantity-btn decrease w-8 h-8 rounded-full bg-[#2a050a] border border-[#ffd700]/30 text-[#ffd700] hover:bg-[#ffd700]/20 transition" data-id="${item.id}">−</button>
+                    <span class="quantity-value w-8 text-center font-bold text-[#ffd700]">${item.quantity}</span>
+                    <button class="quantity-btn increase w-8 h-8 rounded-full bg-[#2a050a] border border-[#ffd700]/30 text-[#ffd700] hover:bg-[#ffd700]/20 transition" data-id="${item.id}">+</button>
+                </div>
+                <button class="remove-item text-red-400 hover:text-red-300 transition p-2" data-id="${item.id}">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                </button>
+            </div>
+        `).join('');
+    }
+
+    // Event delegation for quantity and remove
+    container.addEventListener('click', async (e) => {
+        const btn = e.target.closest('button');
+        if (!btn) return;
+        const itemId = btn.getAttribute('data-id');
+        if (!itemId) return;
+
+        if (btn.classList.contains('increase') || btn.classList.contains('decrease')) {
+            const quantitySpan = btn.parentElement.querySelector('.quantity-value');
+            let currentQty = parseInt(quantitySpan.textContent);
+            const newQty = btn.classList.contains('increase') ? currentQty + 1 : Math.max(1, currentQty - 1);
+
+            try {
+                const res = await fetch(`/cart/update/${itemId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken()
+                    },
+                    body: JSON.stringify({ quantity: newQty })
+                });
+                if (!res.ok) throw new Error(translations.errorUpdate || 'Error updating cart');
+                const data = await res.json();
+                
+                if (newQty === 0) {
+                    btn.closest('.flex.items-center')?.remove();
+                } else {
+                    quantitySpan.textContent = newQty;
+                }
+                
+                totalPriceEl.textContent = Number(data.total).toLocaleString() + ' ' + (translations.currency || 'تومان');
+                
+                if (data.count === 0) {
+                    updateCartDisplay();
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        } else if (btn.classList.contains('remove-item')) {
+            if (!confirm(translations.confirmDelete || 'آیا از حذف این آیتم مطمئن هستید؟')) return;
+            try {
+                const res = await fetch(`/cart/remove/${itemId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': csrfToken()
+                    }
+                });
+                if (!res.ok) throw new Error(translations.errorDelete || 'Error deleting item');
+                const data = await res.json();
+                
+                if (data.count === 0) {
+                    updateCartDisplay();
+                } else {
+                    btn.closest('.flex.items-center')?.remove();
+                    totalPriceEl.textContent = Number(data.total).toLocaleString() + ' ' + (translations.currency || 'تومان');
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
+
+    clearBtn?.addEventListener('click', async () => {
+        if (!confirm(translations.confirmClearAll || 'آیا از خالی کردن سبد خرید مطمئن هستید؟')) return;
+        try {
+            const res = await fetch(`/cart/clear`, {
+                method: 'DELETE',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken()
+                }
+            });
+            if (!res.ok) throw new Error(translations.errorGeneral || 'An error occurred');
+            updateCartDisplay();
+        } catch (error) {
+            console.error(error);
+        }
+    });
+
+    // Initial load
+    await updateCartDisplay();
+
+    // Expose updateCartCount for modal
+    window.updateCartCount = (count) => {
+        if (document.getElementById('cart-items-container')) {
+            updateCartDisplay();
+        }
+    };
+});
