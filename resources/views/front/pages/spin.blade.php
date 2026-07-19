@@ -199,4 +199,10 @@
     }
     .animate-blink { animation: blink 1.4s ease-in-out infinite; }
 </style>
+<script>
+    window.translations = {
+        congratulations: '{{ __("spin.congratulations") }}',
+        youWon: '{{ __("spin.you_won") }}'
+    };
+</script>
 @endsection

@@ -541,23 +541,14 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// ==========================================
-// کدهای صفحه سازمانی (resources\views\front\pages\organizational.blade.php)
-// ==========================================
-// 
-// 
-// 
-// ==========================================
-// کد مشترک برای صفحات Menu و Organizational
-// قابل استفاده در هر دو فایل blade
-// ==========================================
+
 // ==========================================
 // کد مشترک برای صفحات Menu و Organizational
 // قابل استفاده در هر دو فایل blade
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    const menuContainer = document.getElementById('menu-container'); // مخصوص صفحه سازمانی
-    const menuGrid = document.getElementById('menu-grid');          // مخصوص صفحه منو
+    const menuContainer = document.getElementById('menu-container'); // مخصوص صفحه سازمانی و بیرون‌بر
+    const menuGrid = document.getElementById('menu-grid');          // مخصوص صفحه منو سالن
 
     // اگر هیچ‌کدام از المان‌های صفحه وجود نداشت، اجرا نشود
     if (!menuContainer && !menuGrid) return;
@@ -1427,7 +1418,7 @@ document.addEventListener('alpine:init', () => {
                     this.updateActiveSegment(); // همگام‌سازی نهایی
                     
                     setTimeout(() => {
-                        alert('🎉 تبریک! شما برنده شدید: ' + winner.name);
+                        alert(window.translations.congratulations + ' 🎉 ' + window.translations.youWon + ': ' + winner.name);
                     }, 100);
                 }
             });
