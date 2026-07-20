@@ -1,33 +1,38 @@
-<a href="/spin" class="group block w-full bg-linear-to-r from-[#2a1a0a] via-[#3d2b14] to-[#2a1a0a] border-2 border-[#7b1a1a] hover:border-[#d4a017] rounded-2xl p-4 sm:p-6 shadow-[0_4px_30px_rgba(0,0,0,0.4),inset_0_0_15px_rgba(123,26,26,0.3)] hover:shadow-[0_0_35px_rgba(139,0,0,0.3),0_0_50px_rgba(212,160,23,0.2)] transition-all duration-500 hover:scale-[1.01] relative overflow-hidden">
+<a href="/spin" 
+   {{-- سئو و دسترسی‌پذیری: تعریف نقش پیوند، شناسه معنایی و بهینه‌سازی خوانشگرهای صفحه --}}
+   role="link"
+   rel="bookmark"
+   aria-label="{{ __('home.spinner.desktop.spinner_title') }} - {{ __('home.spinner.desktop.spinner_promo') }}"
+   class="group block w-full bg-linear-to-r from-[#2a1a0a] via-[#3d2b14] to-[#2a1a0a] border-2 border-[#7b1a1a] hover:border-[#d4a017] rounded-2xl p-4 sm:p-6 shadow-[0_4px_30px_rgba(0,0,0,0.4),inset_0_0_15px_rgba(123,26,26,0.3)] hover:shadow-[0_0_35px_rgba(139,0,0,0.3),0_0_50px_rgba(212,160,23,0.2)] transition-all duration-500 hover:scale-[1.01] relative overflow-hidden">
     
     {{-- <!-- حاشیه تزئینی زرشکی و زرد سلطنتی --> --}}
-    <div class="absolute inset-0 rounded-2xl border-2 border-[#d4a017]/50 pointer-events-none"></div>
-    <div class="absolute inset-1 rounded-xl border border-[#7b1a1a]/30 pointer-events-none"></div>
+    <div class="absolute inset-0 rounded-2xl border-2 border-[#d4a017]/50 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute inset-1 rounded-xl border border-[#7b1a1a]/30 pointer-events-none" aria-hidden="true"></div>
     
     {{-- <!-- المان‌های تزئینی گوشه‌ها --> --}}
-    <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#d4a017] rounded-tl-xl opacity-70"></div>
-    <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#d4a017] rounded-tr-xl opacity-70"></div>
-    <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#d4a017] rounded-bl-xl opacity-70"></div>
-    <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#d4a017] rounded-br-xl opacity-70"></div>
+    <div class="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-[#d4a017] rounded-tl-xl opacity-70" aria-hidden="true"></div>
+    <div class="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-[#d4a017] rounded-tr-xl opacity-70" aria-hidden="true"></div>
+    <div class="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-[#d4a017] rounded-bl-xl opacity-70" aria-hidden="true"></div>
+    <div class="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-[#d4a017] rounded-br-xl opacity-70" aria-hidden="true"></div>
 
-    {{-- <!-- پس‌زمینه درخشان --> --}}
+    {{-- <!-- پس‌زمینه درخشان پیشرفته --> --}}
     <div class="absolute inset-0 opacity-15 pointer-events-none" aria-hidden="true">
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-72 h-72 bg-[#8b0000] rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute top-0 right-0 w-48 h-48 bg-[#d4a017] rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
     </div>
 
-    {{-- <!-- موبایل: استک عمودی --> --}}
+    {{-- <!-- موبایل: استک عمودی (تغییر یافته به جهت‌های منطقی متن) --> --}}
     <div class="flex flex-col items-center gap-4 relative z-10 sm:hidden">
         
-        {{-- <!-- بخش گردونه --> --}}
+        {{-- <!-- بخش گردونه موبایل --> --}}
         <div class="relative w-36 h-36 shrink-0 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full bg-linear-to-br from-[#d4a017] via-[#8b0000] to-[#d4a017] p-1.5 shadow-[0_0_30px_rgba(139,0,0,0.5),0_0_50px_rgba(212,160,23,0.3)] animate-mini-border-glow">
                 <div class="w-full h-full rounded-full bg-[#2a1a0a] p-1">
                     <div class="w-full h-full rounded-full bg-linear-to-tr from-[#8b0000] via-[#3d2b14] to-[#8b0000] p-0.5 shadow-inner relative">
                         
-                        {{-- <!-- گردونه چرخان --> --}}
-                        <div class="relative w-full h-full animate-promo-spin" style="transform-origin: center center;">
-                            <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl">
+                        {{-- <!-- گردونه چرخان موبایل --> --}}
+                        <div class="relative w-full h-full animate-promo-spin will-change-transform" style="transform-origin: center center;">
+                            <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl" aria-hidden="true" focusable="false">
                                 <defs>
                                     <radialGradient id="mobCrimson" cx="35%" cy="35%" r="65%">
                                         <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9" />
@@ -79,10 +84,10 @@
                             </svg>
                         </div>
 
-                        {{-- <!-- عقربه --> --}}
+                        {{-- <!-- عقربه موبایل --> --}}
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none drop-shadow-[0_0_12px_rgba(212,160,23,0.9)]"
                              style="width: 26px; height: 32px; margin-top: -16px;">
-                            <svg viewBox="0 0 40 50" class="w-full h-full">
+                            <svg viewBox="0 0 40 50" class="w-full h-full" aria-hidden="true" focusable="false">
                                 <defs>
                                     <linearGradient id="mobNeedle" x1="0%" y1="0%" x2="0%" y2="100%">
                                         <stop offset="0%" stop-color="#d4a017" />
@@ -103,7 +108,7 @@
         {{-- <!-- متن موبایل --> --}}
         <div class="text-center space-y-2 w-full">
             <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
-                <span class="w-2 h-2 rounded-full bg-[#d4a017] animate-ping"></span>
+                <span class="w-2 h-2 rounded-full bg-[#d4a017] animate-ping" aria-hidden="true"></span>
                 {{ __('home.spinner.campaign_badge') }}
             </div>
             <h3 class="text-[#fef3c7] font-extrabold text-lg tracking-wide">
@@ -113,9 +118,10 @@
                 {{ __('home.spinner.mobile.promo_text') }}
             </p>
             <div class="pt-1">
-                <span class="text-sm text-[#fef3c7]/80 font-bold inline-flex items-center gap-1.5">
+                <span class="text-sm text-[#fef3c7]/80 font-bold inline-flex items-center gap-1.5 transition-colors">
                     {{ __('home.spinner.mobile.enter_text') }}
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    {{-- آیکون متناسب با جهت متن (RTL قرینه می‌شود) --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transform ltr:rotate-0 rtl:rotate-180 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
                 </span>
@@ -123,13 +129,13 @@
         </div>
     </div>
 
-    {{-- <!-- دسکتاپ: چیدمان فشرده با gap کمتر --> --}}
+    {{-- <!-- دسکتاپ: چیدمان کاملا ریسپانسیو و بهینه بر اساس جهت سیستم (RTL/LTR) --> --}}
     <div class="hidden sm:flex sm:items-center sm:justify-center sm:gap-6 lg:gap-8 relative z-10">
         
-        {{-- <!-- متن سمت راست --> --}}
-        <div class="text-right space-y-1.5 shrink-0">
+        {{-- <!-- متن سمت راست دسکتاپ (استفاده از تراز آغازین منطقی text-start) --> --}}
+        <div class="text-start space-y-1.5 shrink-0">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping" aria-hidden="true"></span>
                  {{ __('home.spinner.campaign_badge') }}
             </div>
             <h3 class="text-[#fef3c7] font-extrabold text-lg lg:text-xl tracking-wide group-hover:text-[#d4a017] transition-colors duration-300 drop-shadow-[0_0_8px_rgba(139,0,0,0.5)]">
@@ -140,14 +146,15 @@
             </p>
         </div>
 
-        {{-- <!-- بخش گردونه --> --}}
+        {{-- <!-- بخش گردونه دسکتاپ --> --}}
         <div class="relative w-36 h-36 lg:w-44 lg:h-44 shrink-0 flex items-center justify-center">
             <div class="absolute inset-0 rounded-full bg-linear-to-br from-[#d4a017] via-[#8b0000] to-[#d4a017] p-1.5 shadow-[0_0_30px_rgba(139,0,0,0.5),0_0_50px_rgba(212,160,23,0.3)] animate-mini-border-glow">
                 <div class="w-full h-full rounded-full bg-[#2a1a0a] p-1">
                     <div class="w-full h-full rounded-full bg-linear-to-tr from-[#8b0000] via-[#3d2b14] to-[#8b0000] p-0.5 shadow-inner relative">
                         
-                        <div class="relative w-full h-full animate-promo-spin" style="transform-origin: center center;">
-                            <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl">
+                        {{-- <!-- گردونه چرخان دسکتاپ --> --}}
+                        <div class="relative w-full h-full animate-promo-spin will-change-transform" style="transform-origin: center center;">
+                            <svg viewBox="0 0 100 100" class="w-full h-full rounded-full shadow-2xl" aria-hidden="true" focusable="false">
                                 <defs>
                                     <radialGradient id="dtCrimson" cx="35%" cy="35%" r="65%">
                                         <stop offset="0%" stop-color="#ef4444" stop-opacity="0.9" />
@@ -199,9 +206,10 @@
                             </svg>
                         </div>
 
+                        {{-- <!-- عقربه دسکتاپ --> --}}
                         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none drop-shadow-[0_0_12px_rgba(212,160,23,0.9)]"
                              style="width: 26px; height: 32px; margin-top: -16px;">
-                            <svg viewBox="0 0 40 50" class="w-full h-full">
+                            <svg viewBox="0 0 40 50" class="w-full h-full" aria-hidden="true" focusable="false">
                                 <defs>
                                     <linearGradient id="dtNeedle" x1="0%" y1="0%" x2="0%" y2="100%">
                                         <stop offset="0%" stop-color="#d4a017" />
@@ -219,10 +227,10 @@
             </div>
         </div>
 
-        {{-- <!-- متن سمت چپ --> --}}
-        <div class="text-right space-y-1.5 shrink-0" dir="auto">
+        {{-- <!-- متن سمت چپ دسکتاپ (تنظیم هوشمند برای پشتیبانی بی‌نقص از جهت متون) --> --}}
+        <div class="text-start space-y-1.5 shrink-0">
             <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#8b0000]/20 border border-[#8b0000]/30 text-[#fef3c7] text-xs font-bold">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#d4a017] animate-ping" aria-hidden="true"></span>
                 {{ __('home.spinner.prizes_badge') }}
             </div>
             <h3 class="text-[#fef3c7] font-extrabold text-lg lg:text-xl tracking-wide group-hover:text-[#d4a017] transition-colors duration-300 drop-shadow-[0_0_8px_rgba(139,0,0,0.5)]">
@@ -233,7 +241,8 @@
             </p>
             <div class="pt-1 flex justify-start">
                 <span class="text-xs lg:text-sm text-[#fef3c7]/80 group-hover:text-[#d4a017] font-bold inline-flex items-center gap-1 transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 lg:h-4 lg:w-4 transform group-hover:-translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                    {{-- انیمیشن و جهت آیکون با توجه به LTR و RTL کاملا پویا کار می‌کند --}}
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 lg:h-4 lg:w-4 transform ltr:rotate-180 rtl:rotate-0 ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
                     </svg>
                     {{ __('home.spinner.desktop.enter_text') }}
@@ -278,5 +287,9 @@
     }
     .animate-promo-text {
         animation: promo-text 2.5s ease-in-out infinite;
+    }
+    
+    .will-change-transform {
+        will-change: transform;
     }
 </style>
