@@ -45,6 +45,7 @@ return [
 
     'login' => [
         'page_title' => 'تسجيل الدخول',
+        'meta_description' => 'Login to your Kakh Moraco Restaurant account | Access your dashboard, track online food orders, and enjoy exclusive discounts.',
         'phone_label' => 'رقم الجوال',
         'phone_placeholder' => '09xxxxxxxxx',
         'phone_title' => 'يجب أن يتكون رقم الجوال من 11 رقمًا ويبدأ بـ 09',

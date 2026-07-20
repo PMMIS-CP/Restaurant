@@ -45,6 +45,7 @@ return [
 
     'login' => [
         'page_title' => 'Login',
+        'meta_description' => 'Login to your Kakh Moraco Restaurant account | Access your dashboard, track online food orders, and enjoy exclusive discounts.',
         'phone_label' => 'Mobile Number',
         'phone_placeholder' => '09xxxxxxxxx',
         'phone_title' => 'Mobile number must be 11 digits and start with 09',

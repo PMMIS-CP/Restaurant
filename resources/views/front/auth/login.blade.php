@@ -1,4 +1,5 @@
 @extends('front.layouts.auth')
+@section('meta_description', __('auth.login.meta_description'))
 
 @section('content')
 <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
