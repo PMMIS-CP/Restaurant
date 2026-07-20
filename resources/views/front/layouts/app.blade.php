@@ -5,14 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="theme-color" content="#450a0a">
+    
+    {{-- SEO Basics --}}
+    <title>@yield('title', __('app.name'))</title>
+    <meta name="description" content="@yield('meta_description', __('app.default_description'))">
+    <link rel="canonical" href="{{ url()->current() }}">
+    
+    {{-- Open Graph / Social Media (Facebook, Telegram, WhatsApp) --}}
+    <meta property="og:title" content="@yield('title', __('app.name'))">
+    <meta property="og:description" content="@yield('meta_description', __('app.default_description'))">
+    <meta property="og:url" content="{{ url()->current() }}">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="{{ __('app.name') }}">
+    <meta property="og:locale" content="{{ app()->getLocale() }}">
+    {{-- تصویر بهینه شده شما --}}
+    <meta property="og:image" content="{{ asset('assets/images/og-image.webp') }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="{{ __('app.og_image_alt') }}">
 
-    <title>{{ __('app.name') }} | @yield('title', 'خانه')</title>
-    <link rel="icon" type="image/png" href="{{ asset('assets/logo/logo.webp') }}">
+    {{-- Twitter Card --}}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="@yield('title', __('app.name'))">
+    <meta name="twitter:description" content="@yield('meta_description', __('app.default_description'))">
+    <meta name="twitter:image" content="{{ asset('assets/images/og-image.webp') }}">
+    
+    {{-- Favicon & Assets --}}
+    <link rel="icon" type="image/webp" href="{{ asset('assets/logo/logo.webp') }}">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}"> --}}
+    
+    {{-- Fonts --}}
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700;900&family=Nunito:wght@200..1000&display=swap" rel="stylesheet">
+    
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <style>
         body.loading {
             overflow: hidden;
@@ -60,6 +87,7 @@
         line-height: 1.5;
     }
     </style>
+
 </head>
 <body class="bg-gray-50 antialiased max-w-full w-full">
     <div id="loader" style="position: fixed; inset: 0; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; background-color: white; transition: opacity 0.5s ease; padding: 1rem;">
@@ -128,6 +156,47 @@
                 loader.style.display = "none";
             }, 500);
         });
+    </script>
+    @php
+        $schema = [
+            "@context" => "https://schema.org",
+            "@type" => "Restaurant",
+            "name" => __('app.name'),
+            "image" => asset('assets/images/og-image.webp'), 
+            "url" => url('/'),
+            "priceRange" => "$$",
+            "telephone" => ["09353077797", "02191094044"],
+            "servesCuisine" => ["ایرانی", "سنتی"], 
+            "address" => [
+                "@type" => "PostalAddress",
+                "streetAddress" => "ولیعصر، غزایی عتیق، پلاک 29، محله‌ی کشاورز",
+                "addressLocality" => "تهران",
+                // "postalCode" => "1234567890",
+                "addressCountry" => "IR"
+            ],
+            "menu" => url('/menu'),
+            "potentialAction" => [
+                "@type" => "ReserveAction",
+                "target" => [
+                    "@type" => "EntryPoint",
+                    "urlTemplate" => url('/reserve'),
+                    "actionPlatform" => ["http://schema.org/DesktopWebPlatform", "http://schema.org/MobileWebPlatform"]
+                ],
+                "result" => [
+                    "@type" => "Reservation",
+                    "name" => "رزرو میز"
+                ]
+            ],
+            "hasMenu" => [
+                ["@type" => "Menu", "name" => "منوی سالن", "url" => url('/menu')],
+                ["@type" => "Menu", "name" => "منوی بیرون‌بر", "url" => url('/menu/takeout')],
+                ["@type" => "Menu", "name" => "منوی سازمانی", "url" => url('/menu/organizational')]
+            ]
+        ];
+    @endphp
+
+    <script type="application/ld+json">
+        @json($schema, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
     </script>
 </body>
 </html>

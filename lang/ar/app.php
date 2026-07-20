@@ -2,5 +2,6 @@
 
 return [
     'name' => 'قصر موراکو',
-    'restaurant' => 'مطعم'
+    'restaurant' => 'مطعم',
+    'og_image_alt' => 'صورة شعار مطعم قصر مراكش التقليدي',
 ];

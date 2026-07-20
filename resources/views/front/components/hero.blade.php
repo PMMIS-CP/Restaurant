@@ -1,23 +1,26 @@
-<div class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0"
+<section class="relative w-full min-h-screen flex items-center justify-center bg-gray-900 overflow-hidden pt-20 md:pt-0"
      x-data="{
-        images: [
-            '{{ asset('assets/images/IMG_20260702_113900.webp') }}',
-            '{{ asset('assets/images/IMG_20260702_113844.webp') }}',
-            '{{ asset('assets/images/IMG_20260702_113729.webp') }}',
-            '{{ asset('assets/images/IMG_20260702_113837.webp') }}',
+        slides: [
+            { src: '{{ asset('assets/images/IMG_20260702_113900.webp') }}', alt: 'Background Image 1' },
+            { src: '{{ asset('assets/images/IMG_20260702_113844.webp') }}', alt: 'Background Image 2' },
+            { src: '{{ asset('assets/images/IMG_20260702_113729.webp') }}', alt: 'Background Image 3' },
+            { src: '{{ asset('assets/images/IMG_20260702_113837.webp') }}', alt: 'Background Image 4' },
         ],
         active: 0
      }"
-     x-init="setInterval(() => { active = (active + 1) % images.length }, 4000)">
+     x-init="setInterval(() => { active = (active + 1) % slides.length }, 4000)">
 
-    <template x-for="(image, index) in images" :key="index">
-        <img :src="image" 
-             alt="Background" 
+    <!-- Background Images with optimized loading -->
+    <template x-for="(slide, index) in slides" :key="index">
+        <img :src="slide.src" 
+             :alt="slide.alt"
+             :fetchpriority="index === 0 ? 'high' : 'low'"
+             :loading="index === 0 ? 'eager' : 'lazy'"
              class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none z-0 transition-opacity duration-1000 ease-in-out"
              :class="active === index ? 'opacity-100' : 'opacity-0'">
     </template>
 
-    <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] z-10"></div>
+    <div class="absolute inset-0 bg-black/50 backdrop-blur-[1px] z-10" aria-hidden="true"></div>
 
     <div class="relative z-20 text-center text-white px-4 max-w-3xl flex flex-col items-center justify-center space-y-4 sm:space-y-6">
         
@@ -29,7 +32,7 @@
             {{ __('home.hero.description') }}
         </p>
 
-        <div class="flex flex-col gap-4 w-full sm:w-auto pt-4">
+        <nav class="flex flex-col gap-4 w-full sm:w-auto pt-4" aria-label="Hero Actions">
             <div class="flex flex-col sm:flex-row gap-4 w-full">
                 <a href="/menu" class="w-full sm:w-auto bg-rose-900 hover:bg-rose-800 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center">
                     {{ __('home.hero.menu_hall') }}
@@ -44,6 +47,6 @@
             <a href="/menu/organizational" class="w-full bg-purple-700 hover:bg-purple-600 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-xl shadow-purple-700/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center">
                 {{ __('home.hero.menu_organizational') }}
             </a>
-        </div>
+        </nav>
     </div>
-</div>
+</section>
