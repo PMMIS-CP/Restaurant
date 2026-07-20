@@ -21,7 +21,7 @@
 
     <div class="relative z-20 text-center text-white px-4 max-w-3xl flex flex-col items-center justify-center space-y-4 sm:space-y-6">
         
-        <h1 class="text-3xl sm:text-4xl md:text-6xl font-black leading-tight tracking-wide drop-shadow-md">
+        <h1 class="mt-20 text-3xl sm:text-4xl md:text-6xl font-black leading-tight tracking-wide drop-shadow-md">
             {{ __('home.hero.title') }}
         </h1>
         

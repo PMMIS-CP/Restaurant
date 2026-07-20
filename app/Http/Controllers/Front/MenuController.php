@@ -115,7 +115,7 @@ class MenuController extends Controller
      */
     private static function formatNumber($num): string
     {
-        if (app()->getLocale() !== 'fa') {
+        if (!in_array(app()->getLocale(), ['fa', 'ar'])) {
             return (string) $num;
         }
 

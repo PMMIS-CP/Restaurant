@@ -12,4 +12,7 @@ return [
     'takeout_badge' => 'طلبات خارجية',
     'currency' => 'تومان',
     'without_category' => 'بدون فئة',
+    'digits' => ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
+    'million' => 'مليون',
+    'thousand' => 'ألف',
 ];

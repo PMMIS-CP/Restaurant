@@ -13,4 +13,7 @@ return [
     'error_add_to_cart' => 'Error! Please try again',
     'error_add_failed' => 'Error adding to cart',
     'incomplete_product' => 'Product information is incomplete.',
+    'item_not_found' => 'Item not found',
+    'digits' => ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
+
 ];

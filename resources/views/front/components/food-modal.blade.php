@@ -83,6 +83,18 @@
         const modalDetails = document.getElementById('modal-food-details');
         const addToCartBtn = document.getElementById('modal-add-to-cart-btn');
 
+        // دریافت ارقام محلی از فایل ترجمه
+        const digits = @json(__('food-modal.digits'));
+        
+        /**
+         * تبدیل اعداد انگلیسی به اعداد محلی (فارسی/عربی/انگلیسی)
+         * @param {number|string} number - عدد ورودی
+         * @returns {string} عدد تبدیل شده با ارقام محلی
+         */
+        function toLocalizedNumber(number) {
+            return String(number).replace(/[0-9]/g, (digit) => digits[parseInt(digit)]);
+        }
+
         // وضعیت گالری
         let modalImages = [];
         let modalCurrentIndex = 0;
@@ -215,7 +227,9 @@
 
                 // پر کردن اطلاعات
                 modalName.textContent = data.name;
-                modalPrice.textContent = Number(data.price).toLocaleString('fa-IR');
+                // ✅ تبدیل قیمت با فرمت و ارقام محلی
+                const formattedPrice = Number(data.price).toLocaleString('en-US');
+                modalPrice.textContent = toLocalizedNumber(formattedPrice);
                 modalDetails.textContent = data.description || '{{ __("food-modal.no_description") }}';
 
                 // ✅ ذخیره برای سبد خرید با product_type صحیح (فرمت کوتاه)

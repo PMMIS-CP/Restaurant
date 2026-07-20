@@ -59,14 +59,21 @@
         </nav>
 
         {{-- لوگو --}}
-        <a href="{{ url('/') }}" class="flex items-center gap-3 group shrink-0">
-            <span class="text-2xl font-bold text-yellow-500 tracking-widest uppercase">
+        <a href="{{ url('/') }}" 
+            class="flex items-center gap-3 group shrink-0"
+            style="font-family: '{{ app()->getLocale() === 'fa' ? 'Vazirmatn' : 'TAN-Pearl' }}', sans-serif;">
+            
+            <span class="font-bold text-yellow-500 tracking-widest 
+                {{ app()->getLocale() === 'fa' ? 'text-3xl' : 'text-xl' }}">
                 {{ __('app.restaurant') }}
             </span>
+            
             <div class="p-2 rounded-full border-2 border-yellow-600 group-hover:rotate-12 transition-transform duration-500">
                 <img src="{{ asset('assets/logo/logo.webp') }}" alt="logo" class="h-20 w-20 brightness-200">
             </div>
-            <span class="text-2xl font-bold text-yellow-500 tracking-widest uppercase">
+            
+            <span class="font-bold text-yellow-500 tracking-widest 
+                {{ app()->getLocale() === 'fa' ? 'text-3xl' : 'text-xl' }}">
                 {{ __('app.name') }}
             </span>
         </a>

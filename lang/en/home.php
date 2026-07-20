@@ -90,5 +90,10 @@ return [
     'guest_overlay_title' => 'Log in to leave a comment',
     'guest_overlay_description' => 'To share your experience at Morocco Palace, please log in to your account first.',
     'guest_login_button' => 'Log in',
+    'max_daily_reached' => 'You have reached the maximum daily comment limit.',
+    'name_regex' => 'Name can only contain letters and numbers.',
+    'comment_empty' => 'Comment text cannot be empty.',
+    'duplicate_detected' => 'Duplicate comment detected. Please wait a few minutes.',
+    'submitted_successfully' => 'Your comment was submitted successfully and will be published after admin approval.',
   ],
 ];

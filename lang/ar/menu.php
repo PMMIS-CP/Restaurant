@@ -13,4 +13,9 @@ return [
     'back_button' => 'عودة',
     'all_menu' => 'كل القائمة',
     'price_per_serving' => 'السعر لكل حصة',
+    'without_category' => 'بدون تصنيف',
+    'currency' => 'تومان',
+    'digits' => ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'],
+    'million' => 'مليون',
+    'thousand' => 'ألف',
 ];

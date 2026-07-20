@@ -15,7 +15,6 @@ return [
     'error_update' => 'خطا در بروزرسانی',
     'error_delete' => 'خطا در حذف',
     'error_general' => 'خطا',
-    
     'product_unavailable' => 'این محصول در حال حاضر در دسترس نیست.',
     'item_added' => 'محصول با موفقیت به سبد خرید اضافه شد.',
     'product_deleted' => 'محصول حذف شده',

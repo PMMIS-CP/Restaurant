@@ -8,6 +8,9 @@
 
     <title>{{ __('app.name') }} | @yield('title', 'خانه')</title>
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/logo.webp') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}"> --}}
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
@@ -16,53 +19,6 @@
         }
     </style>
     <style>
-    /* @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-Thin.woff2') format('woff2');
-        font-weight: 100;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-ExtraLight.woff2') format('woff2');
-        font-weight: 200;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-Light.woff2') format('woff2');
-        font-weight: 300;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-Regular.woff2') format('woff2');
-        font-weight: 400;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-Medium.woff2') format('woff2');
-        font-weight: 500;
-        font-style: normal;
-        font-display: swap;
-    }
-
-    @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-SemiBold.woff2') format('woff2');
-        font-weight: 600;
-        font-style: normal;
-        font-display: swap;
-    } */
 
     @font-face {
         font-family: 'Vazirmatn';
@@ -71,35 +27,37 @@
         font-style: normal;
         font-display: swap;
     }
-
-    /* @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-ExtraBold.woff2') format('woff2');
-        font-weight: 800;
+    @font-face {
+        font-family: 'TAN-Pearl';
+        src: url('/assets/fonts/TANPearl/TAN-Pearl-Regular.woff2') format('woff2');
         font-style: normal;
         font-display: swap;
     }
-
-    @font-face {
-        font-family: 'Vazirmatn';
-        src: url('../fonts/vazirmatn/Vazirmatn-Black.woff2') format('woff2');
-        font-weight: 900;
-        font-style: normal;
-        font-display: swap;
-    } */
-
-    /* body {
-        font-family: 'Vazirmatn';
-        font-weight: 400;
-    } */
 
     html:lang(fa) {
         font-family: 'Vazirmatn';
         font-weight: 700;
     }
-
+    html:lang(ar) {
+        font-family: 'Vazirmatn';
+        font-weight: 700;
+    }
     html:lang(en) {
-        font-family: 'Inter', 'Vazirmatn', sans-serif;
+        font-family: "Lato", system-ui, sans-serif;
+    }
+    h1:lang(en), h2:lang(en){
+        font-family: 'TAN-Pearl', sans-serif;
+    }
+    h1:lang(en) {
+        font-size: 4rem;
+        letter-spacing: 0.05em;
+        line-height: 1.4;
+    }
+
+    h2:lang(en) {
+        font-size: 2rem;
+        letter-spacing: 0.03em;
+        line-height: 1.5;
     }
     </style>
 </head>

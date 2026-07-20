@@ -27,14 +27,16 @@ class FoodModalController extends Controller
             return response()->json(['message' => __('food-modal.item_not_found')], 404);
         }
 
+        // تشخیص زبان فعلی
+        $currentLocale = app()->getLocale();
+        
         $images = $this->getItemImages($item);
 
         return response()->json([
             'id'          => $item->id,
-            'name'        => $item->getNameInLocale('fa'),
-            'name_en'     => $item->getNameInLocale('en'),
+            'name'        => $item->getNameInLocale($currentLocale),
             'price'       => (int) $item->price,
-            'description' => $item->getDescriptionInLocale('fa'),
+            'description' => $item->getDescriptionInLocale($currentLocale),
             'images'      => $images,
             'type'        => $request->type,
         ]);
