@@ -54,7 +54,7 @@ class SmsController extends Controller
             $emailExists = User::where('email', $request->email)->exists();
             if ($emailExists) {
                 return response()->json([
-                    'message' => 'این ایمیل قبلاً ثبت شده است. لطفاً ایمیل دیگری وارد کنید یا با این ایمیل وارد شوید.',
+                    'message' => 'این ایمیل قبلاً ثبت شده است. لطفاً ایمیل دیگری وارد کنید.',
                     'errors' => ['email' => 'ایمیل تکراری']
                 ], 422);
             }
@@ -86,7 +86,7 @@ class SmsController extends Controller
             $emailExists = User::where('email', $request->email)->exists();
             if ($emailExists) {
                 return response()->json([
-                    'message' => 'این ایمیل قبلاً ثبت شده است. لطفاً ایمیل دیگری وارد کنید یا با این ایمیل وارد شوید.'
+                    'message' => 'این ایمیل قبلاً ثبت شده است. لطفاً ایمیل دیگری وارد کنید.'
                 ], 422);
             }
         }

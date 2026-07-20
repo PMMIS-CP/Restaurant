@@ -25,8 +25,8 @@ class PhoneLoginController extends Controller
             return response()->json(['redirect' => $redirect]);
         }
 
-        throw ValidationException::withMessages([
-            'phone' => 'شماره موبایل یا رمز عبور اشتباه است.',
-        ]);
+        return response()->json([
+            'message' => 'رمز عبور اشتباه است.'
+        ], 422);
     }
 }

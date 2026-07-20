@@ -64,6 +64,8 @@ return [
         'login_button' => 'ورود',
         'forgot_password' => 'فراموشی رمز عبور',
         'reset_code_sent' => 'کد تأیید به شماره‌ی شما ارسال شد.',
+        'reset_code_confirm_message' => 'برای بازیابی رمز عبور، یک کد تأیید به شماره شما ارسال خواهد شد:',
+        'confirm_send_code' => 'تأیید و ارسال کد',
         'verify_code' => 'تأیید کد',
         'new_password_label' => 'رمز عبور جدید',
         'new_password_confirmation_label' => 'تکرار رمز عبور جدید',

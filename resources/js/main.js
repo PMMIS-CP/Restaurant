@@ -1600,3 +1600,625 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     };
 });
+
+// ============================================
+// Floating Cart Badge - Functions
+// ============================================
+
+// تابع global برای آپدیت تعداد سبد
+window.updateCartCount = function(count) {
+    const btn = document.getElementById('floating-cart-btn');
+    const badge = document.getElementById('cart-badge');
+    
+    if (!btn || !badge) return;
+    
+    const num = parseInt(count) || 0;
+    
+    if (num > 0) {
+        badge.textContent = num > 99 ? '99+' : num;
+        btn.classList.remove('hidden');
+        // انیمیشن کوچک
+        badge.classList.add('animate-ping-once');
+        setTimeout(() => badge.classList.remove('animate-ping-once'), 300);
+    } else {
+        btn.classList.add('hidden');
+        badge.textContent = '0';
+    }
+};
+
+// تابع global برای fetch و آپدیت اولیه
+window.initCartBadge = async function() {
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]');
+        const res = await fetch('/cart/data', {
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': csrfToken ? csrfToken.getAttribute('content') : ''
+            }
+        });
+        if (res.ok) {
+            const data = await res.json();
+            window.updateCartCount(data.count);
+        }
+    } catch (e) {
+        // بی‌صدا خطا رو نادیده بگیر
+    }
+};
+
+// ============================================
+// Floating Cart Badge - Animation Styles
+// ============================================
+
+const cartStyles = `
+@keyframes ping-once {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+.animate-ping-once {
+    animation: ping-once 0.3s ease-in-out;
+}
+`;
+
+// اضافه کردن استایل‌ها به head
+if (!document.getElementById('cart-badge-styles')) {
+    const styleSheet = document.createElement('style');
+    styleSheet.id = 'cart-badge-styles';
+    styleSheet.textContent = cartStyles;
+    document.head.appendChild(styleSheet);
+}
+
+// ============================================
+// Auto-initialize on page load
+// ============================================
+
+document.addEventListener('DOMContentLoaded', function() {
+    // فقط اگر دکمه سبد در صفحه وجود داشت، initialize کن
+    if (document.getElementById('floating-cart-btn')) {
+        window.initCartBadge();
+    }
+});
+
+// ----------------------------------
+//      کد مربوط به صفحه لاگین
+// ----------------------------------
+document.addEventListener('DOMContentLoaded', function () {
+    // بررسی وجود عناصر اصلی (اگر در صفحه لاگین نباشیم اجرا نشود)
+    const phoneInput = document.getElementById('phone');
+    if (!phoneInput) return; // صفحهٔ لاگین نیست → توقف
+
+    const config = window.AuthConfig;
+    if (!config) {
+        console.error('AuthConfig not found. Make sure it is defined before this script.');
+        return;
+    }
+
+    // میانبر برای دسترسی‌ها
+    const t = config.translations;
+    const routes = config.routes;
+    const csrfToken = config.csrfToken;
+
+    const checkPhoneBtn = document.getElementById('check-phone-btn');
+    const checkPhoneError = document.getElementById('check-phone-error');
+    const generalError = document.getElementById('general-error');
+
+    const phoneStep = document.getElementById('phone-step');
+    const registerStep = document.getElementById('register-step');
+    const loginStep = document.getElementById('login-step');
+    const resetStep = document.getElementById('reset-step');
+
+    // ذخیره موقت شماره
+    let currentPhone = '';
+
+    // توابع کمکی
+    function show(el) { el.classList.remove('hidden'); }
+    function hide(el) { el.classList.add('hidden'); }
+    function setError(el, msg) { el.textContent = msg; show(el); }
+    function clearError(el) { el.textContent = ''; hide(el); }
+
+    // بررسی وجود کاربر با شماره موبایل
+    checkPhoneBtn.addEventListener('click', async function() {
+        const phone = phoneInput.value.trim();
+        if (!/^09\d{9}$/.test(phone)) {
+            setError(checkPhoneError, t.invalidPhone);
+            return;
+        }
+        clearError(checkPhoneError);
+        currentPhone = phone;
+        checkPhoneBtn.disabled = true;
+        checkPhoneBtn.textContent = t.checking;
+
+        try {
+            const response = await fetch(routes.checkPhone, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ phone: phone })
+            });
+            const data = await response.json();
+            
+            hide(phoneStep);
+            document.getElementById('verified-phone').textContent = phone;
+            show(document.getElementById('verified-phone-section'));
+            
+            if (data.exists) {
+                hide(registerStep);
+                hide(resetStep);
+                show(loginStep);
+            } else {
+                hide(loginStep);
+                hide(resetStep);
+                show(registerStep);
+            }
+        } catch (err) {
+            setError(checkPhoneError, t.serverError);
+        } finally {
+            checkPhoneBtn.disabled = false;
+            checkPhoneBtn.textContent = t.continue;
+        }
+    });
+
+    // دکمه ویرایش شماره
+    document.getElementById('change-phone-btn').addEventListener('click', function() {
+        hide(registerStep);
+        hide(loginStep);
+        hide(resetStep);
+        hide(document.getElementById('verified-phone-section'));
+        show(phoneStep);
+        phoneInput.focus();
+    });
+
+    // ----- بخش ثبت‌نام کاربر جدید -----
+    const sendRegOtp = document.getElementById('send-register-otp-btn');
+    const regOtpMsg = document.getElementById('register-otp-message');
+    const regOtpError = document.getElementById('register-otp-error');
+    const regOtpSection = document.getElementById('register-otp-section');
+    const regCodeInput = document.getElementById('register-code');
+    const verifyRegBtn = document.getElementById('verify-register-btn');
+    const resendRegBtn = document.getElementById('resend-register-otp');
+    const resendRegTimer = document.getElementById('resend-register-timer');
+    let regTimerInterval;
+
+    function startRegResendTimer(seconds = 60) {
+        let rem = seconds;
+        resendRegBtn.disabled = true;
+        resendRegTimer.textContent = rem;
+        if (regTimerInterval) clearInterval(regTimerInterval);
+        regTimerInterval = setInterval(() => {
+            rem--;
+            resendRegTimer.textContent = rem;
+            if (rem <= 0) {
+                clearInterval(regTimerInterval);
+                resendRegBtn.disabled = false;
+                resendRegTimer.textContent = '';
+                resendRegBtn.innerHTML = t.resendCode;
+            }
+        }, 1000);
+    }
+
+    function stopRegResendTimer() {
+        if (regTimerInterval) {
+            clearInterval(regTimerInterval);
+            regTimerInterval = null;
+        }
+    }
+
+    async function sendRegisterOtp() {
+        const name = document.getElementById('name').value.trim();
+        const family = document.getElementById('family').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const passwordConf = document.getElementById('password_confirmation').value;
+
+        clearError(regOtpError);
+        hide(regOtpMsg);
+        
+        if (!name || !family) {
+            setError(regOtpError, t.nameFamilyRequired);
+            if (!name) document.getElementById('name').focus();
+            else document.getElementById('family').focus();
+            return;
+        }
+        if (!password) {
+            setError(regOtpError, t.passwordRequired);
+            document.getElementById('password').focus();
+            return;
+        }
+        if (password.length < 6) {
+            setError(regOtpError, t.passwordMin);
+            document.getElementById('password').focus();
+            return;
+        }
+        if (password !== passwordConf) {
+            setError(regOtpError, t.passwordMismatch);
+            document.getElementById('password_confirmation').focus();
+            return;
+        }
+        if (email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                setError(regOtpError, t.invalidEmail);
+                document.getElementById('email').focus();
+                return;
+            }
+        }
+
+        sendRegOtp.disabled = true;
+        sendRegOtp.textContent = t.validating;
+
+        try {
+            // مرحله ۱: اعتبارسنجی
+            const validateResponse = await fetch(routes.validateRegistration, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    family_name: family,
+                    email: email,
+                    password: password,
+                    password_confirmation: passwordConf
+                })
+            });
+
+            const validateData = await validateResponse.json();
+            
+            if (!validateResponse.ok) {
+                const errorMsg = validateData.message || t.invalidData;
+                if (errorMsg.includes(t.email)) {
+                    setError(regOtpError, errorMsg);
+                    document.getElementById('email').focus();
+                } else if (errorMsg.includes(t.password)) {
+                    setError(regOtpError, errorMsg);
+                    document.getElementById('password').focus();
+                } else if (errorMsg.includes(t.name)) {
+                    setError(regOtpError, errorMsg);
+                    if (errorMsg.includes(t.family)) document.getElementById('family').focus();
+                    else document.getElementById('name').focus();
+                } else {
+                    setError(regOtpError, errorMsg);
+                }
+                sendRegOtp.disabled = false;
+                sendRegOtp.textContent = t.getCode;
+                return;
+            }
+
+            // مرحله ۲: ارسال کد تأیید
+            sendRegOtp.textContent = t.sendingCode;
+            
+            const otpResponse = await fetch(routes.sendOtp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentPhone,
+                    name: name,
+                    family_name: family,
+                    email: email,
+                    password: password,
+                    password_confirmation: passwordConf,
+                    purpose: 'register'
+                })
+            });
+            
+            const otpData = await otpResponse.json();
+            
+            if (otpResponse.ok && otpData.message) {
+                hide(sendRegOtp);
+                show(regOtpMsg);
+                regOtpMsg.textContent = t.codeSent.replace(':phone', currentPhone);
+                show(regOtpSection);
+                startRegResendTimer();
+                regCodeInput.value = '';
+                regCodeInput.focus();
+                clearError(regOtpError);
+            } else {
+                if (otpResponse.status === 429) {
+                    setError(regOtpError, otpData.message || t.wait);
+                } else {
+                    setError(regOtpError, otpData.message || t.sendCodeError);
+                }
+                sendRegOtp.disabled = false;
+                sendRegOtp.textContent = t.getCode;
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            setError(regOtpError, t.serverError);
+            sendRegOtp.disabled = false;
+            sendRegOtp.textContent = t.getCode;
+        }
+    }
+
+    sendRegOtp.addEventListener('click', sendRegisterOtp);
+    resendRegBtn.addEventListener('click', sendRegisterOtp);
+
+    // تأیید کد ثبت‌نام
+    verifyRegBtn.addEventListener('click', async function() {
+        const code = regCodeInput.value.trim();
+        if (!/^\d{4}$/.test(code)) {
+            setError(regOtpError, t.codeRequired);
+            regCodeInput.focus();
+            return;
+        }
+        clearError(regOtpError);
+        verifyRegBtn.disabled = true;
+        verifyRegBtn.textContent = t.verifying;
+
+        try {
+            const response = await fetch(routes.verifyOtp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentPhone,
+                    code: code,
+                    purpose: 'register'
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok && data.redirect) {
+                stopRegResendTimer();
+                window.location.href = data.redirect;
+            } else {
+                const errorMsg = data.message || t.invalidCode;
+                if (errorMsg.includes(t.email)) {
+                    setError(regOtpError, errorMsg);
+                    show(sendRegOtp);
+                    hide(regOtpSection);
+                    hide(regOtpMsg);
+                    document.getElementById('email').focus();
+                    document.getElementById('email').value = '';
+                    stopRegResendTimer();
+                } else if (errorMsg.includes(t.code) || errorMsg.includes(t.invalidCode) || errorMsg.includes(t.expired)) {
+                    setError(regOtpError, errorMsg);
+                    regCodeInput.value = '';
+                    regCodeInput.focus();
+                } else {
+                    setError(regOtpError, errorMsg);
+                }
+                verifyRegBtn.disabled = false;
+                verifyRegBtn.textContent = t.verifyRegister;
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            setError(regOtpError, t.networkError);
+            verifyRegBtn.disabled = false;
+            verifyRegBtn.textContent = t.verifyRegister;
+        }
+    });
+
+    window.addEventListener('beforeunload', stopRegResendTimer);
+
+    // ----- بخش ورود با رمز عبور (کاربر موجود) -----
+    const loginBtn = document.getElementById('login-btn');
+    const loginPassword = document.getElementById('login-password');
+    const loginError = document.getElementById('login-error');
+    const forgotBtn = document.getElementById('forgot-password-btn');
+
+    loginBtn.addEventListener('click', async function() {
+        const password = loginPassword.value;
+        if (!password) {
+            setError(loginError, t.enterPassword);
+            loginPassword.focus();
+            return;
+        }
+        clearError(loginError);
+        loginBtn.disabled = true;
+        loginBtn.textContent = t.loggingIn;
+
+        try {
+            const response = await fetch(routes.loginPhone, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentPhone,
+                    password: password
+                })
+            });
+            const data = await response.json();
+            if (response.ok && data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                setError(loginError, data.message || t.wrongCredentials);
+                loginPassword.value = '';
+                loginPassword.focus();
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            setError(loginError, t.networkError);
+        } finally {
+            loginBtn.disabled = false;
+            loginBtn.textContent = t.login;
+        }
+    });
+
+    loginPassword.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            loginBtn.click();
+        }
+    });
+
+    // ----- بازیابی رمز عبور -----
+    const resetCodeInput = document.getElementById('reset-code');
+    const verifyResetBtn = document.getElementById('verify-reset-btn');
+    const resetCodeError = document.getElementById('reset-code-error');
+    const newPasswordSection = document.getElementById('new-password-section');
+    const setNewPasswordBtn = document.getElementById('set-new-password-btn');
+    const newPassword = document.getElementById('new-password');
+    const newPasswordConfirm = document.getElementById('new-password-confirm');
+    const newPasswordError = document.getElementById('new-password-error');
+    const confirmResetBtn = document.getElementById('confirm-reset-btn');
+    const resetCodeSection = document.getElementById('reset-code-section');
+    const resetConfirmError = document.getElementById('reset-confirm-error');
+
+    forgotBtn.addEventListener('click', function() {
+        hide(loginStep);
+        show(resetStep);
+        document.getElementById('reset-confirm-section').classList.remove('hidden');
+        resetCodeSection.classList.add('hidden');
+        newPasswordSection.classList.add('hidden');
+        clearError(resetConfirmError);
+        clearError(resetCodeError);
+    });
+
+    confirmResetBtn.addEventListener('click', async function() {
+        confirmResetBtn.disabled = true;
+        confirmResetBtn.textContent = t.sendingCode;
+        clearError(resetConfirmError);
+        
+        try {
+            const response = await fetch(routes.sendOtp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentPhone,
+                    purpose: 'reset'
+                })
+            });
+            const data = await response.json();
+            
+            if (response.ok) {
+                document.getElementById('reset-confirm-section').classList.add('hidden');
+                resetCodeSection.classList.remove('hidden');
+                resetCodeInput.value = '';
+                resetCodeInput.focus();
+            } else {
+                setError(resetConfirmError, data.message || t.sendResetCodeError);
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            setError(resetConfirmError, t.networkError);
+        } finally {
+            confirmResetBtn.disabled = false;
+            confirmResetBtn.textContent = t.confirmSendCode;
+        }
+    });
+
+    verifyResetBtn.addEventListener('click', async function() {
+        const code = resetCodeInput.value.trim();
+        if (!/^\d{4}$/.test(code)) {
+            setError(resetCodeError, t.codeRequired);
+            resetCodeInput.focus();
+            return;
+        }
+        clearError(resetCodeError);
+        verifyResetBtn.disabled = true;
+        verifyResetBtn.textContent = t.checking;
+
+        try {
+            const response = await fetch(routes.verifyResetOtp, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentPhone,
+                    code: code
+                })
+            });
+            const data = await response.json();
+            if (response.ok && data.valid) {
+                // مخفی کردن فیلد کد و دکمه تأیید
+                resetCodeInput.parentElement.style.display = 'none';
+                verifyResetBtn.style.display = 'none';
+                
+                // نمایش بخش رمز جدید
+                newPasswordSection.classList.remove('hidden');
+                newPassword.focus();
+            } else {
+                setError(resetCodeError, data.message || t.invalidCode);
+                resetCodeInput.value = '';
+                resetCodeInput.focus();
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            setError(resetCodeError, t.networkError);
+        } finally {
+            verifyResetBtn.disabled = false;
+            verifyResetBtn.textContent = t.verifyCode;
+        }
+    });
+
+    setNewPasswordBtn.addEventListener('click', async function() {
+        const pwd = newPassword.value;
+        const pwdConf = newPasswordConfirm.value;
+        
+        if (!pwd || !pwdConf) {
+            setError(newPasswordError, t.fillBothFields);
+            if (!pwd) newPassword.focus();
+            else newPasswordConfirm.focus();
+            return;
+        }
+        if (pwd.length < 6) {
+            setError(newPasswordError, t.passwordMin);
+            newPassword.focus();
+            return;
+        }
+        if (pwd !== pwdConf) {
+            setError(newPasswordError, t.passwordMismatch);
+            newPasswordConfirm.focus();
+            return;
+        }
+        
+        clearError(newPasswordError);
+        setNewPasswordBtn.disabled = true;
+        setNewPasswordBtn.textContent = t.saving;
+
+        try {
+            const response = await fetch(routes.resetPasswordSms, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken,
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    phone: currentPhone,
+                    code: resetCodeInput.value.trim(),
+                    password: pwd,
+                    password_confirmation: pwdConf
+                })
+            });
+            const data = await response.json();
+            if (response.ok && data.redirect) {
+                window.location.href = data.redirect;
+            } else {
+                setError(newPasswordError, data.message || t.passwordChangeError);
+            }
+        } catch (err) {
+            console.error('Error:', err);
+            setError(newPasswordError, t.networkError);
+        } finally {
+            setNewPasswordBtn.disabled = false;
+            setNewPasswordBtn.textContent = t.setPassword;
+        }
+    });
+
+    // فوکوس خودکار اول
+    phoneInput.focus();
+});

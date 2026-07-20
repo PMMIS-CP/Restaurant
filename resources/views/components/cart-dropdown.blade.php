@@ -15,52 +15,6 @@
     </span>
 </a>
 
-<script>
-    // تابع global برای آپدیت تعداد سبد
-    window.updateCartCount = function(count) {
-        const btn = document.getElementById('floating-cart-btn');
-        const badge = document.getElementById('cart-badge');
-        
-        if (!btn || !badge) return;
-        
-        const num = parseInt(count) || 0;
-        
-        if (num > 0) {
-            badge.textContent = num > 99 ? '99+' : num;
-            btn.classList.remove('hidden');
-            // انیمیشن کوچک
-            badge.classList.add('animate-ping-once');
-            setTimeout(() => badge.classList.remove('animate-ping-once'), 300);
-        } else {
-            btn.classList.add('hidden');
-            badge.textContent = '0';
-        }
-    };
-
-    // تابع global برای fetch و آپدیت اولیه
-    window.initCartBadge = async function() {
-        try {
-            const res = await fetch('/cart/data', {  // ← تغییر به مسیر جدید API
-                headers: {
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
-            });
-            if (res.ok) {
-                const data = await res.json();
-                updateCartCount(data.count);
-            }
-        } catch (e) {
-            // بی‌صدا خطا رو نادیده بگیر
-        }
-    };
-
-    // مقداردهی اولیه هنگام لود صفحه
-    document.addEventListener('DOMContentLoaded', function() {
-        initCartBadge();
-    });
-</script>
-
 <style>
 @keyframes ping-once {
     0% { transform: scale(1); }
