@@ -11,14 +11,18 @@ class AddSecurityHeaders
     protected array $securityHeaders = [
         'X-Content-Type-Options' => 'nosniff',
         'X-Frame-Options' => 'SAMEORIGIN',
-        'X-XSS-Protection' => '1; mode=block',
         'Referrer-Policy' => 'strict-origin-when-cross-origin',
-        'Permissions-Policy' => 'geolocation=(), microphone=(), camera=()',
+        'Permissions-Policy' => 'geolocation=(), microphone=(), camera=(), payment=()',
+        'Cross-Origin-Opener-Policy' => 'same-origin',
+        'Cross-Origin-Embedder-Policy' => 'require-corp',
     ];
 
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
+
+        $response->headers->remove('X-Powered-By');
+        $response->headers->remove('Server');
 
         foreach ($this->securityHeaders as $key => $value) {
             if (!$response->headers->has($key)) {
@@ -26,22 +30,22 @@ class AddSecurityHeaders
             }
         }
 
-        // Add X-Powered-By header
-        if (config('app.show_powered_by', false)) {
-            $response->headers->set('X-Powered-By', 'Laravel/' . app()->version());
-        }
-
-        // Add CSP header
         if (config('app.enable_csp', false)) {
-            $response->headers->set(
-                'Content-Security-Policy',
-                "default-src 'self'; script-src 'self' 'unsafe-inline' https:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;"
-            );
+            $csp = "default-src 'self'; " .
+                   "script-src 'self'; " . 
+                   "style-src 'self' 'unsafe-inline'; " . 
+                   "img-src 'self' data: https:; " .
+                   "connect-src 'self'; " .
+                   "frame-ancestors 'self'; " .
+                   "object-src 'none';";
+            $response->headers->set('Content-Security-Policy', $csp);
         }
 
-        // Add HSTS header (production only)
-        if (config('app.enable_hsts', false) && config('app.env') === 'production') {
-            $response->headers->set('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+        if (config('app.env') === 'production') {
+            $hstsValue = 'max-age=31536000';
+            
+            
+            $response->headers->set('Strict-Transport-Security', $hstsValue);
         }
 
         return $response;
