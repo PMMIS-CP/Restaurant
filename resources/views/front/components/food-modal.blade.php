@@ -83,7 +83,6 @@
         const modalDetails = document.getElementById('modal-food-details');
         const addToCartBtn = document.getElementById('modal-add-to-cart-btn');
 
-        // دریافت ارقام محلی از فایل ترجمه
         const digits = @json(__('food-modal.digits'));
         
         /**
@@ -95,14 +94,11 @@
             return String(number).replace(/[0-9]/g, (digit) => digits[parseInt(digit)]);
         }
 
-        // وضعیت گالری
         let modalImages = [];
         let modalCurrentIndex = 0;
 
-        // ذخیره اطلاعات محصول جاری برای ارسال به API سبد خرید
-        // ✅ product_type را به فرمت کوتاه (منطبق با ولیدیشن کنترلر) ذخیره می‌کنیم
         let currentProduct = {
-            type: null,        // فرمت کوتاه: Menu | MenuTakeout | MenuOrganizational
+            type: null,
             id: null,
             name: '',
             price: ''
@@ -128,7 +124,6 @@
          * ساخت گالری از آرایه تصاویر
          */
         function buildGallery(images) {
-            // پاکسازی قبلی
             galleryContainer.querySelectorAll('img').forEach(img => img.remove());
             dotsContainer.innerHTML = '';
             
@@ -136,7 +131,6 @@
             modalCurrentIndex = 0;
 
             if (modalImages.length === 0) {
-                // نمایش placeholder اگر تصویری نبود
                 const placeholder = document.createElement('div');
                 placeholder.className = 'absolute inset-0 flex items-center justify-center text-gray-500 text-sm';
                 placeholder.textContent = '{{ __("food-modal.no_image") }}';
@@ -156,7 +150,6 @@
                 galleryContainer.appendChild(img);
             });
 
-            // ایجاد نقاط (اگر بیشتر از یک تصویر)
             if (modalImages.length > 1) {
                 modalImages.forEach((_, idx) => {
                     const dot = document.createElement('span');
@@ -176,11 +169,6 @@
             }
         }
 
-        /**
-         * ✅ مپ type کوتاه دریافتی از API به product_type معتبر برای CartController
-         * API برمی‌گرداند: 'menu', 'organizational', 'takeout'
-         * CartController نیاز دارد: 'Menu', 'MenuOrganizational', 'MenuTakeout'
-         */
         function mapApiTypeToProductType(apiType) {
             const map = {
                 'menu': 'Menu',
@@ -194,7 +182,6 @@
          * باز کردن مودال با fetch از API
          */
         async function openModal(type, id) {
-            // نمایش مودال اول با حالت loading
             overlay.classList.remove('hidden');
             overlay.classList.add('flex');
             document.body.classList.add('overflow-hidden');
@@ -204,7 +191,6 @@
             modalDetails.textContent = '---';
             loadingSpinner?.classList.remove('hidden');
 
-            // غیرفعال کردن دکمه افزودن به سبد خرید تا زمان بارگذاری
             addToCartBtn.disabled = true;
 
             setTimeout(() => {
@@ -225,26 +211,21 @@
 
                 const data = await response.json();
 
-                // پر کردن اطلاعات
                 modalName.textContent = data.name;
-                // ✅ تبدیل قیمت با فرمت و ارقام محلی
                 const formattedPrice = Number(data.price).toLocaleString('en-US');
                 modalPrice.textContent = toLocalizedNumber(formattedPrice);
                 modalDetails.textContent = data.description || '{{ __("food-modal.no_description") }}';
 
-                // ✅ ذخیره برای سبد خرید با product_type صحیح (فرمت کوتاه)
                 currentProduct = {
-                    type: mapApiTypeToProductType(data.type),  // تبدیل به فرمت کوتاه
+                    type: mapApiTypeToProductType(data.type),  
                     id: data.id,
                     name: data.name,
                     price: data.price
                 };
 
-                // ساخت گالری
                 loadingSpinner?.classList.add('hidden');
                 buildGallery(data.images);
 
-                // فعال کردن دکمه سبد خرید
                 addToCartBtn.disabled = false;
 
             } catch (error) {
@@ -267,7 +248,6 @@
                 overlay.classList.add('hidden');
                 overlay.classList.remove('flex');
                 document.body.classList.remove('overflow-hidden');
-                // ریست گالری
                 buildGallery([]);
                 loadingSpinner?.classList.remove('hidden');
                 currentProduct = { type: null, id: null, name: '', price: '' };
@@ -293,7 +273,6 @@
             }
         });
 
-        // بستن مودال
         closeBtn?.addEventListener('click', (e) => {
             e.stopPropagation();
             closeModal();
@@ -307,7 +286,6 @@
             if (e.key === 'Escape' && !overlay.classList.contains('hidden')) closeModal();
         });
 
-        // دکمه‌های گالری
         prevBtn?.addEventListener('click', () => {
             if (modalImages.length < 2) return;
             modalCurrentIndex = (modalCurrentIndex - 1 + modalImages.length) % modalImages.length;
@@ -320,7 +298,6 @@
             updateGallerySlide();
         });
 
-        // ========== افزودن به سبد خرید ==========
         addToCartBtn?.addEventListener('click', async function () {
             if (!currentProduct.id || !currentProduct.type) {
                 alert('{{ __("food-modal.incomplete_product") }}');
