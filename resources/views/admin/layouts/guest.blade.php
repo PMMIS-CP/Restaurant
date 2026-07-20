@@ -14,7 +14,7 @@
 
     <link rel="icon" type="image/png" href="{{ asset('assets/logo/logo.webp') }}">
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/fonts.css') }}"> --}}
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/admin.css', 'resources/js/admin.js'])
     
 </head>
 <body class="font-[Vazirmatn] antialiased">

@@ -12,7 +12,7 @@
     <link href="https://fonts.bunny.net/css?family=vazirmatn:400,500,600,700" rel="stylesheet" />
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite(['resources/css/admin.css', 'resources/js/admin.js'])
     
     @stack('styles')
 </head>
