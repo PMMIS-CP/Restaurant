@@ -60,7 +60,7 @@
         {{-- خط جداکننده و کپی‌رایت --}}
         <div class="border-t border-[#7A2A3E] mt-8 pt-6 text-center">
             <p class="text-sm text-[#B88A6B]">
-                &copy; {{ date('Y') }} {{ config('app.name') }}. {{ __('footer.copyright') }}
+                &copy; {{ date('Y') }} {{ __('app.name') }}. {{ __('footer.copyright') }}
             </p>
         </div>
     </div>
