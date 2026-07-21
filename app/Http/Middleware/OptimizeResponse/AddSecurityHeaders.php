@@ -14,15 +14,17 @@ class AddSecurityHeaders
         'Referrer-Policy' => 'strict-origin-when-cross-origin',
         'Permissions-Policy' => 'geolocation=(), microphone=(), camera=(), payment=()',
         'Cross-Origin-Opener-Policy' => 'same-origin',
-        'Cross-Origin-Embedder-Policy' => 'require-corp',
     ];
 
     public function handle(Request $request, Closure $next): Response
     {
         $response = $next($request);
 
-        $response->headers->remove('X-Powered-By');
-        $response->headers->remove('Server');
+        if (config('app.show_powered_by') === false) {
+            $response->headers->remove('X-Powered-By');
+        }
+
+        // $response->headers->remove('Server');
 
         foreach ($this->securityHeaders as $key => $value) {
             if (!$response->headers->has($key)) {
@@ -41,10 +43,8 @@ class AddSecurityHeaders
             $response->headers->set('Content-Security-Policy', $csp);
         }
 
-        if (config('app.env') === 'production') {
-            $hstsValue = 'max-age=31536000';
-            
-            
+        if (config('app.enable_hsts', false) && config('app.env') === 'production') {
+            $hstsValue = 'max-age=604800';
             $response->headers->set('Strict-Transport-Security', $hstsValue);
         }
 
