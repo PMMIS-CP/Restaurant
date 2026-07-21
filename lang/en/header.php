@@ -11,6 +11,8 @@ return [
         'login' => 'Login',
         'dashboard' => 'Dashboard',
         'logout' => 'Logout',
+        'welcome' => 'Welcome :name',
+        'go_to_dashboard' => 'Go to Dashboard',
     ],
     'cta' => [
         'book_online' => 'Book Online',

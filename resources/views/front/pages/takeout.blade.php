@@ -3,6 +3,7 @@
 @section('title', __('takeout.page_title'))
 @section('meta_description', __('takeout.meta_description'))
 @section('content')
+<style>.swiper-slide {margin-right: 12px !important; width: auto !important;}</style>
 
 <div class="min-h-screen pb-20 bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
 

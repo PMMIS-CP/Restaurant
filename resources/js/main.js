@@ -353,7 +353,7 @@ window.handleSubmit = async function(event) {
 
 // resources\views\front\components\gallery.blade.php
 document.addEventListener('DOMContentLoaded', () => {
-    // فقط اگر المان‌های مربوطه در صفحه وجود دارند، اجرا کن
+    // ========== انیمیشن‌های GSAP ==========
     if (document.querySelector('.star')) {
         window.gsap.to(".star", { 
             y: -30, 
@@ -387,23 +387,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Swiper عمومی (نسخه ساده)
-    if (document.querySelector('.card-swiper')) {
-        new window.Swiper('.card-swiper', {
-            modules: [window.SwiperEffectCards, window.SwiperAutoplay],
-            effect: "cards",
-            grabCursor: true,
-            loop: true,
-            autoplay: { delay: 3000 }
-        });
-    }
-});
-
-document.addEventListener('DOMContentLoaded', function () {
-    // انتخاب تمام Swiperهای با کلاس card-swiper
+    // ========== Swiper یکپارچه ==========
     const swiperElements = document.querySelectorAll('.card-swiper');
     
-    // اگر Swiper از قبل راه‌اندازی شده، دوباره راه‌اندازی نکن
     swiperElements.forEach(el => {
         // بررسی می‌کنیم Swiper قبلاً روی این المان راه‌اندازی نشده باشد
         if (!el.classList.contains('swiper-initialized')) {

@@ -3,6 +3,7 @@
 @section('meta_description', __('menu.meta_description'))
 @section('content')
 
+<style>.swiper-slide {margin-right: 12px !important; width: auto !important;}</style>
 <div class="min-h-screen bg-[#090506] text-gray-100 antialiased selection:bg-[#bc1c24] selection:text-white">
 
     <div class="relative overflow-hidden py-16 text-center border-b-2 border-[#FFD700]/20 bg-linear-to-b from-[#1a0a0a] to-[#0a0a0a]">

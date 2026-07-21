@@ -11,6 +11,8 @@ return [
         'login' => 'ورود',
         'dashboard' => 'داشبورد',
         'logout' => 'خروج',
+        'welcome' => 'خوش‌آمدی :name',
+        'go_to_dashboard' => 'ورود به داشبورد',
     ],
     'cta' => [
         'book_online' => 'رزرو آنلاین',

@@ -89,9 +89,12 @@
             </div>
 
             @auth
-                <button @click="profileOpen = !profileOpen" class="text-white hover:text-yellow-500 transition-colors">
-                    {{ Auth::user()->name }}
-                </button>
+                <div class="flex flex-col items-center gap-1">
+                    <span class="text-white text-sm">{{ __('header.auth.welcome', ['name' => Auth::user()->name]) }}</span>
+                    <a href="{{ route('dashboard') }}" class="text-yellow-400 hover:text-yellow-500 transition-colors text-sm">
+                        {{ __('header.auth.go_to_dashboard') }}
+                    </a>
+                </div>
             @else
                 <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-yellow-500 transition-all">{{ __('header.auth.login') }}</a>
                 <a href="#" class="bg-yellow-600 hover:bg-yellow-500 text-red-950 px-6 py-2.5 rounded-full text-sm font-black uppercase tracking-wide transition-all shadow-lg hover:shadow-yellow-600/50">
