@@ -40,7 +40,7 @@
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             @foreach($categories as $cat)
                 <button data-category-select="{{ $cat }}" class="category-select-card group bg-linear-to-br from-[#130d0f] to-[#0d0809] border border-neutral-900/80 rounded-2xl p-6 text-center transition-all duration-300 hover:border-[#dfb15b]/40 hover:shadow-[0_10px_25px_rgba(220,20,60,0.15)] cursor-pointer flex flex-col items-center gap-4">
-                    <img src="{{ $categoryImages[$cat] ?? '' }}" alt="{{ $cat }}" class="w-24 h-24 rounded-full object-cover border-2 border-neutral-700 group-hover:border-[#ffd700] transition-colors duration-300">
+                    <img src="{{ $categoryImages[$cat] ?? '' }}" alt="{{ $cat }}" loading="lazy" class="w-24 h-24 rounded-full object-cover border-2 border-neutral-700 group-hover:border-[#ffd700] transition-colors duration-300">
                     <span class="block text-base font-bold text-gray-200 group-hover:text-[#ffd700] transition-colors duration-300">
                         {{ $cat }}
                     </span>
@@ -138,7 +138,7 @@
                     <div class="absolute inset-0 bg-[#bc1c24]/1 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-10"></div>
 
                     <div class="relative">
-                        <img src="{{ $item['image_path'] }}" alt="{{ $item['name'] }}" class="w-full h-48 object-cover">
+                        <img src="{{ $item['image_path'] }}" alt="{{ $item['name'] }}" loading="lazy" class="w-full h-48 object-cover">
                         <div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/90 via-black/50 to-transparent p-4 pt-8">
                             <div class="flex justify-between items-end gap-4">
                                 <h3 class="text-lg font-bold text-gray-100 group-hover:text-[#ffd700] transition-colors duration-300">

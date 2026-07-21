@@ -1,97 +1,8 @@
 {{-- resources\views\front\pages\takeout.blade.php --}}
 @extends('front.layouts.app')
 @section('title', __('takeout.page_title'))
+@section('meta_description', __('takeout.meta_description'))
 @section('content')
-
-<style>
-    .hide-scrollbar::-webkit-scrollbar {
-        display: none;
-    }
-    .hide-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-    }
-    .category-section {
-        scroll-margin-top: 120px;
-    }
-    .glow-panel {
-        box-shadow: 0 15px 35px rgba(0,0,0,0.8), 0 0 20px rgba(255, 215, 0, 0.15);
-        transition: box-shadow 0.4s ease, border-color 0.4s ease;
-    }
-    .glow-panel:hover {
-        box-shadow: 0 20px 40px rgba(0,0,0,0.9), 0 0 30px rgba(255, 215, 0, 0.3);
-        border-color: #ffe55c;
-    }
-    
-    .menu-dots {
-        flex-grow: 1;
-        border-bottom: 2px dotted rgba(255, 215, 0, 0.3);
-        margin: 0 15px;
-        position: relative;
-        top: -8px;
-        opacity: 0.7;
-    }
-    :root {
-        --royal-yellow: #FFD700;
-        --royal-yellow-dark: #B8860B;
-        --royal-yellow-light: #FFED4A;
-        --crimson: #DC143C;
-        --crimson-dark: #8B0000;
-        --crimson-light: #FF6B6B;
-        --dark-bg: #0a0a0a;
-        --dark-panel: #1a1a1a;
-        --dark-border: #2a2a2a;
-    }
-
-    @keyframes shimmer {
-        0% {
-            background-position: -200% center;
-        }
-        100% {
-            background-position: 200% center;
-        }
-    }
-
-    .shimmer-text {
-        background: linear-gradient(
-            90deg,
-            var(--royal-yellow) 0%,
-            var(--royal-yellow-light) 25%,
-            var(--crimson-light) 50%,
-            var(--royal-yellow-light) 75%,
-            var(--royal-yellow) 100%
-        );
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shimmer 3s linear infinite;
-    }
-
-    @keyframes textShimmer {
-        0% { background-position: -200% center; }
-        100% { background-position: 200% center; }
-    }
-    .animate-shimmer-text {
-        background: linear-gradient(90deg, #ffd700 0%, #fff3b0 25%, #ffb700 50%, #fff3b0 75%, #ffd700 100%);
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: textShimmer 4s linear infinite;
-    }
-</style>
-<style>
-    #sticky-nav.is-scrolled {
-        background: rgba(28, 20, 22, 0.98);
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-    }
-    .swiper-slide {
-        margin-right: 12px !important;
-        width: auto !important;
-    }
-</style>
 
 <div class="min-h-screen pb-20 bg-[#070203] text-gray-100 antialiased selection:bg-[#ffd700] selection:text-black">
 
@@ -220,7 +131,7 @@
                                 data-search-keys="{{ mb_strtolower($item['name'] . ' ' . $item['description']) }}">
 
                                 <div class="relative h-40 w-full overflow-hidden">
-                                    <img src="{{ $imagePath }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover">
+                                    <img src="{{ $imagePath }}" alt="{{ $item['name'] }}" loading="lazy" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-linear-to-t from-[#0a0203] via-transparent to-transparent"></div>
                                 </div>
                                 
@@ -255,7 +166,7 @@
                                     data-search-keys="{{ mb_strtolower($item['name'] . ' ' . $item['description']) }}">
                                     
                                     <div class="shrink-0 w-32 h-32 lg:w-36 lg:h-36 rounded-xl overflow-hidden border border-[#ffd700]/20 shadow-[0_5px_15px_rgba(0,0,0,0.4)] relative">
-                                        <img src="{{ $imagePath }}" alt="{{ $item['name'] }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                        <img src="{{ $imagePath }}" alt="{{ $item['name'] }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                         <div class="absolute inset-0 bg-linear-to-t from-[#0a0203]/40 to-transparent"></div>
                                     </div>
                                     
