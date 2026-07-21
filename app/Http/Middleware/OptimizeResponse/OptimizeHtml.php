@@ -28,6 +28,10 @@ class OptimizeHtml
 
     protected function shouldOptimize(Request $request, Response $response): bool
     {
+        if (!config('app.minify_html', true) && !config('app.remove_html_comments', false)) {
+            return false;
+        }
+
         if (config('app.debug')) {
             return false;
         }
@@ -111,17 +115,19 @@ class OptimizeHtml
 
         // Remove HTML comments (if enabled)
         if (config('app.remove_html_comments', false)) {
-            $result = preg_replace('/<!--(?!\[if\s).*?-->/s', '', $result) ?? $html;
+            $result = preg_replace('/<!--[\s\S]*?-->/', '', $result) ?? $html;
             $result = preg_replace('/^\s*[\r\n]+/m', '', $result) ?? $html;
         }
 
-        // Minify spaces between tags
-        $result = preg_replace('/\>[^\S ]+/s', '>', $result) ?? $html;
-        $result = preg_replace('/[^\S ]+\</s', '<', $result) ?? $html;
-        $result = preg_replace('/>\s+</', '><', $result) ?? $html;
-        $result = preg_replace('/(\s)+/s', '\\1', $result) ?? $html;
-        $result = preg_replace('/^[\s]+|[\s]+$/m', '', $result) ?? $html;
-        $result = preg_replace('/^\s*[\r\n]+/m', '', $result) ?? $html;
+        // Minify spaces - فقط اگه minify فعال باشه
+        if (config('app.minify_html', true)) {
+            $result = preg_replace('/\>[^\S ]+/s', '>', $result) ?? $html;
+            $result = preg_replace('/[^\S ]+\</s', '<', $result) ?? $html;
+            $result = preg_replace('/>\s+</', '><', $result) ?? $html;
+            $result = preg_replace('/(\s)+/s', '\\1', $result) ?? $html;
+            $result = preg_replace('/^[\s]+|[\s]+$/m', '', $result) ?? $html;
+            $result = preg_replace('/^\s*[\r\n]+/m', '', $result) ?? $html;
+        }
 
         // Remove UTF-8 BOM
         $result = $this->removeUtf8Bom($result);

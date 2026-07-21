@@ -1685,6 +1685,7 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function () {
     // بررسی وجود عناصر اصلی (اگر در صفحه لاگین نباشیم اجرا نشود)
     const phoneInput = document.getElementById('phone');
+    if (!phoneInput || window.location.pathname.includes('/reserve')) return;
     if (!phoneInput) return; // صفحهٔ لاگین نیست → توقف
 
     const config = window.AuthConfig;
