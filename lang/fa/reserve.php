@@ -42,6 +42,8 @@ return [
         'date_placeholder' => 'تاریخ را ثبت کنید',
         'date_register_time' => 'ورودی و خروجی ساعت را ثبت کنید',
         'date_separator' => 'الی',
+        'previous_month' => 'ماه قبل',
+        'next_month' => 'ماه بعد',
         'weekdays_short' => ['ش', 'ی', 'د', 'س', 'چ', 'پ', 'ج'],
         'weekdays_full' => ['شنبه', 'یک‌شنبه', 'دوشنبه', 'سه‌شنبه', 'چهارشنبه', 'پنج‌شنبه', 'جمعه'],
     ],

@@ -2,39 +2,6 @@
 @section('title', __('reserve.page_title'))
 @section('content')
 @include('front.components.reserveheader')
-{{-- استایل‌ها و اسکریپت‌ها --}}
-<style>
-input:-webkit-autofill,
-input:-webkit-autofill:hover,
-input:-webkit-autofill:focus {
- -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
- -webkit-text-fill-color: #1a1a1a !important;
- transition: background-color 5000s ease-in-out 0s;
-}
-</style>
-<style>
-.ripple-effect {
-  position: relative;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ripple-effect .ripple {
-  position: absolute;
-  border-radius: 50%;
-  background-color: rgba(220, 38, 38, 0.2);
-  transform: scale(0);
-  animation: ripple-animation 0.1s ease-out;
-  pointer-events: none;
-}
-
-@keyframes ripple-animation {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
-}
-</style>
 
 {{-- نسخه دسکتاپ --}}
 <form action="{{ route('reserve.store') }}" method="POST" id="reserve-form" 
@@ -69,7 +36,7 @@ input:-webkit-autofill:focus {
                     
                     <p class="text-red-600 font-bold leading-tight whitespace-nowrap text-[8px] sm:text-[13px] md:text-[12px] lg:text-[14.5px]"
                     style="text-shadow: 0 0 5px rgba(220, 38, 38, 0.3);">
-                        {{ __('reserve.desktop.warning') }}
+                        <strong>{{ __('reserve.desktop.warning') }}</strong>
                     </p>
                 </div>
             </div>
@@ -113,7 +80,8 @@ input:-webkit-autofill:focus {
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
-                                           x-model="$store.reserveForm.phone">
+                                           x-model="$store.reserveForm.phone"
+                                           aria-required="true">
                                 </div>
                             </div>
 
@@ -132,7 +100,8 @@ input:-webkit-autofill:focus {
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
-                                           x-model="$store.reserveForm.name">
+                                           x-model="$store.reserveForm.name"
+                                           aria-required="true">
                                 </div>
                             </div>
                         </div>
@@ -183,6 +152,13 @@ input:-webkit-autofill:focus {
                                     <span class="selected-text">{{ __('reserve.desktop.guest_placeholder') }}</span>
                                     <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
+                                <select name="guest_count" id="guest_count_select_desktop" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1" aria-hidden="true">
+                                    <option value="">{{ __('reserve.desktop.guest_placeholder') }}</option>
+                                    <option value="1-4">{{ __('reserve.dropdowns.guest_options.1-4') }}</option>
+                                    <option value="5-10">{{ __('reserve.dropdowns.guest_options.5-10') }}</option>
+                                    <option value="25-50">{{ __('reserve.dropdowns.guest_options.25-50') }}</option>
+                                    <option value="50-100">{{ __('reserve.dropdowns.guest_options.50-100') }}</option>
+                                </select>
                                 <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
                                     <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">{{ __('reserve.dropdowns.guest_options.1-4') }}</li>
                                     <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.guest_options.5-10') }}</li>
@@ -206,6 +182,19 @@ input:-webkit-autofill:focus {
                                     <span class="selected-text">{{ __('reserve.desktop.event_type_placeholder') }}</span>
                                     <svg class="w-4 h-4 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
+                                <select name="event_type" id="event_type_select_desktop" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1" aria-hidden="true">
+                                    <option value="">{{ __('reserve.desktop.event_type_placeholder') }}</option>
+                                    <option value="ولیمه">{{ __('reserve.dropdowns.event_options.walimeh') }}</option>
+                                    <option value="روزهای-خاص">{{ __('reserve.dropdowns.event_options.special-days') }}</option>
+                                    <option value="خواستگاری">{{ __('reserve.dropdowns.event_options.khastgari') }}</option>
+                                    <option value="شب-یلدا">{{ __('reserve.dropdowns.event_options.yalda') }}</option>
+                                    <option value="سازمانی">{{ __('reserve.dropdowns.event_options.organizational') }}</option>
+                                    <option value="تعیین-جنسیت">{{ __('reserve.dropdowns.event_options.gender-reveal') }}</option>
+                                    <option value="ترحیم">{{ __('reserve.dropdowns.event_options.tahrim') }}</option>
+                                    <option value="عقد">{{ __('reserve.dropdowns.event_options.aghd') }}</option>
+                                    <option value="تولد">{{ __('reserve.dropdowns.event_options.birthday') }}</option>
+                                    <option value="شخصی">{{ __('reserve.dropdowns.event_options.personal') }}</option>
+                                </select>
                                 <ul class="dropdown-menu hidden absolute top-[110%] left-0 w-full bg-white/90 backdrop-blur-md border border-gray-200/50 rounded-xl shadow-[0_10px_30px_rgba(0,0,0,0.08)] overflow-hidden transition-all duration-300 z-50 text-right text-[10px] sm:text-xs md:text-sm max-h-60 overflow-y-auto">
                                     <li data-value="ولیمه" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">{{ __('reserve.dropdowns.event_options.walimeh') }}</li>
                                     <li data-value="روزهای-خاص" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.special-days') }}</li>
@@ -252,7 +241,8 @@ input:-webkit-autofill:focus {
                                     {{-- <!-- دکمه ماه قبل --> --}}
                                     <button @click="changeMonth(-1)" type="button"
                                             class="relative overflow-hidden p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm font-bold ripple-effect rounded-full"
-                                            style="color: #DC2626;">
+                                            style="color: #DC2626;"
+                                            aria-label="{{ __('reserve.calendar.previous_month') }}">
                                         {{-- <!-- فلش چپ برای LTR، فلش راست برای RTL --> --}}
                                         <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
@@ -272,7 +262,8 @@ input:-webkit-autofill:focus {
                                     {{-- <!-- دکمه ماه بعد --> --}}
                                     <button @click="changeMonth(1)" type="button"
                                             class="relative overflow-hidden p-0.5 md:p-1 text-[10px] sm:text-xs md:text-sm font-bold ripple-effect rounded-full"
-                                            style="color: #DC2626;">
+                                            style="color: #DC2626;"
+                                            aria-label="{{ __('reserve.calendar.next_month') }}">
                                         {{-- <!-- فلش راست برای LTR، فلش چپ برای RTL --> --}}
                                         <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                             class="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5 inline-block pointer-events-none">
@@ -384,7 +375,7 @@ input:-webkit-autofill:focus {
         {{-- ۱. متن هشدار --}}
         <div class="w-full bg-white/40 backdrop-blur-md border border-red-600/30 rounded-xl p-3 shadow-sm text-center">
             <p class="text-red-600 font-bold leading-relaxed text-xs animate-pulse">
-               {{ __('reserve.mobile.warning') }}
+                <strong>{{ __('reserve.mobile.warning') }}</strong>
             </p>
         </div>
 
@@ -399,7 +390,7 @@ input:-webkit-autofill:focus {
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="text" id="mobile_name" placeholder="{{ __('reserve.mobile.name_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name">
+                        <input type="text" id="mobile_name" placeholder="{{ __('reserve.mobile.name_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.name" aria-required="true">
                     </div>
                 </div>
 
@@ -410,7 +401,7 @@ input:-webkit-autofill:focus {
                         <svg viewBox="0 0 305.61 57.14" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none">
                             <rect class="light-rect-input fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300" x="1" y="1" width="303.61" height="55.14" rx="12" ry="12"/>
                         </svg>
-                        <input type="tel" id="mobile_phone" placeholder="{{ __('reserve.mobile.phone_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone">
+                        <input type="tel" id="mobile_phone" placeholder="{{ __('reserve.mobile.phone_placeholder') }}" @focus="triggerAnimation($el.parentElement)" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-4 text-right font-normal text-sm placeholder-gray-500" style="color: #1a1a1a;" x-model="$store.reserveForm.phone" aria-required="true">
                     </div>
                 </div>
             </div>
@@ -439,6 +430,19 @@ input:-webkit-autofill:focus {
                             <span class="selected-text">{{ __('reserve.mobile.event_type_placeholder') }}</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
+                        <select name="event_type" id="event_type_select_mobile" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1" aria-hidden="true">
+                            <option value="">{{ __('reserve.mobile.event_type_placeholder') }}</option>
+                            <option value="ولیمه">{{ __('reserve.dropdowns.event_options.walimeh') }}</option>
+                            <option value="روزهای-خاص">{{ __('reserve.dropdowns.event_options.special-days') }}</option>
+                            <option value="خواستگاری">{{ __('reserve.dropdowns.event_options.khastgari') }}</option>
+                            <option value="شب-یلدا">{{ __('reserve.dropdowns.event_options.yalda') }}</option>
+                            <option value="سازمانی">{{ __('reserve.dropdowns.event_options.organizational') }}</option>
+                            <option value="تعیین-جنسیت">{{ __('reserve.dropdowns.event_options.gender-reveal') }}</option>
+                            <option value="ترحیم">{{ __('reserve.dropdowns.event_options.tahrim') }}</option>
+                            <option value="عقد">{{ __('reserve.dropdowns.event_options.aghd') }}</option>
+                            <option value="تولد">{{ __('reserve.dropdowns.event_options.birthday') }}</option>
+                            <option value="شخصی">{{ __('reserve.dropdowns.event_options.personal') }}</option>
+                        </select>
                         <ul class="dropdown-menu hidden absolute top-[110%] right-0 w-full bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-xl shadow-lg overflow-hidden transition-all duration-300 z-50 text-right text-sm max-h-52 overflow-y-auto">
                             <li data-value="ولیمه" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150">{{ __('reserve.dropdowns.event_options.walimeh') }}</li>
                             <li data-value="روزهای-خاص" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer transition-colors duration-150 border-t border-gray-100/50">{{ __('reserve.dropdowns.event_options.special-days') }}</li>
@@ -465,6 +469,13 @@ input:-webkit-autofill:focus {
                             <span class="selected-text">{{ __('reserve.mobile.guest_placeholder') }}</span>
                             <svg class="w-5 h-5 text-[#B8860B] transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
                         </button>
+                        <select name="guest_count" id="guest_count_select_mobile" class="absolute w-0 h-0 opacity-0 pointer-events-none" tabindex="-1" aria-hidden="true">
+                            <option value="">{{ __('reserve.mobile.guest_placeholder') }}</option>
+                            <option value="1-4">{{ __('reserve.dropdowns.guest_options.1-4') }}</option>
+                            <option value="5-10">{{ __('reserve.dropdowns.guest_options.5-10') }}</option>
+                            <option value="25-50">{{ __('reserve.dropdowns.guest_options.25-50') }}</option>
+                            <option value="50-100">{{ __('reserve.dropdowns.guest_options.50-100') }}</option>
+                        </select>
                         <ul class="dropdown-menu hidden absolute top-[110%] right-0 w-full bg-white/95 backdrop-blur-xl border border-gray-200/50 rounded-xl shadow-lg overflow-hidden transition-all duration-300 z-50 text-right text-sm max-h-52 overflow-y-auto">
                             <li data-value="1-4" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">{{ __('reserve.dropdowns.guest_options.1-4') }}</li>
                             <li data-value="5-10" class="px-4 py-3 text-gray-700 hover:bg-[#B8860B]/10 hover:text-[#B8860B] cursor-pointer border-b border-gray-100">{{ __('reserve.dropdowns.guest_options.5-10') }}</li>
@@ -512,7 +523,8 @@ input:-webkit-autofill:focus {
                         {{-- <!-- دکمه ماه قبل --> --}}
                         <button @click="changeMonth(-1)" type="button" 
                                 class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
-                                style="color: #DC2626;">
+                                style="color: #DC2626;"
+                                aria-label="{{ __('reserve.calendar.previous_month') }}">
                             {{-- <!-- LTR: فلش به چپ --> --}}
                             <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-3.5 h-3.5 inline-block pointer-events-none">
@@ -530,7 +542,8 @@ input:-webkit-autofill:focus {
 
                         <button @click="changeMonth(1)" type="button" 
                                 class="relative overflow-hidden p-1 text-xs font-bold ripple-effect rounded-full" 
-                                style="color: #DC2626;">
+                                style="color: #DC2626;"
+                                aria-label="{{ __('reserve.calendar.next_month') }}">
                             <svg x-show="!isRTL" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-3.5 h-3.5 inline-block pointer-events-none">
                             <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />

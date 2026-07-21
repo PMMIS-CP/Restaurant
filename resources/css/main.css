@@ -1,3 +1,4 @@
+/* استایل‌های صفحات منو */
 :root {
     --royal-yellow: #FFD700;
     --royal-yellow-dark: #B8860B;
@@ -86,4 +87,34 @@
 .swiper-slide {
     margin-right: 12px !important;
     width: auto !important;
+}
+
+/* استایل های صفحه رزرو */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+ -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+ -webkit-text-fill-color: #1a1a1a !important;
+ transition: background-color 5000s ease-in-out 0s;
+}
+.ripple-effect {
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ripple-effect .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: rgba(220, 38, 38, 0.2);
+  transform: scale(0);
+  animation: ripple-animation 0.1s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }

@@ -1063,6 +1063,12 @@ document.addEventListener('alpine:init', () => {
                 const containerType = container.getAttribute('data-type'); // 'guest' یا 'event'
                 const fieldName = containerType === 'guest' ? 'guest_count' : 'event_type';
                 
+                const isMobile = container.closest('.lg\\:hidden') !== null || container.closest('.block.lg\\:hidden') !== null;
+                const hiddenSelectId = fieldName === 'guest_count' 
+                    ? (isMobile ? 'guest_count_select_mobile' : 'guest_count_select_desktop')
+                    : (isMobile ? 'event_type_select_mobile' : 'event_type_select_desktop');
+                const hiddenSelect = document.getElementById(hiddenSelectId);
+                if (hiddenSelect) hiddenSelect.value = value;
                 // به‌روزرسانی input اصلی
                 const mainInput = document.getElementById(fieldName + '_input');
                 if (mainInput) mainInput.value = value;
