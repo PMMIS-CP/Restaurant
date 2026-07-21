@@ -186,8 +186,8 @@
                     {{-- لایه کارت راهنمای مهمان --}}
                     <div class="absolute inset-0 flex items-center justify-center p-4">
                         <div class="bg-white/95 backdrop-blur-xs rounded-2xl p-6 md:p-8 shadow-2xl text-center max-w-sm border border-gray-100 transition-transform duration-300 group-hover:scale-[1.02]">
-                            <svg class="w-12 h-12 text-[#D4AF37] mx-auto mb-4 animate-bounce" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                                <path d="M12 1c-4.97 0-9 4.03-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7c0-4.97-4.03-9-9-9z"/>
+                            <svg class="w-12 h-12 text-[#D4AF37] mx-auto mb-4 animate-bounce" viewBox="0 0 24 24" focusable="false" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+                                <path d="M12 3C6.48 3 2 7 2 12s4.48 9 10 9c1.75 0 3.4-.31 4.85-.86l3.65.97-1-3.52c1.2-1.43 1.9-3.25 1.9-5.25 0-5-4.52-9-10-9zm0 17c-4.96 0-9-4-9-9s4.04-9 9-9 9 4 9 9-4.04 9-9 9zM7 12a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0zm3.5 0a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0zm3.5 0a1.5 1.5 0 1 0 3 0 1.5 1.5 0 1 0-3 0z"/>
                             </svg>
                             <h4 class="text-gray-900 font-bold text-lg mb-2">{{ __('home.comments.guest_overlay_title') }}</h4>
                             <p class="text-xs md:text-sm text-gray-600 mb-5 leading-relaxed">{{ __('home.comments.guest_overlay_description') }}</p>

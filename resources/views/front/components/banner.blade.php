@@ -1,50 +1,49 @@
-{{-- <!-- بخش اول با پس‌زمینه کرم و کارت‌های شیشه‌ای مدرن --> --}}
-<div class="bg-[#fcf8f0] py-16 md:py-24">
-    <div class="container mx-auto px-4">
-        <div class="flex flex-col md:flex-row gap-8 lg:gap-10">
-            
-            {{-- <!-- کارت اول --> --}}
-            <div class="w-full md:w-1/2 group/card">
-                <div 
-                   rel="noopener noreferrer" 
-                   class="block -mt-4 sm:-mt-8 lg:-mt-12 rounded-2xl overflow-hidden
-                          bg-white/60 backdrop-blur-sm
-                          shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)]
-                          ring-1 ring-black/3 hover:ring-black/6
-                          transition-all duration-500 ease-out
-                          translate-y-0 hover:-translate-y-1">
-                    <div class="overflow-hidden rounded-2xl">
-                        <img 
-                            src="{{ asset('assets/images/12-4.webp') }}" 
-                            alt="Orkideh Cards"
-                            class="w-full h-auto object-cover transition-all duration-700 ease-out group-hover/card:scale-[1.02]"
-                            loading="lazy"
-                        >
-                    </div>
-                </div>
-            </div>
-            
-            {{-- <!-- کارت دوم --> --}}
-            <div class="w-full md:w-1/2 group/card">
-                <div 
-                   rel="noopener noreferrer" 
-                   class="block -mt-4 sm:-mt-8 lg:-mt-12 rounded-2xl overflow-hidden
-                          bg-white/60 backdrop-blur-sm
-                          shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_20px_50px_rgb(0,0,0,0.08)]
-                          ring-1 ring-black/3 hover:ring-black/6
-                          transition-all duration-500 ease-out
-                          translate-y-0 hover:-translate-y-1">
-                    <div class="overflow-hidden rounded-2xl">
-                        <img 
-                            src="{{ asset('assets/images/12-5.webp') }}" 
-                            alt="Birthday Ceremony"
-                            class="w-full h-auto object-cover transition-all duration-700 ease-out group-hover/card:scale-[1.02]"
-                            loading="lazy"
-                        >
-                    </div>
-                </div>
-            </div>
-            
-        </div>
+@php
+    $bannerConfig = [
+        'image_url' => '',
+        'link_url'  => '',
+        'alt_text'  => '',
+        'is_active' => true
+    ];
+@endphp
+
+@if($bannerConfig['is_active'])
+    <div class="ad-banner-wrapper">
+        <a href="{{ $bannerConfig['link_url'] }}" class="ad-banner-link" target="_blank" rel="noopener">
+            <img src="{{ $bannerConfig['image_url'] }}" 
+                 alt="{{ $bannerConfig['alt_text'] }}" 
+                 class="ad-banner-image">
+        </a>
     </div>
-</div>
+@endif
+
+<style>
+    .ad-banner-wrapper {
+        width: 100%;
+        margin: 20px 0;
+        overflow: hidden;
+        border-radius: 8px;
+    }
+
+    .ad-banner-link {
+        display: block;
+        width: 100%;
+    }
+
+    .ad-banner-image {
+        width: 100%;
+        aspect-ratio: 4 / 1; 
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .ad-banner-image:hover {
+        transform: scale(1.02);
+    }
+
+    @media (max-width: 640px) {
+        .ad-banner-image {
+            aspect-ratio: 2 / 1;
+        }
+    }
+</style>
