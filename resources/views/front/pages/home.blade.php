@@ -21,7 +21,7 @@
 @include('front.components.hero')
 @include('front.components.about')
 @include('front.components.gallery')
-@include('front.components.services')
+{{-- @include('front.components.services') --}}
 @include('front.components.ceremony')
 @include('front.components.spinner')
 @include('front.components.banner')
