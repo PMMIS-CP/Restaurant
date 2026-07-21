@@ -38,3 +38,5 @@
 ::-webkit-scrollbar-corner {
     background: #1A0A0D;
 }
+
+@import "./main.css"

@@ -1,50 +1,7 @@
 @extends('front.layouts.app')
 @section('title', __('menu.page_title'))
+@section('meta_description', __('menu.meta_description'))
 @section('content')
-
-<style>
-    :root {
-        --royal-yellow: #FFD700;
-        --royal-yellow-dark: #B8860B;
-        --royal-yellow-light: #FFED4A;
-        --crimson: #DC143C;
-        --crimson-dark: #8B0000;
-        --crimson-light: #FF6B6B;
-        --dark-bg: #0a0a0a;
-        --dark-panel: #1a1a1a;
-        --dark-border: #2a2a2a;
-    }
-
-    @keyframes shimmer {
-        0% {
-            background-position: -200% center;
-        }
-        100% {
-            background-position: 200% center;
-        }
-    }
-
-    .shimmer-text {
-        background: linear-gradient(
-            90deg,
-            var(--royal-yellow) 0%,
-            var(--royal-yellow-light) 25%,
-            var(--crimson-light) 50%,
-            var(--royal-yellow-light) 75%,
-            var(--royal-yellow) 100%
-        );
-        background-size: 200% auto;
-        -webkit-background-clip: text;
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-        animation: shimmer 3s linear infinite;
-    }
-        #sticky-nav.is-scrolled {
-        background: rgba(28, 20, 22, 0.98);
-        padding-top: 0.75rem;
-        padding-bottom: 0.75rem;
-    }
-</style>
 
 <div class="min-h-screen bg-[#090506] text-gray-100 antialiased selection:bg-[#bc1c24] selection:text-white">
 
