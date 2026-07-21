@@ -3,20 +3,23 @@
 namespace App\Http\Controllers\Front;
 
 use App\Http\Controllers\Controller;
+use App\Models\Spin;
 use Illuminate\Http\Request;
 
 class SpinController extends Controller
 {
     private function getPrizes()
     {
-        return collect([
-            ['name' => 'پیتزا مخصوص', 'color' => '#ef4444'],
-            ['name' => 'نوشابه رایگان', 'color' => '#3b82f6'],
-            ['name' => 'تخفیف ۵۰٪', 'color' => '#f59e0b'],
-            ['name' => 'سالاد فصل', 'color' => '#10b981'],
-            ['name' => 'سیب‌زمینی', 'color' => '#8b5cf6'],
-            ['name' => 'شانس مجدد', 'color' => '#ec4899'],
-        ]);
+        return Spin::active()
+            ->get()
+            ->map(function ($spin) {
+                return [
+                    'id' => $spin->id,
+                    'name' => $spin->name,
+                    'color' => $spin->color,
+                    'probability' => $spin->probability,
+                ];
+            });
     }
 
     private function calculateWheelData($prizes)
@@ -45,7 +48,7 @@ class SpinController extends Controller
 
             $textRotation = $midAngle;
 
-            $lightRadius = 44; // شعاع
+            $lightRadius = 44;
             $lightX = 50 + $lightRadius * cos(deg2rad($midSvg));
             $lightY = 50 + $lightRadius * sin(deg2rad($midSvg));
 
@@ -76,7 +79,14 @@ class SpinController extends Controller
     public function index()
     {
         $prizes = $this->getPrizes();
-        $wheelCalculation = $this->calculateWheelData($prizes->toArray());
+        
+        // اگر هیچ جایزه فعالی وجود نداشت
+        if ($prizes->isEmpty()) {
+            return redirect()->back()->with('error', 'هیچ جایزه فعالی وجود ندارد.');
+        }
+
+        $prizesArray = $prizes->toArray();
+        $wheelCalculation = $this->calculateWheelData($prizesArray);
         
         return view('front.pages.spin', array_merge(
             compact('prizes'),
@@ -88,5 +98,49 @@ class SpinController extends Controller
                 'wheelData' => $wheelCalculation['wheelData'],
             ]
         ));
+    }
+
+    public function spin(Request $request)
+    {
+        $prizes = Spin::active()->get();
+        
+        if ($prizes->isEmpty()) {
+            return response()->json(['error' => 'هیچ جایزه فعالی وجود ندارد.'], 400);
+        }
+
+        // انتخاب جایزه بر اساس احتمال (probability)
+        $totalProbability = $prizes->sum('probability');
+        $random = mt_rand(1, $totalProbability * 100) / 100;
+        
+        $cumulativeProbability = 0;
+        $selectedPrize = null;
+        
+        foreach ($prizes as $prize) {
+            $cumulativeProbability += $prize->probability;
+            if ($random <= $cumulativeProbability) {
+                $selectedPrize = $prize;
+                break;
+            }
+        }
+        
+        // اگر به هر دلیلی جایزه‌ای انتخاب نشد، آخرین جایزه رو برمی‌گردونیم
+        if (!$selectedPrize) {
+            $selectedPrize = $prizes->last();
+        }
+
+        // پیدا کردن ایندکس جایزه انتخاب شده
+        $prizeIndex = $prizes->search(function ($prize) use ($selectedPrize) {
+            return $prize->id === $selectedPrize->id;
+        });
+
+        return response()->json([
+            'prize' => [
+                'id' => $selectedPrize->id,
+                'name' => $selectedPrize->name,
+                'color' => $selectedPrize->color,
+            ],
+            'prize_index' => $prizeIndex,
+            'total_prizes' => $prizes->count(),
+        ]);
     }
 }
