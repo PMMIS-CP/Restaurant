@@ -12,13 +12,6 @@
         </a>
     </div>
 
-    {{-- پیام موفقیت --}}
-    @if(session('success'))
-        <div class="p-4 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 dark:bg-emerald-900/20 dark:border-emerald-800 dark:text-emerald-400">
-            {{ session('success') }}
-        </div>
-    @endif
-
     {{-- فیلترها --}}
     <form method="GET" class="p-4 bg-white rounded-xl shadow-sm border border-gray-200 dark:bg-gray-800 dark:border-gray-700">
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">

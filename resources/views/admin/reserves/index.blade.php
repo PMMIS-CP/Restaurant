@@ -14,24 +14,6 @@
         </span>
     </div>
 
-    {{-- پیام موفقیت / خطا --}}
-    @if(session('success'))
-        <div class="rounded-md bg-green-50 p-4 mb-6 flex items-start gap-3">
-            <div class="flex-1 text-sm text-green-700">{{ session('success') }}</div>
-            <button type="button" class="text-green-500 hover:text-green-700" onclick="this.parentElement.remove()">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-    @endif
-    @if(session('error'))
-        <div class="rounded-md bg-red-50 p-4 mb-6 flex items-start gap-3">
-            <div class="flex-1 text-sm text-red-700">{{ session('error') }}</div>
-            <button type="button" class="text-red-500 hover:text-red-700" onclick="this.parentElement.remove()">
-                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-            </button>
-        </div>
-    @endif
-
     {{-- Card --}}
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <div class="p-4 sm:p-6">

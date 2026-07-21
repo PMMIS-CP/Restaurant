@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\Dashboard\ReserveManagementController;
 use App\Http\Controllers\Admin\Dashboard\UserManagementController;
 use App\Http\Controllers\Admin\Dashboard\TranslationController;
 use App\Http\Controllers\Admin\Dashboard\CommentController;
+use App\Http\Controllers\Admin\Dashboard\SpinController;
 
 Route::name('admin.')->group(function () {
 
@@ -136,5 +137,6 @@ Route::name('admin.')->group(function () {
             Route::get('/{translation}/edit', [TranslationController::class, 'edit'])->name('edit');
             Route::put('/{translation}', [TranslationController::class, 'update'])->name('update');
         });
+        Route::resource('spins', SpinController::class)->except(['show']);
     });
 });

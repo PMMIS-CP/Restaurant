@@ -11,13 +11,6 @@
         </div>
     </div>
 
-    {{-- پیغام‌های موفقیت --}}
-    @if(session('success'))
-        <div class="mb-6 p-4 bg-green-50 border border-green-200 text-green-700 rounded-xl">
-            {{ session('success') }}
-        </div>
-    @endif
-
     <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="w-full text-sm text-right">

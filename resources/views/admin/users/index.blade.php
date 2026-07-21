@@ -12,13 +12,6 @@
         </a>
     </div>
 
-    {{-- Success Message --}}
-    @if (session('success'))
-        <div class="mb-4 rounded-lg bg-green-50 p-4 text-sm text-green-700">
-            {{ session('success') }}
-        </div>
-    @endif
-
     {{-- Users Table --}}
     <div class="overflow-hidden rounded-lg bg-white shadow">
         <table class="min-w-full divide-y divide-gray-200">

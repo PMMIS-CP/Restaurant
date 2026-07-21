@@ -13,10 +13,6 @@
         </a>
     </div>
 
-    @if(session('error'))
-        <div class="rounded-md bg-red-50 p-4 mb-6 text-sm text-red-700">{{ session('error') }}</div>
-    @endif
-
     <div class="bg-white rounded-lg shadow-md overflow-hidden">
         <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-800">فرم ویرایش</h3>
