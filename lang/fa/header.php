@@ -4,8 +4,8 @@ return [
     'nav' => [
         'home' => 'خانه',
         'menu' => 'منو',
-        'reserve' => 'رزرو میز',
-        'contact' => 'تماس',
+        'about' => 'درباره ما',
+        'contact' => 'تماس با ما',
     ],
     'auth' => [
         'login' => 'ورود',
@@ -15,6 +15,6 @@ return [
         'go_to_dashboard' => 'ورود به داشبورد',
     ],
     'cta' => [
-        'book_online' => 'رزرو آنلاین',
+        'book_online' => 'رزرو میز',
     ],
 ];

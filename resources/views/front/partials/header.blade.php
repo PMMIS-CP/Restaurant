@@ -13,7 +13,7 @@
                 $links = [
                     ['name' => __('header.nav.home'), 'url' => '/'],
                     ['name' => __('header.nav.menu'), 'url' => route('menu')],
-                    ['name' => __('header.nav.reserve'), 'url' => 'reserve'],
+                    ['name' => __('header.nav.about'), 'url' => 'about'],
                 ];
                 $isRtl = app()->getLocale() === 'fa';
             @endphp
@@ -25,37 +25,37 @@
             @endforeach
             
             {{-- آیتم تماس با دو شماره --}}
-            @if($isRtl)
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-yellow-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
-                    </svg>
-                    
-                    <div class="flex flex-col text-right" dir="rtl">
-                        <a href="tel:09353077797" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
-                            09353077797
-                        </a>
-                        <a href="tel:02191094044" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
-                            021-910-940-44
-                        </a>
+            <div class="-mt-5 flex flex-col gap-1">
+                @if($isRtl)
+                    {{-- متن بالای شماره ها --}}
+                    <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold">
+                        {{ __('header.nav.contact') }}
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-yellow-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                        <div class="flex flex-col text-right" dir="rtl">
+                            <a href="tel:09353077797" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">09353077797</a>
+                            <a href="tel:02191094044" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">021-910-940-44</a>
+                        </div>
                     </div>
-                </div>
-            @else
-                <div class="flex items-center gap-2">
-                    <svg class="w-4 h-4 text-yellow-500 shrink-0 transform scale-x-[-1]" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
-                    </svg>
-                    
-                    <div class="flex flex-col text-left" dir="ltr">
-                        <a href="tel:09353077797" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
-                            09353077797
-                        </a>
-                        <a href="tel:02191094044" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">
-                            021-910-940-44
-                        </a>
+                @else
+                    {{-- متن بالای شماره ها --}}
+                    <span class="text-[10px] uppercase tracking-wider text-gray-400 font-bold">
+                        {{ __('header.nav.contact') }}
+                    </span>
+                    <div class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-yellow-500 shrink-0 transform scale-x-[-1]" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/>
+                        </svg>
+                        <div class="flex flex-col text-left" dir="ltr">
+                            <a href="tel:09353077797" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">09353077797</a>
+                            <a href="tel:02191094044" class="text-xs font-medium text-gray-200 hover:text-yellow-500 transition-colors leading-tight" dir="ltr">021-910-940-44</a>
+                        </div>
                     </div>
-                </div>
-            @endif
+                @endif
+            </div>
         </nav>
 
         {{-- لوگو --}}
@@ -97,7 +97,7 @@
                 </div>
             @else
                 <a href="{{ route('login') }}" class="text-sm font-bold text-white hover:text-yellow-500 transition-all">{{ __('header.auth.login') }}</a>
-                <a href="#" class="bg-yellow-600 hover:bg-yellow-500 text-red-950 px-6 py-2.5 rounded-full text-sm font-black uppercase tracking-wide transition-all shadow-lg hover:shadow-yellow-600/50">
+                <a href="{{ route('reserve') }}" class="bg-yellow-600 hover:bg-yellow-500 text-red-950 px-6 py-2.5 rounded-full text-sm font-black uppercase tracking-wide transition-all shadow-lg hover:shadow-yellow-600/50">
                     {{ __('header.cta.book_online') }}
                 </a>
             @endauth

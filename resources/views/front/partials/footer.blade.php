@@ -18,9 +18,11 @@
                 <h3 class="text-[#F5C518] font-semibold mb-4 text-lg">{{ __('footer.quick_access') }}</h3>
                 <ul class="space-y-2.5">
                     <li><a href="{{ url('/') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.home') }}</a></li>
-                    <li><a href="{{ url('/menu') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.menu') }}</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.contact_us') }}</a></li>
-                    <li><a href="#" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.about_us') }}</a></li>
+                    <li><a href="{{ route('reserve') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.reserve') }}</a></li>
+                    <li><a href="{{ route('menu') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.menu') }}</a></li>
+                    <li><a href="{{ route('menu.takeout') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.takeout') }}</a></li>
+                    <li><a href="{{ route('menu.organizational') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.organizational') }}</a></li>
+                    <li><a href="{{ route('about') }}" class="text-gray-300 hover:text-[#F5C518] transition-colors text-sm">{{ __('footer.about_us') }}</a></li>
                 </ul>
             </nav>
 

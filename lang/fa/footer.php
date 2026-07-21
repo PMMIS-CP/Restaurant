@@ -10,4 +10,7 @@ return [
     'contact_title' => 'ارتباط با ما',
     'email' => 'info@restaurant.ir',
     'copyright' => 'تمامی حقوق محفوظ است.',
+    'organizational' => 'منوی سازمانی',
+    'takeout' => 'منوی بیرون‌بر',
+    'reserve' => 'رزرو میز',
 ];
