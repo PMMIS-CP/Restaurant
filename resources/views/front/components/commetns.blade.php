@@ -16,6 +16,40 @@
         <style>
             .swiper-container-custom { cursor: grab; }
             .swiper-container-custom:active { cursor: grabbing; }
+            
+            /* === تنظیمات اصلی برای برابری ارتفاع و عرض === */
+            .swiper {
+                width: 100%;
+            }
+            
+            .swiper-wrapper {
+                display: flex !important;
+                align-items: stretch !important;
+            }
+            
+            .swiper-slide {
+                height: auto !important;
+                display: flex !important;
+                align-self: stretch !important;
+            }
+            
+            .swiper-slide > div {
+                height: 100%;
+                width: 100%;
+            }
+            
+            /* کارت سفید داخلی - پر کردن کامل فضا */
+            .swiper-slide .bg-white {
+                height: 100%;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+            
+            /* بخش blockquote فضای باقی‌مانده را پر کند */
+            .swiper-slide blockquote {
+                flex: 1;
+            }
         </style>
 
         {{-- محفظه اصلی اسلایدر --}}

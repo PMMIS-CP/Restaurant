@@ -441,72 +441,162 @@ document.addEventListener('alpine:init', () => {
     Alpine.data('customSwiper', () => ({
         swiper: null,
         timeout: null,
+        resizeObserver: null,
         
         initSwiper() {
             // بررسی وجود المان Swiper
             if (!this.$refs.swiperContainer) return;
             
+            // محاسبه تعداد واقعی اسلایدها
+            const totalSlides = this.$refs.swiperContainer.querySelectorAll('.swiper-slide').length;
+            
+            // تنظیم slidesPerView بر اساس اندازه صفحه و تعداد اسلایدها
+            const getSlidesPerView = () => {
+                const width = window.innerWidth;
+                if (width >= 1024) {
+                    return Math.min(3, totalSlides);
+                } else if (width >= 768) {
+                    return Math.min(2, totalSlides);
+                }
+                return 1;
+            };
+            
+            // آیا loop فعال باشد؟ (فقط وقتی تعداد اسلایدها بیشتر از نمایش همزمان باشد)
+            const shouldLoop = totalSlides > getSlidesPerView();
+            
             this.swiper = new window.Swiper(this.$refs.swiperContainer, {
                 modules: [window.SwiperAutoplay],
-                slidesPerView: 1,
+                slidesPerView: getSlidesPerView(),
                 spaceBetween: 30,
-                loop: true,
+                loop: shouldLoop,
                 speed: 3000,
-                autoplay: {
+                autoplay: shouldLoop ? {
                     delay: 0,
                     disableOnInteraction: false,
                     pauseOnMouseEnter: false,
-                },
-                pagination: {
+                } : false, // اگر loop نباشد autoplay هم خاموش
+                pagination: shouldLoop ? {
                     el: this.$refs.pagination,
                     clickable: true,
-                },
+                } : false,
                 navigation: {
                     nextEl: this.$refs.nextBtn,
                     prevEl: this.$refs.prevBtn,
                 },
-                breakpoints: {
-                    768: { slidesPerView: 2 },
-                    1024: { slidesPerView: 3 }
+                // ریسپانسیو برای تنظیم مجدد در تغییر سایز
+                on: {
+                    resize: (swiper) => {
+                        const newSlidesPerView = getSlidesPerView();
+                        if (swiper.params.slidesPerView !== newSlidesPerView) {
+                            swiper.params.slidesPerView = newSlidesPerView;
+                            swiper.update();
+                        }
+                    }
                 }
             });
 
-            // تابع کمکی برای توقف و زمان‌بندی مجدد
-            const handleInteraction = () => {
+            // === تابع برابرسازی ارتفاع و عرض کارت‌ها ===
+            const equalizeCards = () => {
                 if (!this.swiper) return;
+                
+                const slides = this.$refs.swiperContainer.querySelectorAll('.swiper-slide');
+                if (slides.length === 0) return;
+                
+                let maxHeight = 0;
+                let maxWidth = 0;
+                
+                // مرحله ۱: ریست تمام ارتفاع‌ها و عرض‌ها برای محاسبه دقیق
+                slides.forEach(slide => {
+                    const card = slide.querySelector('.bg-white');
+                    if (card) {
+                        card.style.height = 'auto';
+                        card.style.width = 'auto';
+                        card.style.minWidth = 'auto';
+                    }
+                });
+                
+                // مرحله ۲: پیدا کردن بزرگترین ارتفاع و عرض
+                slides.forEach(slide => {
+                    const card = slide.querySelector('.bg-white');
+                    if (card) {
+                        const rect = card.getBoundingClientRect();
+                        if (rect.height > maxHeight) maxHeight = rect.height;
+                        if (rect.width > maxWidth) maxWidth = rect.width;
+                    }
+                });
+                
+                // مرحله ۳: اعمال ارتفاع و عرض یکسان به همه کارت‌ها
+                if (maxHeight > 0 && maxWidth > 0) {
+                    slides.forEach(slide => {
+                        const card = slide.querySelector('.bg-white');
+                        if (card) {
+                            card.style.height = `${maxHeight}px`;
+                            card.style.minWidth = `${maxWidth}px`;
+                        }
+                    });
+                    
+                    // به‌روزرسانی Swiper بعد از تغییر ابعاد
+                    this.swiper.update();
+                }
+            };
+            
+            // اجرای اولیه بعد از لود کامل
+            this.$nextTick(() => {
+                setTimeout(equalizeCards, 100);
+            });
+            
+            // مشاهده تغییرات در محتوای اسلایدها (مثلاً لود داینامیک)
+            if (window.ResizeObserver) {
+                this.resizeObserver = new ResizeObserver(() => {
+                    equalizeCards();
+                });
+                
+                const slides = this.$refs.swiperContainer.querySelectorAll('.swiper-slide .bg-white');
+                slides.forEach(card => {
+                    this.resizeObserver.observe(card);
+                });
+            }
+            
+            // اجرا در تغییر سایز پنجره
+            window.addEventListener('resize', equalizeCards);
+            this._equalizeCards = equalizeCards;
+
+            // === سیستم تعامل با اسکرول (کدهای موجود) ===
+            const handleInteraction = () => {
+                if (!this.swiper || !this.swiper.autoplay) return;
                 this.swiper.autoplay.stop();
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
-                    if (this.swiper) {
+                    if (this.swiper && this.swiper.autoplay) {
                         this.swiper.autoplay.start();
                     }
                 }, 30000);
             };
 
             // تشخیص اسکرول موس (کمترین حرکت)
-            this.$refs.swiperContainer.addEventListener('wheel', (e) => {
-                // فقط اگر اسکرول عمودی باشه (نه افقی)
-                if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-                    handleInteraction();
-                }
-            }, { passive: true });
+            if (this.$refs.swiperContainer) {
+                this.$refs.swiperContainer.addEventListener('wheel', (e) => {
+                    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+                        handleInteraction();
+                    }
+                }, { passive: true });
 
-            // تشخیص لمس در موبایل (کمترین حرکت انگشت)
-            let touchStartY = 0;
-            this.$refs.swiperContainer.addEventListener('touchstart', (e) => {
-                touchStartY = e.touches[0].clientY;
-            });
-            
-            this.$refs.swiperContainer.addEventListener('touchmove', (e) => {
-                const touchY = e.touches[0].clientY;
-                // اگر حرکت عمودی اتفاق افتاده (حتی کم)
-                if (Math.abs(touchY - touchStartY) > 5) {
-                    handleInteraction();
-                }
-            }, { passive: true });
+                // تشخیص لمس در موبایل (کمترین حرکت انگشت)
+                let touchStartY = 0;
+                this.$refs.swiperContainer.addEventListener('touchstart', (e) => {
+                    touchStartY = e.touches[0].clientY;
+                });
+                
+                this.$refs.swiperContainer.addEventListener('touchmove', (e) => {
+                    const touchY = e.touches[0].clientY;
+                    if (Math.abs(touchY - touchStartY) > 5) {
+                        handleInteraction();
+                    }
+                }, { passive: true });
 
-            // کلیک موس هم بمونه (برای موارد خاص)
-            this.$refs.swiperContainer.addEventListener('mousedown', handleInteraction);
+                // کلیک موس
+                this.$refs.swiperContainer.addEventListener('mousedown', handleInteraction);
+            }
         },
         
         // Cleanup هنگام destroy شدن کامپوننت
@@ -518,14 +608,15 @@ document.addEventListener('alpine:init', () => {
             if (this.timeout) {
                 clearTimeout(this.timeout);
             }
+            if (this.resizeObserver) {
+                this.resizeObserver.disconnect();
+            }
+            if (this._equalizeCards) {
+                window.removeEventListener('resize', this._equalizeCards);
+            }
         }
     }));
 });
-
-// ==========================================
-// کدهای صفحه منو (resources\views\front\pages\menu.blade.php)
-// ==========================================
-
 
 // ==========================================
 // اسکرول ناوبری چسبان (sticky nav)
