@@ -29,6 +29,10 @@ Route::name('admin.')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
+        // Admin Logout
+        Route::post('/Adminlogout', [AdminAuthenticatedSessionController::class, 'destroy'])
+            ->name('Adminlogout');
+
         // Comments Management
         Route::prefix('comments')->name('comments.')->group(function () {
             Route::get('/', [CommentController::class, 'index'])->name('index');
@@ -132,8 +136,5 @@ Route::name('admin.')->group(function () {
             Route::get('/{translation}/edit', [TranslationController::class, 'edit'])->name('edit');
             Route::put('/{translation}', [TranslationController::class, 'update'])->name('update');
         });
-
-        Route::post('/logout', [AdminAuthenticatedSessionController::class, 'destroy'])
-            ->name('logout');
     });
 });

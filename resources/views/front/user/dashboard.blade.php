@@ -8,8 +8,23 @@
 
     {{-- هدر داشبورد --}}
     <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-800">داشبورد من</h1>
-        <p class="text-gray-600 mt-2">خوش آمدید، {{ auth()->user()->name }} 👋</p>
+        <div class="flex justify-between items-start">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-800">داشبورد من</h1>
+                <p class="text-gray-600 mt-2">خوش آمدید، {{ auth()->user()->name }} </p>
+            </div>
+            
+            {{-- دکمه خروج --}}
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition duration-200 flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                    </svg>
+                    خروج
+                </button>
+            </form>
+        </div>
     </div>
 
     {{-- کارت‌های آمار --}}

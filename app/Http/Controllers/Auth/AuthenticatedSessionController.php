@@ -49,6 +49,10 @@ class AuthenticatedSessionController extends Controller
 
     /**
      * Destroy an authenticated session.
+     * 
+     * TODO: Currently invalidating the web session also logs out admin 
+     * if both are logged in on the same browser. This is acceptable for now
+     * since admins and regular users don't share sessions in practice.
      */
     public function destroy(Request $request): RedirectResponse
     {

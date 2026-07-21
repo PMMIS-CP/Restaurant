@@ -69,7 +69,7 @@
                             <span class="text-zinc-400 text-sm ml-4">
                                 {{ auth('admin')->user()->name }}
                             </span>
-                            <form method="POST" action="{{ route('admin.logout') }}">
+                            <form method="POST" action="{{ route('admin.Adminlogout') }}">
                                 @csrf
                                 <button type="submit" class="text-zinc-400 hover:text-white text-sm">
                                     خروج
