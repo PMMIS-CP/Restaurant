@@ -24,6 +24,6 @@
 {{-- @include('front.components.services') --}}
 @include('front.components.ceremony')
 @include('front.components.spinner')
-@include('front.components.banner')
+{{-- @include('front.components.banner') --}}
 @include('front.components.commetns')
 @endsection
