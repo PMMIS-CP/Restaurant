@@ -57,7 +57,7 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="email" id="email" placeholder="{{ __('reserve.desktop.email_placeholder') }}" 
+                                    <input type="email" name="email" id="email" autocomplete="email" placeholder="{{ __('reserve.desktop.email_placeholder') }}" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -76,7 +76,7 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="tel" id="phone" placeholder="{{ __('reserve.desktop.phone_placeholder') }}" 
+                                    <input type="tel" name="phone" id="phone" autocomplete="tel" placeholder="{{ __('reserve.desktop.phone_placeholder') }}" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -96,7 +96,7 @@
                                         <rect class="light-rect-input fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] filter drop-shadow-[0_2px_8px_rgba(220,38,38,0.15)] transition-all duration-300 ease hover:stroke-[#0022ff] hover:drop-shadow-[0_4px_12px_rgba(184,134,11,0.2)]" 
                                               x="0" y="0" width="305.61" height="57.14" rx="12" ry="12"/>
                                     </svg>
-                                    <input type="text" id="name" placeholder="{{ __('reserve.desktop.name_placeholder') }}" 
+                                    <input type="text" name="name" id="name" autocomplete="name" placeholder="{{ __('reserve.desktop.name_placeholder') }}" 
                                            @focus="triggerAnimation($el.parentElement)"
                                            class="absolute inset-0 w-full h-full bg-transparent border-none outline-none px-2 md:px-4 text-right font-normal text-[10px] sm:text-xs md:text-sm placeholder-gray-400"
                                            style="color: #1a1a1a;"
@@ -218,7 +218,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 945.89 309.84" class="w-full h-full pointer-events-none absolute">
                                     <rect class="light-rect-textarea fill-white/40 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="0" y="0" width="945.89" height="309.84" rx="15" ry="15"/>
                                 </svg>
-                                <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="{{ __('reserve.desktop.description_placeholder') }}" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
+                                <textarea id="description_desktop" name="description" x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="{{ __('reserve.desktop.description_placeholder') }}" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm" style="color: #1a1a1a;"></textarea>
                             </div>
                         </div>
                     </div>
@@ -619,7 +619,7 @@
             <svg viewBox="0 0 945.89 309.84" preserveAspectRatio="none" class="absolute inset-0 w-full h-full pointer-events-none z-10">
                 <rect class="light-rect-textarea fill-white/60 stroke-red-600 stroke-[2.5] [stroke-miterlimit:10] transition-all duration-300" x="2" y="2" width="941.89" height="305.84" rx="15" ry="15"/>
             </svg>
-            <textarea x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="{{ __('reserve.mobile.description_placeholder') }}" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
+            <textarea id="description_mobile" name="description" x-model="$store.reserveForm.description" @focus="triggerAnimation($el.parentElement)" placeholder="{{ __('reserve.mobile.description_placeholder') }}" class="absolute inset-0 w-full h-full bg-transparent border-none outline-none p-4 text-right resize-none text-sm z-20 placeholder-gray-500" style="color: #1a1a1a;"></textarea>
         </div>
 
         {{-- ۶. دکمه ثبت نهایی --}}
@@ -694,7 +694,7 @@
         {{-- مرحله ورود کد --}}
         <div x-show="step === 'verify'">
             <h2 class="text-lg font-bold mb-2" style="color: #B8860B;">{{ __('reserve.otp.enter_code') }}</h2>
-            <input type="text" x-model="code" maxlength="4" placeholder="{{ __('reserve.otp.code_placeholder') }}" class="w-full text-center text-2xl tracking-widest border-2 border-red-600/50 rounded-lg p-2 mb-4 outline-none focus:border-red-600" autofocus @keyup.enter="verifyOtp">
+            <input id="otp_code" name="otp_code" type="text" x-model="code" maxlength="4" placeholder="{{ __('reserve.otp.code_placeholder') }}" class="w-full text-center text-2xl tracking-widest border-2 border-red-600/50 rounded-lg p-2 mb-4 outline-none focus:border-red-600" autofocus @keyup.enter="verifyOtp">
             <div class="flex gap-2">
                 <button @click="verifyOtp" :disabled="verifying" class="flex-1 py-2 rounded-lg text-white font-bold transition-all duration-200" :class="verifying ? 'bg-gray-400' : 'bg-red-600 hover:bg-red-700'" style="background: linear-gradient(135deg, #DC2626, #B8860B);">
                     <span x-show="!verifying">{{ __('reserve.otp.verify') }}</span>

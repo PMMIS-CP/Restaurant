@@ -107,7 +107,7 @@
                     @csrf
                     <div>
                         <label for="comment-name" class="block text-sm font-semibold text-gray-700 mb-2">{{ __('home.comments.form_name_label') }}</label>
-                        <input type="text" name="name" id="comment-name" 
+                        <input type="text" name="name" id="comment-name" autocomplete="name"
                                value="{{ old('name', Auth::user()->name) }}"
                                class="w-full rounded-xl border border-gray-300 px-4 py-3 text-sm focus:ring-2 focus:ring-[#8B0000]/40 focus:border-[#8B0000] outline-hidden transition duration-200"
                                aria-required="true"
