@@ -4,18 +4,17 @@
 
 @php
     $images = [
-        'assets/images/790015.webp',
-        'assets/images/790636.webp',
-        'assets/images/792410.webp',
-        'assets/images/792412.webp',
-        'assets/images/831644.webp',
-        'assets/images/839115.webp',
-        'assets/images/839110.webp',
-        'assets/images/839111.webp',
-        'assets/images/839112.webp',
-        'assets/images/839116.webp',
-        'assets/images/839119.webp',
-        'assets/images/8391157.webp',
+        'assets/images/gallery/6.webp',
+        'assets/images/gallery/8.webp',
+        'assets/images/gallery/3.webp',
+        'assets/images/gallery/4.webp',
+        'assets/images/gallery/2.webp',
+        'assets/images/gallery/5.webp',
+        'assets/images/gallery/7.webp',
+        'assets/images/gallery/1.webp',
+        'assets/images/gallery/11.webp',
+        'assets/images/gallery/9.webp',
+        'assets/images/gallery/10.webp',
     ];
 @endphp
 @include('front.components.hero')

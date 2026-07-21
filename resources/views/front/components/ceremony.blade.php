@@ -24,7 +24,7 @@
                 
                 <div class="relative overflow-hidden h-56 md:h-64">
                     <img 
-                        src="{{ asset('assets/images/7-1.webp') }}" 
+                        src="{{ asset('assets/images/1.webp') }}" 
                         alt="{{ __('home.ceremony.cards.birthday.image_alt') }}" 
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         loading="lazy"
@@ -54,7 +54,7 @@
                 
                 <div class="relative overflow-hidden h-56 md:h-64">
                     <img 
-                        src="{{ asset('assets/images/14.webp') }}" 
+                        src="{{ asset('assets/images/2.webp') }}" 
                         alt="{{ __('home.ceremony.cards.wedding.image_alt') }}" 
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         loading="lazy"
@@ -83,7 +83,7 @@
                 
                 <div class="relative overflow-hidden h-56 md:h-64">
                     <img 
-                        src="{{ asset('assets/images/118.webp') }}" 
+                        src="{{ asset('assets/images/3.webp') }}" 
                         alt="{{ __('home.ceremony.cards.corporate.image_alt') }}" 
                         class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                         loading="lazy"
