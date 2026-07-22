@@ -4,6 +4,7 @@ import Cropper from 'cropperjs';
 import 'cropperjs/dist/cropper.css';
 import { Image } from 'cross-image';
 // import Swal from 'sweetalert2';
+import { gregorianToHijri } from '@tabby_ai/hijri-converter';
 
 window.Alpine = Alpine;
 // window.axios = axios;

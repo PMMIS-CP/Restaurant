@@ -8,10 +8,12 @@ import { gsap } from "gsap";
 import persianDate from 'persian-date';
 
 import Swal from 'sweetalert2';
+import { gregorianToHijri } from '@tabby_ai/hijri-converter';
 
 window.Swal = Swal;
 window.persianDate = persianDate;
 window.gsap = gsap;
+window.gregorianToHijri = gregorianToHijri;
 
 window.Swiper = Swiper;
 window.SwiperEffectCards = EffectCards;

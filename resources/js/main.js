@@ -1072,33 +1072,244 @@ document.addEventListener('alpine:init', () => {
         showCalendar: false,
         selectedDate: '',
         finalDate: '',
-        year: new window.persianDate().year(),
-        month: new window.persianDate().month(),
+        year: null,
+        month: null,
         blockedDates: ['1406/4/4', '1406/4/5'],
+        currentLocale: document.documentElement.lang || 'fa',
         
-        get viewDate() { return new window.persianDate([this.year, this.month, 1]); },
-        get currentYear() { return this.viewDate.year(); },
-        get currentMonthName() { return this.viewDate.format('MMMM'); },
-        get daysInMonth() { return this.viewDate.daysInMonth(); },
-        get startDayOffset() { return this.viewDate.day(); },
+        init() {
+            this.initializeDate();
+            this.$watch('currentLocale', () => this.initializeDate());
+        },
+        
+        getTehranDate(date = new Date()) {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Asia/Tehran',
+                year: 'numeric',
+                month: 'numeric',
+                day: 'numeric'
+            }).formatToParts(date);
+
+            const getPart = (type) => parseInt(parts.find(p => p.type === type).value);
+
+            return {
+                year: getPart('year'),
+                month: getPart('month'),
+                day: getPart('day')
+            };
+        },
+        
+        // متد کمکی برای تبدیل تاریخ میلادی به قمری با استفاده از window
+        convertToHijri(date) {
+            if (window.gregorianToHijri) {
+                return window.gregorianToHijri(date);
+            }
+            // Fallback در صورت در دسترس نبودن کتابخانه
+            console.warn('gregorianToHijri is not available');
+            return { year: 1445, month: 1, day: 1 };
+        },
+        
+        initializeDate() {
+            const isPersian = this.currentLocale === 'fa';
+            const isArabic = this.currentLocale === 'ar';
+            
+            if (isPersian && window.persianDate) {
+                const today = new window.persianDate();
+                this.year = today.year();
+                this.month = today.month();
+            } else if (isArabic) {
+                const tehranDate = this.getTehranDate();
+                const hijriDate = this.convertToHijri(tehranDate);
+                this.year = hijriDate.year;
+                this.month = hijriDate.month;
+            } else {
+                const today = new Date();
+                this.year = today.getFullYear();
+                this.month = today.getMonth() + 1;
+            }
+        },
+        
+        get viewDate() { 
+            if (this.currentLocale === 'fa' && window.persianDate) {
+                return new window.persianDate([this.year, this.month, 1]);
+            }
+            if (this.currentLocale === 'ar') {
+                return { year: this.year, month: this.month, type: 'hijri' };
+            }
+            return new Date(this.year, this.month - 1, 1);
+        },
+        
+        get currentYear() { 
+            if (this.currentLocale === 'fa' && window.persianDate) {
+                return this.viewDate.year();
+            }
+            // برای حالت عربی و میلادی
+            return this.year;
+        },
+        
+        get currentMonthName() { 
+            if (this.currentLocale === 'fa' && window.persianDate) {
+                return this.viewDate.format('MMMM');
+            }
+            if (this.currentLocale === 'ar') {
+                const hijriMonths = [
+                    'محرم', 'صفر', 'ربیع الأول', 'ربیع الثانی', 
+                    'جمادی الأولی', 'جمادی الثانیة', 'رجب', 'شعبان', 
+                    'رمضان', 'شوال', 'ذو القعدة', 'ذو الحجة'
+                ];
+                return hijriMonths[this.month - 1] || '';
+            }
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            return monthNames[this.month - 1] || '';
+        },
+        
+        get daysInMonth() { 
+            if (this.currentLocale === 'fa' && window.persianDate) {
+                return this.viewDate.daysInMonth();
+            }
+            if (this.currentLocale === 'ar') {
+                return this.getHijriMonthDays(this.year, this.month);
+            }
+            return new Date(this.year, this.month, 0).getDate();
+        },
+        
+        // محاسبه تعداد روزهای ماه قمری
+        getHijriMonthDays(year, month) {
+            try {
+                // برای 11 ماه اول سال، از شروع ماه بعد استفاده می‌کنیم
+                if (month < 12) {
+                    const currentMonthStart = this.findGregorianDate(year, month, 1);
+                    const nextMonthStart = this.findGregorianDate(year, month + 1, 1);
+                    if (currentMonthStart && nextMonthStart) {
+                        const diffTime = nextMonthStart.getTime() - currentMonthStart.getTime();
+                        return Math.round(diffTime / (1000 * 60 * 60 * 24));
+                    }
+                } else {
+                    // برای ماه آخر سال، از شروع ماه اول سال بعد استفاده می‌کنیم
+                    const currentMonthStart = this.findGregorianDate(year, 12, 1);
+                    const nextYearStart = this.findGregorianDate(year + 1, 1, 1);
+                    if (currentMonthStart && nextYearStart) {
+                        const diffTime = nextYearStart.getTime() - currentMonthStart.getTime();
+                        return Math.round(diffTime / (1000 * 60 * 60 * 24));
+                    }
+                }
+            } catch (error) {
+                console.error('Error calculating Hijri month days:', error);
+            }
+            // پیش‌فرض: 29 یا 30 روز (تخمین)
+            return 30;
+        },
+        
+        // پیدا کردن تاریخ میلادی معادل با یک تاریخ قمری
+        findGregorianDate(hijriYear, hijriMonth, hijriDay) {
+            try {
+                // جستجوی تاریخ میلادی با تست کردن تاریخ‌های مختلف
+                const startDate = new Date(2020, 0, 1); // شروع از 2020
+                const endDate = new Date(2100, 11, 31); // تا 2100
+                
+                // استفاده از روش جستجوی دودویی برای یافتن تاریخ
+                let currentDate = new Date(startDate);
+                while (currentDate <= endDate) {
+                    const testDate = {
+                        year: currentDate.getFullYear(),
+                        month: currentDate.getMonth() + 1,
+                        day: currentDate.getDate()
+                    };
+                    const hijri = this.convertToHijri(testDate);
+                    
+                    if (hijri.year === hijriYear && hijri.month === hijriMonth && hijri.day === hijriDay) {
+                        return new Date(testDate.year, testDate.month - 1, testDate.day);
+                    }
+                    
+                    // پرش به روز بعد
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            } catch (error) {
+                console.error('Error finding Gregorian date:', error);
+            }
+            return null;
+        },
+        
+        get startDayOffset() { 
+            if (this.currentLocale === 'fa' && window.persianDate) {
+                return this.viewDate.day();
+            }
+            if (this.currentLocale === 'ar') {
+                const monthStart = this.findGregorianDate(this.year, this.month, 1);
+                if (monthStart) {
+                    return monthStart.getDay();
+                }
+                return 0;
+            }
+            return new Date(this.year, this.month - 1, 1).getDay();
+        },
 
         changeMonth(amount) {
-            let newDate = this.viewDate.add('months', amount);
-            this.year = newDate.year();
-            this.month = newDate.month();
+            if (this.currentLocale === 'fa' && window.persianDate) {
+                let newDate = this.viewDate.add('months', amount);
+                this.year = newDate.year();
+                this.month = newDate.month();
+            } else {
+                // برای هر دو حالت عربی و میلادی
+                let newMonth = this.month + amount;
+                let newYear = this.year;
+                
+                while (newMonth > 12) {
+                    newMonth -= 12;
+                    newYear += 1;
+                }
+                while (newMonth < 1) {
+                    newMonth += 12;
+                    newYear -= 1;
+                }
+                
+                this.year = newYear;
+                this.month = newMonth;
+            }
         },
+        
         selectDate(day) {
             if (this.isBlocked(day)) return;
-            this.selectedDate = `${this.year}/${this.month}/${day}`;
+            if (this.currentLocale === 'fa' || this.currentLocale === 'ar') {
+                this.selectedDate = `${this.year}/${this.month}/${day}`;
+            } else {
+                this.selectedDate = `${this.year}-${String(this.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            }
         },
+        
         confirmDate() {
             if (!this.selectedDate) return;
             this.finalDate = this.selectedDate;
-            this.$dispatch('date-confirmed', { date: this.finalDate });
+            this.$dispatch('date-confirmed', { 
+                date: this.finalDate,
+                locale: this.currentLocale 
+            });
             this.showCalendar = false;
         },
-        isSelected(day) { return this.selectedDate === `${this.year}/${this.month}/${day}`; },
-        isBlocked(day) { return this.blockedDates.includes(`${this.year}/${this.month}/${day}`); }
+        
+        isSelected(day) { 
+            if (this.currentLocale === 'fa' || this.currentLocale === 'ar') {
+                return this.selectedDate === `${this.year}/${this.month}/${day}`;
+            }
+            return this.selectedDate === `${this.year}-${String(this.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        },
+        
+        isBlocked(day) { 
+            if (this.currentLocale === 'fa' || this.currentLocale === 'ar') {
+                return this.blockedDates.includes(`${this.year}/${this.month}/${day}`);
+            }
+            const formattedDate = `${this.year}-${String(this.month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            return this.blockedDates.includes(formattedDate);
+        },
+        
+        get isPersian() {
+            return this.currentLocale === 'fa';
+        },
+        
+        get isArabic() {
+            return this.currentLocale === 'ar';
+        }
     }));
 });
 
