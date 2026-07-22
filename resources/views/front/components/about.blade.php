@@ -11,7 +11,7 @@
         </div>
         <div class="flex flex-col items-center gap-8 sm:gap-10 md:gap-12 md:flex-row">
             <div class="w-full text-center md:w-1/2 md:text-start">
-                <h2 id="about-us" class="text-2xl sm:text-3xl font-extrabold text-[#5D1A1A] md:text-4xl lg:text-5xl">
+                <h2 id="about-us" class="text-2xl! sm:text-3xl font-extrabold text-[#5D1A1A] md:text-4xl lg:text-5xl">
                     {{ __('home.about.title') }}
                 </h2>
                 <p class="mt-4 sm:mt-5 md:mt-6 text-base sm:text-lg leading-relaxed text-[#4A3424]">

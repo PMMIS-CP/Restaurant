@@ -10,7 +10,7 @@
     <div class="mb-8">
         <div class="flex justify-between items-start">
             <div>
-                <h1 class="text-3xl font-bold text-gray-800">داشبورد من</h1>
+                <h1! class="text-3xl font-bold text-gray-800">داشبورد من</h1>
                 <p class="text-gray-600 mt-2">خوش آمدید، {{ auth()->user()->name }} </p>
             </div>
             
@@ -81,7 +81,7 @@
         {{-- رزروهای من --}}
         <div class="bg-white rounded-lg shadow p-6">
             <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-semibold text-gray-800">رزروهای من</h2>
+                <h2! class="text-xl font-semibold text-gray-800">رزروهای من</h2>
                 <a href="#" class="text-sm text-orange-600 hover:text-orange-700">
                     رزرو جدید ←
                 </a>

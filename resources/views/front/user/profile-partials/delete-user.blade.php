@@ -1,5 +1,5 @@
 <div class="p-6">
-    <h2 class="text-lg font-semibold text-red-600 mb-1">حذف حساب کاربری</h2>
+    <h2 class="text-lg! font-semibold text-red-600 mb-1">حذف حساب کاربری</h2>
     <p class="text-sm text-gray-600 mb-6">
         پس از حذف حساب، تمام اطلاعات و داده‌های شما برای همیشه پاک خواهد شد. 
         لطفاً قبل از حذف، اطلاعات مورد نیاز خود را دانلود کنید.
@@ -25,7 +25,7 @@
         {{-- Modal Content --}}
         <div class="flex items-center justify-center min-h-screen p-4">
             <div class="relative bg-white rounded-lg shadow-xl max-w-lg w-full p-6">
-                <h2 class="text-lg font-semibold text-gray-800 mb-2">
+                <h2! class="text-lg font-semibold text-gray-800 mb-2">
                     آیا از حذف حساب خود اطمینان دارید؟
                 </h2>
                 <p class="text-sm text-gray-600 mb-6">

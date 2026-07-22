@@ -21,7 +21,7 @@
         </div>
         
         <div class="relative z-10 mt-10">
-            <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
+            <h1 class="text-4xl! md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
                 {{ __('takeout.title') }}
             </h1>
             <p class="mt-4 text-sm md:text-base tracking-[0.3em] uppercase text-[#FFD700]/70 font-medium">
@@ -111,7 +111,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.232.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                             </svg>
                         </div>
-                        <h2 class="text-2xl md:text-3xl font-black text-transparent bg-clip-text bg-linear-to-r from-[#ffd700] to-[#fff3b0] drop-shadow-[0_0_8px_rgba(255,215,0,0.5)] md:animate-shimmer-text">
+                        <h2 class="text-2xl! md:text-3xl! font-black text-transparent bg-clip-text bg-linear-to-r from-[#ffd700] to-[#fff3b0] drop-shadow-[0_0_8px_rgba(255,215,0,0.5)] md:animate-shimmer-text">
                             {{ $category }}
                         </h2>
                         <div class="h-px flex-1 bg-linear-to-r from-[#ffd700]/40 to-transparent"></div>

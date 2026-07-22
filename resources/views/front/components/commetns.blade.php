@@ -5,7 +5,7 @@
         {{-- عنوان بخش با رعایت دقیق ساختار درختی هدینگ‌ها (H2 برای سئو عالی صفحه اصلی) --}}
         <div class="w-24 h-1 bg-[#D4AF37] mx-auto mb-4 rounded-full" aria-hidden="true"></div>
         <div class="text-center mb-12">
-            <h2 id="testimonials-heading" class="text-3xl md:text-4xl font-extrabold text-[#8B0000] tracking-tight relative inline-block">
+            <h2 id="testimonials-heading" class="text-3xl! md:text-4xl font-extrabold text-[#8B0000] tracking-tight relative inline-block">
                 {{ __('home.comments.section_title') }}
             </h2>
             <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">

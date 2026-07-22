@@ -9,7 +9,7 @@
             <h2 id="ceremony-heading" class="text-3xl md:text-5xl font-extrabold text-[#8B1A1A] mb-4 tracking-tight">
                 {{ __('home.ceremony.heading') }}
             </h2>
-            <p class="text-base md:text-lg text-[#4a3e35] max-w-4xl mx-auto leading-relaxed font-light">
+            <p class="text-base md:text-lg text-[#4a3e35] max-w-4xl mx-auto leading-relaxed">
                 {!! __('home.ceremony.description') !!}
             </p>
         </div>
@@ -39,7 +39,7 @@
                     <div class="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37] text-2xl" aria-hidden="true">
                         🎂
                     </div>
-                    <h3 class="text-xl md:text-2xl font-bold text-[#8B1A1A] mb-2 tracking-wide">
+                    <h3 class="text-xl! md:text-2xl! font-bold text-[#8B1A1A] mb-2 tracking-wide">
                         {{ __('home.ceremony.cards.birthday.title') }}
                     </h3>
                     <p class="text-[#5a4e42] text-sm leading-relaxed">
@@ -68,7 +68,7 @@
                     <div class="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37] text-2xl" aria-hidden="true">
                         💍
                     </div>
-                    <h3 class="text-xl md:text-2xl font-bold text-[#8B1A1A] mb-2 tracking-wide">
+                    <h3 class="text-xl! md:text-2xl! font-bold text-[#8B1A1A] mb-2 tracking-wide">
                         {{ __('home.ceremony.cards.wedding.title') }}
                     </h3>
                     <p class="text-[#5a4e42] text-sm leading-relaxed">
@@ -97,7 +97,7 @@
                     <div class="w-12 h-12 bg-[#D4AF37]/10 rounded-full flex items-center justify-center mx-auto mb-3 text-[#D4AF37] text-2xl" aria-hidden="true">
                         💼
                     </div>
-                    <h3 class="text-xl md:text-2xl font-bold text-[#8B1A1A] mb-2 tracking-wide">
+                    <h3 class="text-xl! md:text-2xl! font-bold text-[#8B1A1A] mb-2 tracking-wide">
                         {{ __('home.ceremony.cards.corporate.title') }}
                     </h3>
                     <p class="text-[#5a4e42] text-sm leading-relaxed">

@@ -14,7 +14,7 @@
         </div>
         
         <div class="relative z-10 mt-15">
-            <h1 class="text-4xl md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
+            <h1 class="text-4xl! md:text-6xl font-black tracking-wider shimmer-text drop-shadow-[0_2px_15px_rgba(255,215,0,0.3)]">
                 {{ __('menu.title') }}
             </h1>
             <p class="mt-4 text-sm md:text-base uppercase text-[#FFD700]/70 font-medium">
@@ -35,7 +35,7 @@
     </div>
 
     <div id="category-page" class="max-w-5xl mx-auto px-4 py-12 relative z-30">
-        <h2 class="text-xl md:text-2xl font-bold text-center text-[#ffd700] mb-8 drop-shadow-[0_2px_10px_rgba(255,215,0,0.15)]">
+        <h2 class="text-xl! md:text-2xl! font-bold text-center text-[#ffd700] mb-8 drop-shadow-[0_2px_10px_rgba(255,215,0,0.15)]">
             {{ __('menu.select_category') }}
         </h2>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">

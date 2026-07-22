@@ -1,5 +1,5 @@
 <div class="p-6">
-    <h2 class="text-lg font-semibold text-gray-800 mb-1">اطلاعات کاربری</h2>
+    <h2 class="text-lg! font-semibold text-gray-800 mb-1">اطلاعات کاربری</h2>
     <p class="text-sm text-gray-600 mb-6">اطلاعات پروفایل و ایمیل خود را به‌روزرسانی کنید.</p>
 
     {{-- فرم تأیید ایمیل (مخفی) --}}

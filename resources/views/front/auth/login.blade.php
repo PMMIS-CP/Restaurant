@@ -4,7 +4,7 @@
 @section('content')
 <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
     <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8 space-y-8">
-        <h2 class="text-center text-3xl font-extrabold text-gray-900">{{ __('auth.login.page_title') }}</h2>
+        <h2 class="text-center text-3xl! font-extrabold text-gray-900">{{ __('auth.login.page_title') }}</h2>
 
         {{-- نمایش خطاهای عمومی --}}
         <div id="general-error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg hidden"></div>

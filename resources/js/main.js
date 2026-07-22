@@ -1577,7 +1577,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             <div class="flex items-center gap-4 bg-[#130d0f] border border-[#ffd700]/10 rounded-xl p-4" data-item-id="${item.id}">
                 <img src="${item.image || '/images/placeholder.jpg'}" alt="${item.name}" class="w-20 h-20 rounded-lg object-cover border border-[#ffd700]/20">
                 <div class="flex-1">
-                    <h3 class="text-lg font-bold text-white">${item.name}</h3>
+                    <h3 class="text-lg! font-bold text-white">${item.name}</h3>
                     <p class="text-sm text-gray-400">${Number(item.price).toLocaleString()} ${currency}</p>
                 </div>
                 <div class="flex items-center gap-2">

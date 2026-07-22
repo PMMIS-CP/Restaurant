@@ -55,7 +55,7 @@
                 <span class="inline-block text-amber-600 font-semibold text-sm tracking-wider uppercase bg-amber-50 px-4 py-2 rounded-full">
                     {{ __('about.intro_heading') }}
                 </span>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 class="text-3xl! sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                     {{ __('about.intro_heading') }}
                 </h2>
                 <div class="h-1 w-20 bg-linear-to-r from-amber-500 to-amber-600 rounded-full"></div>
@@ -131,7 +131,7 @@
                 <span class="inline-block text-amber-600 font-semibold text-sm tracking-wider uppercase bg-amber-100 px-4 py-2 rounded-full">
                     {{ __('about.our_menu') }}
                 </span>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 class="text-3xl! sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
                     {{ __('about.cuisine_heading') }}
                 </h2>
                 <div class="h-1 w-20 bg-linear-to-r from-amber-500 to-amber-600 rounded-full"></div>
@@ -179,7 +179,7 @@
             <span class="inline-block text-amber-400 font-semibold text-sm tracking-wider uppercase bg-gray-800 px-4 py-2 rounded-full">
                 {{ __('about.entertainment') }}
             </span>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold mt-6 mb-4">
+            <h2 class="text-3xl! sm:text-4xl! lg:text-5xl font-bold mt-6 mb-4">
                 {{ __('about.music_heading') }}
             </h2>
             <div class="h-1 w-20 bg-linear-to-r from-amber-500 to-amber-600 rounded-full mx-auto"></div>
@@ -237,7 +237,7 @@
                 <span class="inline-block text-amber-600 font-semibold text-sm tracking-wider uppercase bg-amber-50 px-4 py-2 rounded-full">
                     {{ __('about.premium') }}
                 </span>
-                <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                <h2 class="text-3xl! sm:text-4xl! lg:text-5xl font-bold text-gray-900 leading-tight">
                     {{ __('about.vip_heading') }}
                 </h2>
                 <div class="h-1 w-20 bg-linear-to-r from-amber-500 to-amber-600 rounded-full"></div>
@@ -294,7 +294,7 @@
             <span class="inline-block text-white/90 font-semibold text-sm tracking-wider uppercase bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                 {{ __('about.easy_booking') }}
             </span>
-            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight">
+            <h2 class="text-3xl! sm:text-4xl! lg:text-5xl font-bold text-white leading-tight">
                 {{ __('about.reservation_heading') }}
             </h2>
             <p class="text-white/90 text-lg leading-relaxed">
@@ -323,7 +323,7 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-bold text-gray-900 mb-3">{{ __('about.hours_heading') }}</h3>
+                        <h3 class="text-xl! font-bold text-gray-900 mb-3">{{ __('about.hours_heading') }}</h3>
                         <p class="text-gray-600 text-lg">{{ __('about.hours_text') }}</p>
                     </div>
                 </div>

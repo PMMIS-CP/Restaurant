@@ -5,7 +5,7 @@
 @section('content')
 <div class="min-h-screen bg-[#0a0203] text-white px-4 py-8 pb-30 pt-30">
     <div class="max-w-2xl mx-auto">
-        <h1 class="text-3xl font-black text-[#ffd700] mb-8">{{ __('cart.title') }}</h1>
+        <h1 class="text-3xl! font-black text-[#ffd700] mb-8">{{ __('cart.title') }}</h1>
 
         {{-- لیست آیتم‌ها --}}
         <div id="cart-items-container" class="space-y-4">

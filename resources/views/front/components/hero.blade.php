@@ -34,7 +34,7 @@
 
         <nav class="flex flex-col gap-4 w-full sm:w-auto pt-4" aria-label="Hero Actions">
             <div class="flex flex-col sm:flex-row gap-4 w-full">
-                <a href="/menu" class="w-full sm:w-auto bg-rose-900 hover:bg-rose-800 text-white font-bold text-lg px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center">
+                <a href="/menu" class="w-full sm:w-auto bg-rose-900 hover:bg-rose-800 text-white font-bold text-lg! px-8 py-4 rounded-2xl shadow-xl shadow-amber-500/20 transition-all duration-300 hover:scale-105 active:scale-95 text-center">
                     {{ __('home.hero.menu_hall') }}
                 </a>
                 <a href="/reserve" class="w-full sm:w-auto bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/30 text-white font-bold text-lg px-8 py-4 rounded-2xl transition-all duration-300 hover:scale-105 active:scale-95 text-center">

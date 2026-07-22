@@ -1,5 +1,5 @@
 <div class="p-6">
-    <h2 class="text-lg font-semibold text-gray-800 mb-1">تغییر رمز عبور</h2>
+    <h2 class="text-lg! font-semibold text-gray-800 mb-1">تغییر رمز عبور</h2>
     <p class="text-sm text-gray-600 mb-6">برای امنیت بیشتر، از رمز عبور طولانی و تصادفی استفاده کنید.</p>
 
     <form method="post" action="{{ route('password.update') }}" class="space-y-6">
