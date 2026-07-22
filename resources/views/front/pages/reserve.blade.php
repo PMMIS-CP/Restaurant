@@ -111,7 +111,7 @@
                     <div class="flex flex-row gap-1 md:gap-3 w-full mt-1 md:mt-2">
                         <div class="flex flex-col flex-1 min-w-0" 
                             x-data="confirmationComponent"
-                            x-on:date-confirmed.window="confirmedDate = $event.detail.date"
+                            x-on:date-confirmed.window="confirmedDate = $event.detail.convertedDate; displayDate = $event.detail.date"
                             x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
                             x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
 
@@ -489,7 +489,7 @@
             {{-- ردیف چهارم: تاریخ ثبت شده (تکی) --}}
             <div class="flex flex-col relative" 
                 x-data="confirmationComponent"
-                x-on:date-confirmed.window="confirmedDate = $event.detail.date"
+                x-on:date-confirmed.window="confirmedDate = $event.detail.convertedDate; displayDate = $event.detail.date"
                 x-on:entry-time-confirmed.window="confirmedEntryTime = $event.detail.time"
                 x-on:exit-time-confirmed.window="confirmedExitTime = $event.detail.time">
                 

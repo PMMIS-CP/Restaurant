@@ -967,6 +967,7 @@ document.addEventListener('alpine:init', () => {
 document.addEventListener('alpine:init', () => {
     window.Alpine.data('confirmationComponent', () => ({
         confirmedDate: '',
+        displayDate: '', // اضافه کردن این خط - تاریخ نمایشی
         confirmedEntryTime: '',
         confirmedExitTime: '',
         isAnimating: false,
@@ -995,10 +996,8 @@ document.addEventListener('alpine:init', () => {
             this.isAnimating = true;
 
             const runGsap = (selector, context = document) => {
-                // پیدا کردن تمام المان‌های مشابه و بررسی اینکه کدامشان در صفحه (دسکتاپ یا موبایل) Visible است
                 const targets = context.querySelectorAll(selector);
                 targets.forEach(target => {
-                    // offsetParent === null به این معنی است که المان مخفی (display: none) است
                     if(target.offsetParent !== null || window.getComputedStyle(target).display !== 'none') {
                         window.gsap.set(target, { opacity: 1 });
                         window.gsap.fromTo(target, 
@@ -1009,10 +1008,7 @@ document.addEventListener('alpine:init', () => {
                 });
             };
 
-            // ۱. فیلد فعلی
             runGsap('.light-rect', el.parentElement);
-
-            // ۲. پیدا کردن المان‌های قابل مشاهده تقویم و ساعت
             runGsap('.light-rect-calendar', document);
             runGsap('.light-rect-time', document);
 
@@ -1021,15 +1017,17 @@ document.addEventListener('alpine:init', () => {
 
         get displayText() {
             const t = window.translations;
-            if (this.confirmedDate && this.confirmedEntryTime && this.confirmedExitTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} ${t.date_separator} ${this.confirmedExitTime}`;
-            if (this.confirmedDate && this.confirmedEntryTime) return `${this.confirmedDate} - ${this.confirmedEntryTime} ${t.date_separator} ${t.time_format}`;
-            if (this.confirmedDate && this.confirmedExitTime) return `${this.confirmedDate} - ${t.time_format} ${t.date_separator} ${this.confirmedExitTime}`;
-            if (this.confirmedDate) return `${this.confirmedDate} - ${t.date_register_time}`;
+            // استفاده از displayDate به جای confirmedDate
+            if (this.displayDate && this.confirmedEntryTime && this.confirmedExitTime) return `${this.displayDate} - ${this.confirmedEntryTime} ${t.date_separator} ${this.confirmedExitTime}`;
+            if (this.displayDate && this.confirmedEntryTime) return `${this.displayDate} - ${this.confirmedEntryTime} ${t.date_separator} ${t.time_format}`;
+            if (this.displayDate && this.confirmedExitTime) return `${this.displayDate} - ${t.time_format} ${t.date_separator} ${this.confirmedExitTime}`;
+            if (this.displayDate) return `${this.displayDate} - ${t.date_register_time}`;
             if (this.confirmedEntryTime || this.confirmedExitTime) return `${t.date_placeholder} - ${this.confirmedEntryTime || t.time_format} ${t.date_separator} ${this.confirmedExitTime || t.time_format}`;
             return t.date_placeholder;
         }
     }));
 
+    // بقیه کامپوننت‌ها بدون تغییر...
     window.Alpine.data('formAnimation', () => ({
         isAnimating: false,
         triggerAnimation(el) {
@@ -1078,6 +1076,9 @@ document.addEventListener('alpine:init', () => {
         currentLocale: document.documentElement.lang || 'fa',
         
         init() {
+            console.log('🔵 datePicker init - currentLocale:', this.currentLocale);
+            console.log('🔵 window.persianDate available:', !!window.persianDate);
+            console.log('🔵 window.gregorianToHijri available:', !!window.gregorianToHijri);
             this.initializeDate();
             this.$watch('currentLocale', () => this.initializeDate());
         },
@@ -1099,14 +1100,76 @@ document.addEventListener('alpine:init', () => {
             };
         },
         
-        // متد کمکی برای تبدیل تاریخ میلادی به قمری با استفاده از window
         convertToHijri(date) {
             if (window.gregorianToHijri) {
                 return window.gregorianToHijri(date);
             }
-            // Fallback در صورت در دسترس نبودن کتابخانه
             console.warn('gregorianToHijri is not available');
             return { year: 1445, month: 1, day: 1 };
+        },
+        
+        hijriToGregorian(year, month, day) {
+            try {
+                const startDate = new Date(2020, 0, 1);
+                const endDate = new Date(2100, 11, 31);
+                
+                let currentDate = new Date(startDate);
+                while (currentDate <= endDate) {
+                    const testDate = {
+                        year: currentDate.getFullYear(),
+                        month: currentDate.getMonth() + 1,
+                        day: currentDate.getDate()
+                    };
+                    const hijri = this.convertToHijri(testDate);
+                    
+                    if (hijri.year === year && hijri.month === month && hijri.day === day) {
+                        return {
+                            year: testDate.year,
+                            month: testDate.month,
+                            day: testDate.day
+                        };
+                    }
+                    
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
+            } catch (error) {
+                console.error('Error converting Hijri to Gregorian:', error);
+            }
+            return null;
+        },
+        
+        gregorianToPersian(year, month, day) {
+            console.log('🟣 gregorianToPersian called with:', { year, month, day });
+            if (window.persianDate) {
+                try {
+                    // روش صحیح: استفاده از Date معمولی برای ساخت تاریخ میلادی
+                    // و سپس تبدیل به شمسی با persian-date
+                    const nativeDate = new Date(year, month - 1, day);
+                    console.log('🟣 Native Date created:', nativeDate);
+                    
+                    const persianDate = new window.persianDate(nativeDate);
+                    console.log('🟣 Persian Date object:', persianDate.format());
+                    
+                    const result = {
+                        year: persianDate.year(),
+                        month: persianDate.month(),
+                        day: persianDate.date()
+                    };
+                    
+                    console.log('🟢 gregorianToPersian result:', result);
+                    
+                    // نمایش تاریخ شمسی به فرمت خوانا
+                    const persianFormatted = `${result.year}/${result.month}/${result.day}`;
+                    console.log('🟢 Persian formatted:', persianFormatted);
+                    
+                    return result;
+                } catch (error) {
+                    console.error('🔴 Error in gregorianToPersian:', error);
+                }
+            } else {
+                console.warn('🔴 window.persianDate not available');
+            }
+            return null;
         },
         
         initializeDate() {
@@ -1143,7 +1206,6 @@ document.addEventListener('alpine:init', () => {
             if (this.currentLocale === 'fa' && window.persianDate) {
                 return this.viewDate.year();
             }
-            // برای حالت عربی و میلادی
             return this.year;
         },
         
@@ -1174,10 +1236,8 @@ document.addEventListener('alpine:init', () => {
             return new Date(this.year, this.month, 0).getDate();
         },
         
-        // محاسبه تعداد روزهای ماه قمری
         getHijriMonthDays(year, month) {
             try {
-                // برای 11 ماه اول سال، از شروع ماه بعد استفاده می‌کنیم
                 if (month < 12) {
                     const currentMonthStart = this.findGregorianDate(year, month, 1);
                     const nextMonthStart = this.findGregorianDate(year, month + 1, 1);
@@ -1186,7 +1246,6 @@ document.addEventListener('alpine:init', () => {
                         return Math.round(diffTime / (1000 * 60 * 60 * 24));
                     }
                 } else {
-                    // برای ماه آخر سال، از شروع ماه اول سال بعد استفاده می‌کنیم
                     const currentMonthStart = this.findGregorianDate(year, 12, 1);
                     const nextYearStart = this.findGregorianDate(year + 1, 1, 1);
                     if (currentMonthStart && nextYearStart) {
@@ -1197,18 +1256,14 @@ document.addEventListener('alpine:init', () => {
             } catch (error) {
                 console.error('Error calculating Hijri month days:', error);
             }
-            // پیش‌فرض: 29 یا 30 روز (تخمین)
             return 30;
         },
         
-        // پیدا کردن تاریخ میلادی معادل با یک تاریخ قمری
         findGregorianDate(hijriYear, hijriMonth, hijriDay) {
             try {
-                // جستجوی تاریخ میلادی با تست کردن تاریخ‌های مختلف
-                const startDate = new Date(2020, 0, 1); // شروع از 2020
-                const endDate = new Date(2100, 11, 31); // تا 2100
+                const startDate = new Date(2020, 0, 1);
+                const endDate = new Date(2100, 11, 31);
                 
-                // استفاده از روش جستجوی دودویی برای یافتن تاریخ
                 let currentDate = new Date(startDate);
                 while (currentDate <= endDate) {
                     const testDate = {
@@ -1222,7 +1277,6 @@ document.addEventListener('alpine:init', () => {
                         return new Date(testDate.year, testDate.month - 1, testDate.day);
                     }
                     
-                    // پرش به روز بعد
                     currentDate.setDate(currentDate.getDate() + 1);
                 }
             } catch (error) {
@@ -1251,7 +1305,6 @@ document.addEventListener('alpine:init', () => {
                 this.year = newDate.year();
                 this.month = newDate.month();
             } else {
-                // برای هر دو حالت عربی و میلادی
                 let newMonth = this.month + amount;
                 let newYear = this.year;
                 
@@ -1280,9 +1333,53 @@ document.addEventListener('alpine:init', () => {
         
         confirmDate() {
             if (!this.selectedDate) return;
+            
+            // finalDate همان تاریخ انتخاب شده کاربر باقی می‌ماند (برای نمایش)
             this.finalDate = this.selectedDate;
+            
+            // محاسبه تاریخ تبدیل شده به شمسی (برای ارسال به سرور)
+            let convertedToPersian = this.selectedDate;
+            
+            if (this.currentLocale === 'fa') {
+                // تاریخ شمسی - مستقیماً استفاده شود
+                convertedToPersian = this.selectedDate;
+            } else if (this.currentLocale === 'ar') {
+                // تبدیل تاریخ قمری به میلادی و سپس به شمسی
+                const parts = this.selectedDate.split('/');
+                const hijriYear = parseInt(parts[0]);
+                const hijriMonth = parseInt(parts[1]);
+                const hijriDay = parseInt(parts[2]);
+                
+                // قمری به میلادی
+                const gregorianDate = this.hijriToGregorian(hijriYear, hijriMonth, hijriDay);
+                if (gregorianDate) {
+                    // میلادی به شمسی
+                    const persianDate = this.gregorianToPersian(
+                        gregorianDate.year, 
+                        gregorianDate.month, 
+                        gregorianDate.day
+                    );
+                    if (persianDate) {
+                        convertedToPersian = `${persianDate.year}/${persianDate.month}/${persianDate.day}`;
+                    }
+                }
+            } else {
+                // تاریخ میلادی - تبدیل به شمسی
+                const parts = this.selectedDate.split('-');
+                const gregYear = parseInt(parts[0]);
+                const gregMonth = parseInt(parts[1]);
+                const gregDay = parseInt(parts[2]);
+                
+                const persianDate = this.gregorianToPersian(gregYear, gregMonth, gregDay);
+                if (persianDate) {
+                    convertedToPersian = `${persianDate.year}/${persianDate.month}/${persianDate.day}`;
+                }
+            }
+            
+            // ارسال هر دو مقدار: تاریخ نمایشی و تاریخ تبدیل شده
             this.$dispatch('date-confirmed', { 
-                date: this.finalDate,
+                date: this.finalDate,           
+                convertedDate: convertedToPersian,
                 locale: this.currentLocale 
             });
             this.showCalendar = false;
